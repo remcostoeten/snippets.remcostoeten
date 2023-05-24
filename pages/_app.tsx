@@ -1,6 +1,15 @@
-import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+import Navbar from '../components/Navbar'
+import '../styles/globals.scss'
+import Loader from '@/components/ui-elements/Loader';
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
+    <>
+      <Navbar />
+	  <Loader show={true} />
+      <Component {...pageProps} />
+    </>
+  )
 }
+
+export default MyApp
