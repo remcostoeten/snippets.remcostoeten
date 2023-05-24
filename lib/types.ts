@@ -6,6 +6,7 @@ export interface user {
 export interface document {
 	id: string;
 	title: string;
+	category: string;
 	content: string;
   }
 

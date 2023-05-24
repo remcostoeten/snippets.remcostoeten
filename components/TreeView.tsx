@@ -14,15 +14,7 @@ const TreeView: React.FC<TreeViewProps> = ({ documents }) => {
 			{documents &&
 				documents.map((doc) => (
 					<Link href={`/doc/${doc.id}`} key={doc.id}>
-						<a
-							className={`block px-4 py-2 text-white ${
-								router.pathname === `/doc/${doc.id}`
-									? 'bg-blue-500'
-									: ''
-							}`}
-						>
-							{doc.title}
-						</a>
+						{doc.title}
 					</Link>
 				))}
 		</div>

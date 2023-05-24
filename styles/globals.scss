@@ -3,6 +3,8 @@
 @tailwind utilities;
 
 @import './components/_loader.scss';
+@import './components/_sidebar.scss';
+@import './components/_header.scss';
 
 @import './utillities/_animations.scss';
 
@@ -20,7 +22,10 @@
 	}
 }
 
+$background: fff;
+
 body {
+	background-color: $background;
 	color: rgb(var(--foreground-rgb));
 	background: linear-gradient(
 			to bottom,

@@ -17,6 +17,16 @@ if (!firebase.apps.length) {
 		firebase.initializeApp(firebaseConfig);
 }
 
+const handleAddDocument = async (newDocument) => {
+	try {
+	  const docRef = await firestore.collection('documentatie').add(newDocument);
+	  console.log('Document toegevoegd met ID:', docRef.id);
+	} catch (error) {
+	  console.error('Fout bij het toevoegen van document:', error);
+	}
+  };
+  
+
 export const auth = firebase.auth();
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 

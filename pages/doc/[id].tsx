@@ -1,13 +1,17 @@
 import { GetServerSideProps } from 'next';
-import { getDocuments, DocumentData } from '@/lib/firestore';
+import { getDocuments, getDocument, CustomDocumentData } from '@/lib/firestore';
 import TreeView from '@/components/TreeView';
 
 interface DocumentPageProps {
-	document: DocumentData;
-	documents: DocumentData[];
+	document: CustomDocumentData | null;
+	documents: CustomDocumentData[];
 }
 
 const DocumentPage: React.FC<DocumentPageProps> = ({ document, documents }) => {
+	if (!document) {
+		return <div>Document not found.</div>;
+	}
+
 	return (
 		<div className="flex h-screen">
 			<div className="w-64 bg-gray-800">

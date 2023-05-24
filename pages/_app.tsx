@@ -3,10 +3,12 @@ import Navbar from '../components/Navbar';
 import '../styles/globals.scss';
 import Loader from '@/components/ui-elements/Loader';
 import Sidebar from '@/components/Sidebar';
+import TopNotice from '@/components/ui-elements/TopNotice';
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
-			<Navbar />
+			<TopNotice />
+			{/* <Navbar /> */}
 			<div className="flex">
 				<Sidebar />
 				<main>

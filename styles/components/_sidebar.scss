@@ -1,0 +1,120 @@
+body {
+	position: relative;
+
+	&::after {
+		content: '';
+		transition: 1s ease-in-out;
+		width: 50vw;
+		height: 100vh;
+		background-color: #374151;
+		filter: blur(150px);
+		position: absolute;
+		top: -97%;
+		left: 30%;
+		z-index: -1;
+		animation: rotateBlob 25s linear infinite;
+	}
+}
+
+@keyframes rotateBlob {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		scale: 1.3;
+		transform: rotate(45deg);
+	}
+}
+
+.sidebar {
+	display: flex;
+	width: 5rem;
+	height: 100vh;
+	overflow: hidden;
+	color: #cbd5e1;
+	transition: width 0.3s ease;
+
+	&.expanded {
+		width: 12rem;
+
+		a {
+			// justify-content: flex-start;
+		}
+
+		.menu-text {
+			opacity: 0;
+			animation: textDelay 0.35s 0.35s cubic-bezier(0.165, 0.84, 0.44, 1)
+				forwards;
+		}
+
+		a.icon {
+			opacity: 0;
+			margin-right: 0.75rem;
+		}
+	}
+
+	@keyframes textDelay {
+		from {
+			opacity: 0;
+		}
+
+		to {
+			opacity: 1;
+		}
+	}
+
+	a {
+		display: flex;
+		transform: translateX(10%);
+	}
+}
+
+.sidebar a {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding: 0.75rem;
+	margin-top: 0.75rem;
+	color: #cbd5e1;
+	text-decoration: none;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar a:hover {
+	background-color: #374151;
+	color: #e5e7eb;
+}
+
+.sidebar a .icon {
+	width: 1.5rem;
+	height: 1.5rem;
+	margin-right: 0.5rem;
+	fill: currentColor;
+	transition: margin-right 0.3s ease;
+}
+
+.sidebar:hover a .icon {
+	margin-right: 0.75rem;
+}
+
+.sidebar a .text {
+	font-size: 0.875rem;
+	font-weight: 500;
+	transition: opacity 0.3s ease;
+	opacity: 0;
+}
+
+.sidebar:hover a .text {
+	opacity: 1;
+}
+
+/* Active Sidebar Item */
+.sidebar a.active {
+	background-color: #6b7280;
+	color: #e5e7eb;
+}
+
+.sidebar a.active .icon {
+	fill: #e5e7eb;
+}
