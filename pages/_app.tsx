@@ -1,6 +1,15 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
+import { useUserData } from '../lib/hooks';
+import { UserContext } from '../lib/context';
+import Navbar from '@/components/Navbar';
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+export default function MyApp({ Component, pageProps }) {
+  
+  const userData = useUserData();
+
+  return (
+    <UserContext.Provider value={userData}>
+      <Navbar />
+      <Component {...pageProps} />
+    </UserContext.Provider>
+  );
 }

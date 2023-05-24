@@ -1,0 +1,20 @@
+{
+	"github.copilot.advanced": {},
+	"workbench.editor.tabSizing": "shrink",
+	"workbench.editor.tabCloseButton": "left",
+	"workbench.editor.tabCloseButtonBackground": "#1e1e1e",
+	"workbench.editor.tabCloseButtonHoverBackground": "#292929",
+	"workbench.editor.tabActiveBackground": "#252526",
+	"workbench.editor.tabActiveForeground": "#fff",
+	"workbench.editor.tabInactiveForeground": "#ccc",
+	"workbench.editor.tabActiveBorder": "#007acc",
+	"workbench.editor.tabUnfocusedActiveBorder": "#ddd",
+	"workbench.editor.tabInactiveBackground": "#2d2d2d",
+	"workbench.editor.tabHoverBackground": "#383838",
+	"workbench.editor.showIcons": true,
+	"workbench.editor.labelFontSize": 7,
+	"scss.watcher.exclude": [
+		"**/components/**",
+		"**/*.module.scss"
+	]
+}
