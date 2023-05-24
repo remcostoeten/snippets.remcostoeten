@@ -9,24 +9,26 @@ import { useRouter } from 'next/router';
 export default function Sidebar() {
 	const [isSidebarExpanded, setSidebarExpanded] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [documents, setDocuments] = useState([]);
+	const [documents, setDocuments] = useState<Document[]>([]);
 
-	const anchorStyling =
+	const anchorStyling: string =
 		'flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-700 hover:text-gray-300 	';
 
-	const toggleSidebar = () => {
+	const toggleSidebar: () => void = () => {
 		setSidebarExpanded(!isSidebarExpanded);
 	};
 
-	const openModal = () => {
+	const openModal: () => void = () => {
 		setIsModalOpen(true);
 	};
 
-	const closeModal = () => {
+	const closeModal: () => void = () => {
 		setIsModalOpen(false);
 	};
 
-	const handleAddDocument = (newDocument) => {
+	const handleAddDocument: (newDocument: Document) => void = (
+		newDocument: Document,
+	) => {
 		setDocuments([...documents, newDocument]);
 	};
 
@@ -135,11 +137,6 @@ export default function Sidebar() {
 							<AddCircleIcon />
 						</Link>
 
-						<AddDocumentModal
-							isOpen={isModalOpen}
-							onClose={closeModal}
-							onSubmit={handleAddDocument}
-						/>
 						<Link href="#" className={anchorStyling}>
 							<ColorSwitcher />
 						</Link>

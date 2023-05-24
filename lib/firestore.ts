@@ -1,5 +1,4 @@
-import { firestore } from './firebase';
-
+import { firestore } from '@/lib/firebase';
 export interface CustomDocumentData {
   id: string;
   title: string;
@@ -17,18 +16,27 @@ export async function getDocuments(): Promise<CustomDocumentData[]> {
   return documents;
 }
 
-export async function getDocument(id: string): Promise<CustomDocumentData | null> {
-  const docRef = firestore.collection('documents').doc(id);
-  const docSnapshot = await docRef.get();
-
-  if (docSnapshot.exists) {
-    const documentData = docSnapshot.data();
-    return {
-      id: docSnapshot.id,
-      title: documentData.title,
-      content: documentData.content,
-    };
-  }
-
-  return null;
+export interface CustomDocumentData {
+  id: string;
+  title: string;
+  content: string;
 }
+
+export async function getDocument(id: string): Promise<CustomDocumentData | null> {
+	const docRef = firestore.collection('documents').doc(id);
+	const docSnapshot = await docRef.get();
+  
+	if (docSnapshot.exists) {
+	  const documentData = docSnapshot.data();
+	  if (documentData) {
+		return {
+		  id: docSnapshot.id,
+		  title: documentData.title,
+		  content: documentData.content,
+		};
+	  }
+	}
+  
+	return null;
+  }
+  

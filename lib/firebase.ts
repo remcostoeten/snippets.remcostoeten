@@ -17,7 +17,7 @@ if (!firebase.apps.length) {
 		firebase.initializeApp(firebaseConfig);
 }
 
-const handleAddDocument = async (newDocument) => {
+const handleAddDocument = async (newDocument: Document) => {
 	try {
 	  const docRef = await firestore.collection('documentatie').add(newDocument);
 	  console.log('Document toegevoegd met ID:', docRef.id);

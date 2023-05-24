@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { DocumentData } from '../lib/firestore';
+import { CustomDocumentData } from '../lib/firestore';
 
 interface TreeViewProps {
-	documents: DocumentData[];
+	documents: CustomDocumentData[];
 }
 
 const TreeView: React.FC<TreeViewProps> = ({ documents }) => {
