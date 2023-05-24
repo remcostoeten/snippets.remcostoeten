@@ -1,46 +1,34 @@
-import { auth, googleAuthProvider } from '@/lib/firebase';
-import { useState, useContext } from 'react';
-import { UserContext } from '../lib/context';
+// src/components/Navbar.js
+import React from 'react';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
-export default function SignInButton() {
-  const userData = useContext(UserContext);
-
-  return (
-    <main>
-      {userData ? 
-        !userData.username ? <UsernameForm /> : <SignOutButton /> 
-        : 
-        <SignInBtn />
-      }
-    </main>
-  );
+interface User {
+  displayName: string;
+  photoURL: string;
 }
 
-function SignInBtn() {
-  const [error, setError] = useState(null);
+interface NavbarProps {
+  user: User;
+}
 
-  const signInWithGoogle = async () => {
+const Navbar: React.FC<NavbarProps> = ({ user }) => {
+  const handleLogout = async () => {
     try {
-      await auth.signInWithPopup(googleAuthProvider);
+      await firebase.auth().signOut();
     } catch (error) {
-      setError(error);
+      console.error('Error logging out:', error);
     }
   };
 
   return (
-    <>
-      {error && <p>{error.message}</p>}
-      <button className="btn-google" onClick={signInWithGoogle}>
-        <img src={'/google.png'} /> Sign in with Google
-      </button>
-    </>
+    <nav>
+      <div>
+        <img src={user.photoURL} alt="User" />
+        <span>{user.displayName}</span>
+      </div>
+      <button onClick={handleLogout}>Logout</button>
+    </nav>
   );
-}
-
-function SignOutButton() {
-  return <button onClick={() => auth.signOut()}>Sign Out</button>;
-}
-
-function UsernameForm() {
-  return null;
-}
+  }
+  export default Navbar

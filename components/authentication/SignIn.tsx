@@ -1,5 +1,6 @@
 import { auth, googleAuthProvider } from '@/lib/firebase';
 import { useState } from 'react';
+import SignInButton from './SignIn';
 
 export default function SignInButton() {
   const user = null;
@@ -16,16 +17,19 @@ export default function SignInButton() {
   );
 }
 
-function SignInBtn() {
-  const [error, setError] = useState(null);
+function SignInButton() {
+	    const signInWithGoogle = async () => {
+			try {
+	 
+				await auth.signInWithPopup(googleAuthProvider);
+			}
+		}  catch (error) {
+			console.error(error);
 
-  const signInWithGoogle = async () => {
-    try {
-      await auth.signInWithPopup(googleAuthProvider);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+		} 	
+	};
+
+
 
   return (
     <>
