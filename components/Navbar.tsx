@@ -1,46 +1,55 @@
-import { auth, googleAuthProvider } from '@/lib/firebase';
-import { useState, useContext } from 'react';
-import { UserContext } from '../lib/context';
+import { useEffect, useState } from 'react';
+import { auth, googleAuthProvider } from '../lib/firebase';
 
-export default function SignInButton() {
-  const userData = useContext(UserContext);
+type User = {
+	displayName: string | null;
+	photoURL: string | null;
+};
 
-  return (
-    <main>
-      {userData ? 
-        !userData.username ? <UsernameForm /> : <SignOutButton /> 
-        : 
-        <SignInBtn />
-      }
-    </main>
-  );
-}
+export default function Navbar() {
+	const [user, setUser] = useState<User | null>(null);
 
-function SignInBtn() {
-  const [error, setError] = useState(null);
+	useEffect(() => {
+		const unsubscribe = auth.onAuthStateChanged((user) => {
+			setUser(user);
+		});
 
-  const signInWithGoogle = async () => {
-    try {
-      await auth.signInWithPopup(googleAuthProvider);
-    } catch (error) {
-      setError(error);
-    }
-  };
+		// Cleanup subscription on unmount
+		return () => unsubscribe();
+	}, []);
 
-  return (
-    <>
-      {error && <p>{error.message}</p>}
-      <button className="btn-google" onClick={signInWithGoogle}>
-        <img src={'/google.png'} /> Sign in with Google
-      </button>
-    </>
-  );
-}
+	const signInWithGoogle = async () => {
+		await auth.signInWithPopup(googleAuthProvider);
+	};
 
-function SignOutButton() {
-  return <button onClick={() => auth.signOut()}>Sign Out</button>;
-}
+	const signOut = async () => {
+		await auth.signOut();
+		setUser(null);
+	};
 
-function UsernameForm() {
-  return null;
+	return (
+		<nav className="flex items-center justify-between p-6 bg-blue-500">
+			<span className="text-xl font-semibold text-white">My App</span>
+			<div>
+				{user ? (
+					<div className="flex items-center">
+						<span className="text-white">{user.displayName}</span>
+						<button
+							onClick={signOut}
+							className="ml-4 px-4 py-2 text-sm font-medium text-blue-500 rounded bg-white hover:bg-blue-200"
+						>
+							Sign Out
+						</button>
+					</div>
+				) : (
+					<button
+						onClick={signInWithGoogle}
+						className="px-4 py-2 text-sm font-medium text-blue-500 rounded bg-white hover:bg-blue-200"
+					>
+						Sign In with Google
+					</button>
+				)}
+			</div>
+		</nav>
+	);
 }

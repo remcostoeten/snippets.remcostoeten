@@ -1,46 +1,51 @@
 import { auth, googleAuthProvider } from '@/lib/firebase';
 import { useState } from 'react';
-
+import firebase from 'firebase/app';
+import 'firebase/auth';
 export default function SignInButton() {
-  const user = null;
-  const username = null;
+	const user = null;
+	const username = null;
 
-  return (
-    <main>
-      {user ? 
-        !username ? <UsernameForm /> : <SignOutButton /> 
-        : 
-        <SignInBtn />
-      }
-    </main>
-  );
+	return (
+		<main>
+			{user ? (
+				!username ? (
+					<UsernameForm />
+				) : (
+					<SignOutButton />
+				)
+			) : (
+				<SignInBtn />
+			)}
+		</main>
+	);
 }
 
 function SignInBtn() {
-  const [error, setError] = useState(null);
+	const [error, setError] = useState(null);
 
-  const signInWithGoogle = async () => {
-    try {
-      await auth.signInWithPopup(googleAuthProvider);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+	const signInWithGoogle = async () => {
+		try {
+			await auth.signInWithPopup(googleAuthProvider);
+		} catch (error: any) {
+			setError(error.message);
+		}
+	};
 
-  return (
-    <>
-      {error && <p>{error}</p>}
-      <button className="btn-google" onClick={signInWithGoogle}>
-        <img src={'/google.png'} /> Sign in with Google
-      </button>
-    </>
-  );
+	return (
+		<>
+			{error && <p>{error}</p>}
+			<button className="btn-google" onClick={signInWithGoogle}>
+				<img src={'/google.png'} /> Sign in with Google
+			</button>
+		</>
+	);
 }
 
 function SignOutButton() {
-  return <button onClick={() => auth.signOut()}>Sign Out</button>;
+	return <button onClick={() => auth.signOut()}>Sign Out</button>;
 }
 
 function UsernameForm() {
-  return null;
+	return null;
 }

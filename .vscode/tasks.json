@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"version": "2.0.0",
 	"tasks": [
 		{
@@ -19,3 +20,25 @@
 		}
 	]
 }
+=======
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "npm run dev",
+            "type": "npm",
+            "script": "dev",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+                "env": {
+                    "TERM_PROGRAM": "dev localhost"
+                },
+                "color": "Fuchsia" 
+            }
+        }
+    ]
+}
+>>>>>>> develop
