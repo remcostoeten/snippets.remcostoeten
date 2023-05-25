@@ -25,17 +25,17 @@ const handleAddDocument = async (newDocument: { id: number, title: string, done:
 	}
 };
 
- const handleToggleDocument = async (id: string, updatedDocument: { id: number, title: string, done: boolean }) => {
+
+ const handleToggleDocument = async (docId: string, task: Task) => {
 	try {
-		await firestore.collection('tasks').doc(id).update(updatedDocument);
-		console.log('Document bijgewerkt met ID:', id);
+		await firestore.collection('tasks').doc(docId).update(task);
 	} catch (error) {
-		console.error('Fout bij het bijwerken van document:', error);
+		console.error('Error updating document: ', error);
 	}
 };
+
 export const auth = firebase.auth();
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-
 export const firestore = firebase.firestore();
 export const storage = firebase.storage();
  export { handleAddDocument, handleToggleDocument };

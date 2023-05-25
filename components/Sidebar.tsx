@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import ColorSwitcher from './ui-elements/ColorSwitcher';
 import Link from 'next/link';
-import AddDocumentModal from './AddDocumentModal';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import HomeIcon from '@mui/icons-material/Home';
-import { useRouter } from 'next/router';
-
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import AddDocumentModal from './AddDocumentModal';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 export default function Sidebar() {
 	const [isSidebarExpanded, setSidebarExpanded] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -79,31 +79,29 @@ export default function Sidebar() {
 								Search
 							</span>
 						</Link>
-						<Link href="#" className={anchorStyling}>
-							<svg
-								className={`w-6 h-6 stroke-current ${
-									isSidebarExpanded ? 'mr-2' : 'mr-2'
-								}`}
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
-							>
-								<path
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									strokeWidth="2"
-									d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-								/>
-							</svg>
+
+						<Link href="/todos" className={anchorStyling}>
+							<PlaylistAddCheckIcon />
 							<span
 								className={`ml-2 text-sm menu-text font-medium ${
 									isSidebarExpanded ? 'flex' : 'hidden'
 								}`}
 							>
-								Insights
+								Todos
 							</span>
 						</Link>
+
+						<Link href="/tests" className={anchorStyling}>
+							<DashboardIcon />
+							<span
+								className={`ml-2 text-sm menu-text font-medium ${
+									isSidebarExpanded ? 'flex' : 'hidden'
+								}`}
+							>
+								Dashboard
+							</span>
+						</Link>
+
 						<Link href="#" className={anchorStyling}>
 							<svg
 								className={`w-6 h-6 stroke-current ${
