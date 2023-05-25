@@ -38,12 +38,12 @@ export const EntriesList = () => {
 					<h2 className="text-lg font-semibold">{entry.title}</h2>
 					<p className="text-sm">{entry.content}</p>
 					<div className="flex">
-						<button
+						{/* <button
 							onClick={() => setIsEditing(true)}
 							className="px-4 py-2 bg-blue-600 text-white rounded mr-2"
 						>
 							Edit
-						</button>
+						</button> */}
 						<button
 							onClick={() => deleteEntry(entry.id)}
 							className="px-4 py-2 bg-red-600 text-white rounded"

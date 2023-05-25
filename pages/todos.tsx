@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+
 import {
 	firestore,
 	handleAddDocument,
@@ -63,8 +64,22 @@ export default function Todo() {
 		setTasks(updatedTasks);
 	};
 
+	if (loading) {
+		return (
+			<div className="flex justify-center items-center h-screen">
+				<div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+			</div>
+		);
+	}
+
+	const todoCategories = [
+		'snippets.remcostoeten',
+		'remcostoeten.com',
+		'portfolio.remcostoeten.com',
+	];
+
 	return (
-		<div className="h-screen w-screen bg-white rounded-lg p-4">
+		<div className="h-screen bg-white  rounded-lg p-4">
 			<Head>
 				<title>Todo List</title>
 				<meta
@@ -72,6 +87,14 @@ export default function Todo() {
 					content="A simple todo list built with Next.js and Firebase."
 				/>
 			</Head>
+			<h1 className="text-2xl  text-slate-950 font-bold mb-4">
+				Roadmap for the Site
+			</h1>
+			<p className="mb-6  text-slate-800">
+				This To-Do list outlines the upcoming features and to-do's I
+				have lined up for all my sites.
+			</p>
+
 			<div className="mt-3 text-sm text-[#8ea6c8] flex justify-between items-center">
 				<p className="set_date">{new Date().toLocaleDateString()}</p>
 			</div>
@@ -80,7 +103,7 @@ export default function Todo() {
 			</p>
 			<input
 				type="text"
-				className="border rounded px-3 py-2 mr-2"
+				className="border rounded  text-gray-700 px-3 py-2 mr-2"
 				value={newTask}
 				onChange={(e) => setNewTask(e.target.value)}
 			/>
@@ -91,46 +114,38 @@ export default function Todo() {
 				Add
 			</button>
 			<ul className="my-4 ">
-				{loading
-					? Array.from({ length: 10 }).map((_, index) => (
-							<li className="animate-pulse mt-4" key={index}>
-								<div className="flex gap-2">
-									<div className="w-9/12 h-12 bg-gray-400 rounded-[7px]"></div>
-									<div className="w-1/4 h-12 bg-gray-400 rounded-[7px]"></div>
-								</div>
-							</li>
-					  ))
-					: tasks.map((task) => (
-							<li className="mt-4" key={task.id}>
-								<div className="flex gap-2">
-									<div className="w-9/12 h-12 bg-[#e0ebff] rounded-[7px] flex justify-start items-center px-3">
-										<span
-											className="w-7 h-7 bg-white rounded-full border border-white transition-all cursor-pointer hover:border-[#36d344] flex justify-center items-center"
-											onClick={() => toggleTask(task.id)}
-										>
-											<i className="text-white fa fa-check"></i>
-										</span>
-										<span
-											className={
-												task.done
-													? 'line-through text-sm ml-4 text-[#5b7a9d] font-semibold'
-													: 'text-sm ml-4 text-[#5b7a9d] font-semibold'
-											}
-										>
-											{task.title}
-										</span>
-									</div>
-									<button onClick={() => deleteTask(task.id)}>
-										<DeleteForeverIcon color="red" />
-									</button>
-									<span className="w-1/4 h-12 bg-[#e0ebff] rounded-[7px] flex justify-center text-sm text-[#5b7a9d] font-semibold items-center ">
-										{new Date(
-											task.date.seconds * 1000,
-										).toLocaleTimeString()}
-									</span>
-								</div>
-							</li>
-					  ))}
+				{tasks.map((task) => (
+					<li className="mt-4" key={task.id}>
+						<div className="flex gap-2">
+							<div className="w-9/12 h-12 bg-[#e0ebff] rounded-[7px] flex justify-start items-center px-3">
+								<span
+									className="w-7 h-7 bg-white rounded-full border border-white transition-all cursor-pointer hover:border-[#36d344] flex justify-center items-center"
+									onClick={() => toggleTask(task.id)}
+								>
+									<i className="text-white fa fa-check"></i>
+								</span>
+								<span
+									className={
+										task.done
+											? 'line-through text-sm ml-4 text-[#5b7a9d] font-semibold'
+											: 'text-sm ml-4 text-[#5b7a9d] font-semibold'
+									}
+								>
+									{task.title}
+								</span>
+							</div>
+							<button onClick={() => deleteTask(task.id)}>
+								<DeleteForeverIcon className="text-black" />
+							</button>
+
+							<span className="w-1/4 h-12 bg-[#e0ebff] rounded-[7px] flex justify-center text-sm text-[#5b7a9d] font-semibold items-center ">
+								{new Date(
+									task.date.seconds * 1000,
+								).toLocaleTimeString()}
+							</span>
+						</div>
+					</li>
+				))}
 			</ul>
 		</div>
 	);
