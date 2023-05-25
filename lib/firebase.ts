@@ -12,30 +12,39 @@ const firebaseConfig = {
 	appId: "1:457325786920:web:782eb6f05bb419f900c21d"
   };
 
-if (!firebase.apps.length) {
-		firebase.initializeApp(firebaseConfig);
-}
-
-const handleAddDocument = async (newDocument: { id: number, title: string, done: boolean }) => {
+  if (!firebase.apps.length) {
+	firebase.initializeApp(firebaseConfig);
+  }
+  
+  type Task = {
+	id: string;
+	title: string;
+	done: boolean;
+  };
+  
+  const handleAddDocument = async (newDocument: {
+	id: number;
+	title: string;
+	done: boolean;
+  }) => {
 	try {
-		const docRef = await firestore.collection('tasks').add(newDocument);
-		console.log('Document toegevoegd met ID:', docRef.id);
+	  const docRef = await firebase.firestore().collection('tasks').add(newDocument);
+	  console.log('Document added with ID:', docRef.id);
 	} catch (error) {
-		console.error('Fout bij het toevoegen van document:', error);
+	  console.error('Error adding document:', error);
 	}
-};
-
-
- const handleToggleDocument = async (docId: string, task: Task) => {
+  };
+  
+  const handleToggleDocument = async (docId: string, task: Task) => {
 	try {
-		await firestore.collection('tasks').doc(docId).update(task);
+	  await firebase.firestore().collection('tasks').doc(docId).update(task);
 	} catch (error) {
-		console.error('Error updating document: ', error);
+	  console.error('Error updating document:', error);
 	}
-};
-
-export const auth = firebase.auth();
-export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-export const firestore = firebase.firestore();
-export const storage = firebase.storage();
- export { handleAddDocument, handleToggleDocument };
+  };
+  
+  export const auth = firebase.auth();
+  export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+  export const firestore = firebase.firestore();
+  export const storage = firebase.storage();
+  export { handleAddDocument, handleToggleDocument };

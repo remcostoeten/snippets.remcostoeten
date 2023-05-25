@@ -1,5 +1,6 @@
 import { auth, googleAuthProvider } from '@/lib/firebase';
 import Link from 'next/link';
+import { User } from 'firebase/auth';
 import { useState, useEffect } from 'react';
 export default function TopNotice() {
 	const [user, setUser] = useState<User | null>(null);
@@ -84,7 +85,7 @@ export default function TopNotice() {
 			<div className="flex md: flex-wrap items-center gap-x-2 gap-y-1 items-center">
 				<p className="text-sm leading-6 text-gray-400">
 					You’re currently on{' '}
-					<span ng className="font-semibold">
+					<span className="font-semibold">
 						<Link href="/">docs.remcostoeten.com</Link>
 					</span>
 					<svg

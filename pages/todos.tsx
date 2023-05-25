@@ -14,14 +14,13 @@ type Task = {
 	id: string;
 	title: string;
 	done: boolean;
-	date: firebase.firestore.Timestamp;
+	date: any;
 	category: string;
 };
 
 export default function Todo() {
 	const [tasks, setTasks] = useState<Task[]>([]);
 	const [newTask, setNewTask] = useState('');
-	const [newCategory, setNewCategory] = useState('');
 	const [loading, setLoading] = useState(true);
 	const [selectedCategory, setSelectedCategory] = useState('');
 
@@ -38,7 +37,7 @@ export default function Todo() {
 		loadTasks();
 	}, []);
 
-	const addTask = async () => {
+	const addTask = async (): Promise<void> => {
 		const newTaskData: Task = {
 			id: `${tasks.length}`,
 			title: newTask,
@@ -46,7 +45,12 @@ export default function Todo() {
 			date: firebase.firestore.Timestamp.now(),
 			category: selectedCategory,
 		};
-		await handleAddDocument('tasks', newTaskData);
+
+		await handleAddDocument({
+			...newTaskData,
+			id: parseInt(newTaskData.id, 10), // parsing the id to a number
+		});
+
 		setTasks([...tasks, newTaskData]);
 		setNewTask('');
 	};
@@ -95,7 +99,7 @@ export default function Todo() {
 			<h1 className="text-2xl text-slate-950 font-bold mb-4">
 				Roadmap for the Site
 			</h1>
-			<p className="mb-6 text-slate-800 top-nav relative isolate 	 items-center gap-x-6 overflow-hidden text-gray-400   px-6 py-1.5 sm:px-1.5 sm:before:flex-1 md:w-2/4">
+			<p className="mb-6 text-slate-800 top-nav relative isolate items-center gap-x-6 overflow-hidden text-gray-400 px-6 py-1.5 sm:px-1.5 sm:before:flex-1 md:w-2/4">
 				This To-Do list outlines the upcoming features and to-dos I have
 				lined up for all my sites and other random projects related to
 				development. Mainly working on{' '}
@@ -112,11 +116,11 @@ export default function Todo() {
 					href="https://snippets.remcostoeten.com"
 					target="_blank"
 				>
-					{''} snippets.remcostoeten.com{''}
+					{' '}
+					snippets.remcostoeten.com{' '}
 				</Link>
 				which has some snippets and other tools I use on a day-to-day
-				basis, so purely personal and
-				{''}{' '}
+				basis, so purely personal and{''}{' '}
 				<Link
 					className="font-bold underline"
 					href="https://experiments.remcostoeten.com"
@@ -133,7 +137,7 @@ export default function Todo() {
 			<div className="mt-3 text-sm text-[#8ea6c8] flex justify-between items-center"></div>
 			<div className="flex">
 				<div className="flex flex-col">
-					<p className="text-xl font-semibold mb-1    text-[#063c76]">
+					<p className="text-xl font-semibold mb-1 text-[#063c76]">
 						To-do List
 					</p>
 					<input
@@ -149,7 +153,7 @@ export default function Todo() {
 						Category
 					</p>
 					<select
-						className="bordefinline-flex items-center px-3 py-0.5 h-full pr-2 mr-2 text-sm font-medium border  text-slate-900"
+						className="bordefinline-flex items-center px-3 py-0.5 h-full pr-2 mr-2 text-sm font-medium border text-slate-900"
 						value={selectedCategory}
 						onChange={(e) => setSelectedCategory(e.target.value)}
 					>
@@ -195,7 +199,7 @@ export default function Todo() {
 										</div>
 										<div className="flex relative">
 											<Badge category={category} />
-											<span className="rounded-full flex items-center bg-white text-xs  text-black px-2.5 py-0.5">
+											<span className="rounded-full flex items-center bg-white text-xs text-black px-2.5 py-0.5">
 												{new Date(
 													task.date.seconds * 1000,
 												).toLocaleTimeString()}

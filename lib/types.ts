@@ -17,7 +17,7 @@ export interface document {
 
   export interface HomeProps {
 	user: user;
-	documents: DocumentData[]; // Verander 'document' naar 'DocumentData'
+	documents: DocumentData[]; 
   }
   
 export interface  DocumentData {
@@ -27,7 +27,7 @@ export interface  DocumentData {
   };
 
 
-  export interface Entry = {
+  export interface Entry  {
 	id?: string;
 	date: Date;
 	title: string;
