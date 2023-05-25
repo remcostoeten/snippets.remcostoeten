@@ -1,5 +1,12 @@
 body {
 	position: relative;
+	overflow: hidden;
+
+	&.sidebar-expanded {
+		.main-content {
+			width: 85vw;
+		}
+	}
 
 	&::after {
 		content: '';
@@ -29,14 +36,14 @@ body {
 
 .sidebar {
 	display: flex;
-	width: 5rem;
+	width: 5vw;
 	height: 100vh;
 	overflow: hidden;
 	color: #cbd5e1;
 	transition: width 0.3s ease;
 
 	&.expanded {
-		width: 12rem;
+		width: 15vw;
 
 		a {
 			// justify-content: flex-start;

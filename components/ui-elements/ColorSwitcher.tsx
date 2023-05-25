@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import LightIcon from '@mui/icons-material/Light';
+import ModeNightIcon from '@mui/icons-material/ModeNight';
 
-export default function Witcher() {
+export default function ColorSwitcher() {
 	const [isDarkMode, setIsDarkMode] = useState(false);
 
 	const handleToggleMode = () => {
@@ -10,12 +12,9 @@ export default function Witcher() {
 
 	return (
 		<div className="witcher-container">
-			<h1 className="witcher-title">
-				{isDarkMode ? 'Dark Mode' : 'Light Mode'}
-			</h1>
-			<button className="witcher-button" onClick={handleToggleMode}>
-				Toggle Mode
-			</button>
+			<span onClick={handleToggleMode}>
+				{isDarkMode ? <LightIcon /> : <ModeNightIcon />}
+			</span>
 		</div>
 	);
 }

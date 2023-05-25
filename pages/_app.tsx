@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<TopNotice />
 			<div className="flex">
 				<Sidebar />
-				<main className="flex flex-col flex-1">
+				<main className="main-content flex flex-col flex-1 h-screen bg-white rounded-lg p-4 w-95">
 					<Component {...pageProps} />
 				</main>
 			</div>

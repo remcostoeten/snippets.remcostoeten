@@ -18,24 +18,61 @@ type Task = {
 	category: string;
 };
 
-export default function Todo() {
-	const [tasks, setTasks] = useState<Task[]>([]);
+async function loadTasks() {
+	const taskCollection = await firestore
+		.collection('tasks')
+		.orderBy('date')
+		.limit(10)
+		.get();
+
+	return taskCollection.docs.map(
+		(doc) => ({ ...doc.data(), id: doc.id } as Task),
+	);
+}
+
+export async function getServerSideProps(context) {
+	const tasks = await loadTasks();
+
+	const serializedTasks = tasks.map((task) => ({
+		...task,
+		date: task.date.toMillis(),
+	}));
+
+	return {
+		props: {
+			initialTasks: serializedTasks,
+		},
+	};
+}
+
+export default function Todo({ initialTasks }) {
+	const [tasks, setTasks] = useState<Task[]>(initialTasks);
 	const [newTask, setNewTask] = useState('');
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState('');
+	const [searchQuery, setSearchQuery] = useState('');
+	const [sortedTasks, setSortedTasks] = useState<Task[]>([]);
 
 	useEffect(() => {
-		const loadTasks = async () => {
-			const taskCollection = await firestore.collection('tasks').get();
-			setTasks(
-				taskCollection.docs.map(
-					(doc) => ({ ...doc.data(), id: doc.id } as Task),
-				),
-			);
+		const fetchAdditionalTasks = async () => {
+			setLoading(true);
+			const moreTasks = await loadTasks();
+			setTasks((currentTasks) => [...currentTasks, ...moreTasks]);
 			setLoading(false);
 		};
-		loadTasks();
+		fetchAdditionalTasks();
 	}, []);
+
+	useEffect(() => {
+		if (searchQuery === '') {
+			setSortedTasks([...tasks]);
+		} else {
+			const filteredTasks = tasks.filter((task) =>
+				task.title.toLowerCase().includes(searchQuery.toLowerCase()),
+			);
+			setSortedTasks(filteredTasks);
+		}
+	}, [searchQuery, tasks]);
 
 	const addTask = async (): Promise<void> => {
 		const newTaskData: Task = {
@@ -51,10 +88,15 @@ export default function Todo() {
 			id: parseInt(newTaskData.id, 10), // parsing the id to a number
 		});
 
-		setTasks([...tasks, newTaskData]);
+		setTasks((prevTasks) => [...prevTasks, newTaskData]); // Add the task to the global tasks state
+
+		// Check if the new task belongs to the selected category
+		if (selectedCategory === newTaskData.category) {
+			setSortedTasks((prevTasks) => [...prevTasks, newTaskData]); // Add the task to the sortedTasks state for the selected category
+		}
+
 		setNewTask('');
 	};
-
 	const toggleTask = async (id: string) => {
 		const task = tasks.find((task) => task.id === id);
 		if (task) {
@@ -73,6 +115,20 @@ export default function Todo() {
 		setTasks(updatedTasks);
 	};
 
+	const sortAlphabetically = () => {
+		const sortedAlphabetically = [...sortedTasks].sort((a, b) =>
+			a.title.localeCompare(b.title),
+		);
+		setSortedTasks(sortedAlphabetically);
+	};
+
+	const sortByDate = () => {
+		const sortedByDate = [...sortedTasks].sort(
+			(a, b) => a.date.seconds - b.date.seconds,
+		);
+		setSortedTasks(sortedByDate);
+	};
+
 	if (loading) {
 		return (
 			<div className="flex justify-center items-center h-screen">
@@ -88,13 +144,18 @@ export default function Todo() {
 	];
 
 	return (
-		<div className="h-screen bg-white rounded-lg p-4">
+		<>
 			<Head>
 				<title>Todo List</title>
-				<meta
-					name="description"
-					content="A simple todo list built with Next.js and Firebase."
-				/>
+				<script type="application/ld+json">
+					{JSON.stringify({
+						'@context': 'https://schema.org',
+						'@type': 'WebPage',
+						name: 'Todo List',
+						description:
+							'A simple todo list built with Next.js and Firebase.',
+					})}
+				</script>
 			</Head>
 			<h1 className="text-2xl text-slate-950 font-bold mb-4">
 				Roadmap for the Site
@@ -134,7 +195,31 @@ export default function Todo() {
 				packages, which I want to finish someday.
 			</p>
 
-			<div className="mt-3 text-sm text-[#8ea6c8] flex justify-between items-center"></div>
+			<div className="mt-3 text-sm text-[#8ea6c8] flex justify-between items-center">
+				<div>
+					<button
+						onClick={sortAlphabetically}
+						className="bg-blue-500 mt-2 text-white rounded px-3 py-2 mr-2"
+					>
+						Sort Alphabetically
+					</button>
+					<button
+						onClick={sortByDate}
+						className="bg-blue-500 mt-2 text-white rounded px-3 py-2"
+					>
+						Sort by Date
+					</button>
+				</div>
+				<div>
+					<input
+						type="text"
+						className="border rounded text-gray-700 px-3 py-2"
+						value={searchQuery}
+						placeholder="Search tasks..."
+						onChange={(e) => setSearchQuery(e.target.value)}
+					/>
+				</div>
+			</div>
 			<div className="flex">
 				<div className="flex flex-col">
 					<p className="text-xl font-semibold mb-1 text-[#063c76]">
@@ -173,48 +258,54 @@ export default function Todo() {
 			</button>
 			{todoCategories.map((category) => (
 				<div key={category}>
+					<h2>{category}</h2>
 					<ul>
-						{tasks.map((task) => (
-							<li className="mt-4" key={task.id}>
-								<div className="flex gap-2">
-									<div className="w-9/12 h-12 bg-[#e0ebff] rounded-[7px] flex justify-between items-center px-3">
-										<div className="flex relative">
-											<span
-												className="w-7 h-7 bg-white rounded-full border border-white transition-all cursor-pointer hover:border-[#36d344] flex justify-center items-center"
-												onClick={() =>
-													toggleTask(task.id)
-												}
-											>
-												<i className="text-white fa fa-check"></i>
-											</span>
-											<span
-												className={
-													task.done
-														? 'line-through text-sm ml-4 text-[#5b7a9d] font-semibold'
-														: 'text-sm ml-4 text-[#5b7a9d] font-semibold'
-												}
-											>
-												{task.title}
-											</span>
+						{sortedTasks
+							.filter((task) => task.category === category)
+							.map((task) => (
+								<li className="mt-4" key={task.id}>
+									<div className="flex gap-2">
+										<div className="w-9/12 h-12 bg-[#e0ebff] rounded-[7px] flex justify-between items-center px-3">
+											<div className="flex relative">
+												<span
+													className="w-7 h-7 bg-white rounded-full border border-white transition-all cursor-pointer hover:border-[#36d344] flex justify-center items-center"
+													onClick={() =>
+														toggleTask(task.id)
+													}
+												>
+													<i className="text-white fa fa-check"></i>
+												</span>
+												<span
+													className={
+														task.done
+															? 'line-through text-sm ml-4 text-[#5b7a9d] font-semibold'
+															: 'text-sm ml-4 text-[#5b7a9d] font-semibold'
+													}
+												>
+													{task.title}
+												</span>
+											</div>
+											<div className="flex relative">
+												<Badge category={category} />
+												<span className="rounded-full flex items-center bg-white text-xs text-black px-2.5 py-0.5">
+													{new Date(
+														task.date.seconds *
+															1000,
+													).toLocaleTimeString()}
+												</span>
+											</div>{' '}
 										</div>
-										<div className="flex relative">
-											<Badge category={category} />
-											<span className="rounded-full flex items-center bg-white text-xs text-black px-2.5 py-0.5">
-												{new Date(
-													task.date.seconds * 1000,
-												).toLocaleTimeString()}
-											</span>
-										</div>{' '}
+										<button
+											onClick={() => deleteTask(task.id)}
+										>
+											<DeleteForeverIcon className="text-black" />
+										</button>
 									</div>
-									<button onClick={() => deleteTask(task.id)}>
-										<DeleteForeverIcon className="text-black" />
-									</button>
-								</div>
-							</li>
-						))}{' '}
+								</li>
+							))}
 					</ul>
 				</div>
 			))}
-		</div>
+		</>
 	);
 }
