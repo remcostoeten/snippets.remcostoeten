@@ -8,6 +8,7 @@ import {
 import firebase from 'firebase/compat/app';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Head from 'next/head';
+import Badge from '@/components/ui-elements/Badge';
 
 type Task = {
 	id: string;
@@ -129,9 +130,7 @@ export default function Todo() {
 				packages, which I want to finish someday.
 			</p>
 
-			<div className="mt-3 text-sm text-[#8ea6c8] flex justify-between items-center">
-				<p className="set_date">{new Date().toLocaleDateString()}</p>
-			</div>
+			<div className="mt-3 text-sm text-[#8ea6c8] flex justify-between items-center"></div>
 			<div className="flex">
 				<div className="flex flex-col">
 					<p className="text-xl font-semibold mb-1    text-[#063c76]">
@@ -141,6 +140,7 @@ export default function Todo() {
 						type="text"
 						className="border rounded text-gray-700 px-3 py-2 mr-2"
 						value={newTask}
+						placeholder="Add a new task..."
 						onChange={(e) => setNewTask(e.target.value)}
 					/>
 				</div>
@@ -149,7 +149,7 @@ export default function Todo() {
 						Category
 					</p>
 					<select
-						className="border rounded text-gray-700 px-3 py-2 mr-2"
+						className="bordefinline-flex items-center px-3 py-0.5 h-full pr-2 mr-2 text-sm font-medium border  text-slate-900"
 						value={selectedCategory}
 						onChange={(e) => setSelectedCategory(e.target.value)}
 					>
@@ -163,45 +163,18 @@ export default function Todo() {
 			</div>
 			<button
 				onClick={addTask}
-				className="bg-blue-500 text-white rounded px-3 py-2"
+				className="bg-blue-500 mt-2 text-white rounded px-3 py-2"
 			>
 				Add
 			</button>
 			{todoCategories.map((category) => (
 				<div key={category}>
-					{tasks.length > 0 && (
-						<h2 className="text-slate-600">{category}</h2>
-					)}
-					{todoCategories.map((category) => (
-						<div key={category}>
-							{tasks.length > 0 && (
-								<h2 className="text-slate-600">
-									<Badge text={category} color="blue" />
-								</h2>
-							)}
-							<ul>
-								{tasks
-									.filter(
-										(task) => task.category === category,
-									)
-									.map((task) => (
-										<TaskItem
-											key={task.id}
-											task={task}
-											onDelete={deleteTask}
-											onToggle={toggleTask}
-										/>
-									))}
-							</ul>
-						</div>
-					))}{' '}
 					<ul>
-						{tasks
-							.filter((task) => task.category === category)
-							.map((task) => (
-								<li key={task.id} className="mt-4">
-									<div className="flex gap-2">
-										<div className="w-9/12 h-12 bg-[#e0ebff] rounded-[7px] flex justify-start items-center px-3">
+						{tasks.map((task) => (
+							<li className="mt-4" key={task.id}>
+								<div className="flex gap-2">
+									<div className="w-9/12 h-12 bg-[#e0ebff] rounded-[7px] flex justify-between items-center px-3">
+										<div className="flex relative">
 											<span
 												className="w-7 h-7 bg-white rounded-full border border-white transition-all cursor-pointer hover:border-[#36d344] flex justify-center items-center"
 												onClick={() =>
@@ -220,19 +193,21 @@ export default function Todo() {
 												{task.title}
 											</span>
 										</div>
-										<button
-											onClick={() => deleteTask(task.id)}
-										>
-											<DeleteForeverIcon className="text-black" />
-										</button>
-										<span className="w-1/4 h-12 bg-[#e0ebff] rounded-[7px] flex justify-center text-sm text-[#5b7a9d] font-semibold items-center ">
-											{new Date(
-												task.date.seconds * 1000,
-											).toLocaleTimeString()}
-										</span>
+										<div className="flex relative">
+											<Badge category={category} />
+											<span className="rounded-full flex items-center bg-white text-xs  text-black px-2.5 py-0.5">
+												{new Date(
+													task.date.seconds * 1000,
+												).toLocaleTimeString()}
+											</span>
+										</div>{' '}
 									</div>
-								</li>
-							))}
+									<button onClick={() => deleteTask(task.id)}>
+										<DeleteForeverIcon className="text-black" />
+									</button>
+								</div>
+							</li>
+						))}{' '}
 					</ul>
 				</div>
 			))}
