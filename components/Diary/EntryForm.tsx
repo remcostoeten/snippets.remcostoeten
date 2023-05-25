@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { firestore } from '@/lib/firebase';
 import Message from '../ui-elements/Messages';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 export const EntryForm = ({ entry = {} }) => {
 	const [title, setTitle] = useState(entry.title || '');
 	const [content, setContent] = useState(entry.content || '');
 	const [category, setCategory] = useState(entry.category || []);
 	const [error, setError] = useState(false);
+	const [success, setSuccess] = useState(false);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -15,6 +17,8 @@ export const EntryForm = ({ entry = {} }) => {
 		if (!title || !content) {
 			setError(true);
 			return;
+		} else {
+			setSuccess(true);
 		}
 
 		const categoriesArray =
@@ -81,7 +85,16 @@ export const EntryForm = ({ entry = {} }) => {
 							: 'You should fill in the content field!'
 					}
 					iconBackgroundColor="bg-gray-800"
+					textColor="text-gray-500"
 					Icon={<WarningAmberIcon />}
+				/>
+			)}
+			{success && (
+				<Message
+					toastMessage="Note successfully created!"
+					iconBackgroundColor="bg-gray-800"
+					textColor="text-gray-500"
+					Icon={<CheckCircleOutlineIcon />}
 				/>
 			)}
 		</>
