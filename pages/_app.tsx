@@ -8,7 +8,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
 			<TopNotice />
-			<Navbar />
 			<div className="flex">
 				<Sidebar />
 				<main className="flex flex-col flex-1">

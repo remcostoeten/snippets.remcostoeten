@@ -3,6 +3,11 @@ export interface user {
 	user: string;
 }
 
+export interface User {
+	name: string;
+	user: string;
+}
+
 export interface document {
 	id: string;
 	title: string;

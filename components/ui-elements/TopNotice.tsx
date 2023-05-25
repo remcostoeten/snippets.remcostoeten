@@ -1,7 +1,26 @@
+import { auth, googleAuthProvider } from '@/lib/firebase';
 import Link from 'next/link';
-import { useEffect } from 'react';
-
+import { useState, useEffect } from 'react';
 export default function TopNotice() {
+	const [user, setUser] = useState<User | null>(null);
+
+	useEffect(() => {
+		const unsubscribe = auth.onAuthStateChanged((user) => {
+			setUser(user);
+		});
+
+		return () => unsubscribe();
+	}, []);
+
+	const signInWithGoogle = async () => {
+		await auth.signInWithPopup(googleAuthProvider);
+	};
+
+	const signOut = async () => {
+		await auth.signOut();
+		setUser(null);
+	};
+
 	useEffect(() => {
 		const handleHover = () => {
 			document.body.classList.toggle('external-hovered');
@@ -53,7 +72,7 @@ export default function TopNotice() {
 	}, []);
 
 	return (
-		<div className="top-nav relative isolate flex items-center gap-x-6 overflow-hidden text-gray-400 bg-gray-900  px-6 py-1.5 sm:px-1.5 sm:before:flex-1">
+		<div className="top-nav relative isolate flex md:items-center gap-x-6 overflow-hidden text-gray-400 bg-gray-900  px-6 py-1.5 sm:px-1.5 sm:before:flex-1 flex-col just md:flex-row">
 			<div
 				className="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
 				aria-hidden="true"
@@ -62,12 +81,12 @@ export default function TopNotice() {
 				className="absolute left-[max(45rem,calc(50%+8rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
 				aria-hidden="true"
 			></div>
-			<div className="flex flex-wrap items-center gap-x-2 gap-y-1 items-center">
+			<div className="flex md: flex-wrap items-center gap-x-2 gap-y-1 items-center">
 				<p className="text-sm leading-6 text-gray-400">
 					You’re currently on{' '}
-					<strong className="font-semibold">
+					<span ng className="font-semibold">
 						<Link href="/">docs.remcostoeten.com</Link>
-					</strong>
+					</span>
 					<svg
 						viewBox="0 0 2 2"
 						className="mx-2 inline h-0.5 w-0.5 fill-current"
@@ -80,14 +99,13 @@ export default function TopNotice() {
 						here{' '}
 					</Link>
 					to navigate to the main site. or to view my experimental{' '}
-					<small>WiP</small>
+					<Link
+						href="https://experiment.remcostoeten.com"
+						className="flex-none rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm link link--arrow"
+					>
+						Click here <span aria-hidden="true">&rarr;</span>
+					</Link>{' '}
 				</p>
-				<Link
-					href="https://experiment.remcostoeten.com"
-					className="flex-none rounded-full bg-gray-900 px-3.5 py-1 text-sm font-semibold text-white shadow-sm link link--arrow"
-				>
-					Click here <span aria-hidden="true">&rarr;</span>
-				</Link>
 			</div>
 			<div className="flex flex-1 justify-end">
 				<button
@@ -97,6 +115,24 @@ export default function TopNotice() {
 					<span className="sr-only">Dismiss</span>
 				</button>
 			</div>
+			{user ? (
+				<div className="flex items-center">
+					<span className="text-white">{user.displayName}</span>
+					<button
+						onClick={signOut}
+						className="ml-4 px-4 py-2 text-sm font-medium text-blue-500 rounded  bg-grey-400 hover:bg-blue-200"
+					>
+						Sign Out
+					</button>
+				</div>
+			) : (
+				<button
+					onClick={signInWithGoogle}
+					className="px-4 py-2 text-sm font-medium text-white rounded bg-indigo-800 rounded-xl mr-4 hover:bg-blue-200"
+				>
+					Sign In with Google
+				</button>
+			)}{' '}
 		</div>
 	);
 }

@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { auth, googleAuthProvider } from '../lib/firebase';
-
-type User = {
-	displayName: string | null;
-	photoURL: string | null;
-};
+import user from '@/lib/types';
 
 export default function Navbar() {
 	const [user, setUser] = useState<User | null>(null);
