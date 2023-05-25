@@ -21,3 +21,12 @@ export interface  DocumentData {
 	content: string;
   };
 
+
+  export interface Entry = {
+	id?: string;
+	date: Date;
+	title: string;
+	content: string;
+	userId: string;
+  };
+  
