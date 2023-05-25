@@ -1,21 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 interface MessageProps {
 	toastMessage: string;
 	Icon: JSX.Element;
 	iconBackgroundColor: string;
+	backgroundColor?: string;
+	textColor?: string;
+	onClose?: () => void; // Optional callback function for closing the message
 }
 
 const Message: React.FC<MessageProps> = ({
 	toastMessage,
 	Icon,
 	iconBackgroundColor,
+	backgroundColor = 'bg-gray-100',
+	textColor = 'text-gray-900',
+	onClose,
 }) => {
 	const [showMessage, setShowMessage] = useState(true);
 
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			handleClose();
+		}, 5000); // Automatically hide the message after 5 seconds
+
+		return () => {
+			clearTimeout(timer);
+		};
+	}, []);
+
 	const handleClose = () => {
 		setShowMessage(false);
+		if (onClose) {
+			onClose();
+		}
 	};
 
 	return (
@@ -27,7 +46,7 @@ const Message: React.FC<MessageProps> = ({
 						animate={{ y: 0, opacity: 1 }}
 						exit={{ y: '110%', opacity: 0 }}
 						transition={{ duration: 0.3 }}
-						className="max-w-2xl mx-4 p-4 rounded-lg shadow-md bg-white dark:bg-gray-800"
+						className={`max-w-2xl mx-4 p-4 rounded-lg shadow-md bg-white dark:bg-gray-800 ${backgroundColor} ${textColor} rounded-lg dark:text-blue-200`}
 					>
 						<div className="flex items-center">
 							<div
