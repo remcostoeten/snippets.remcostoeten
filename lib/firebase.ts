@@ -3,7 +3,6 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
-
 const firebaseConfig = {
 	apiKey: "AIzaSyB_OxFAbOowfYUU9v730OONfdj0ch1MuSE",
 	authDomain: "remcostoeten-docs.firebaseapp.com",
@@ -17,18 +16,26 @@ if (!firebase.apps.length) {
 		firebase.initializeApp(firebaseConfig);
 }
 
-const handleAddDocument = async (newDocument: Document) => {
+const handleAddDocument = async (newDocument: { id: number, title: string, done: boolean }) => {
 	try {
-	  const docRef = await firestore.collection('documentatie').add(newDocument);
-	  console.log('Document toegevoegd met ID:', docRef.id);
+		const docRef = await firestore.collection('tasks').add(newDocument);
+		console.log('Document toegevoegd met ID:', docRef.id);
 	} catch (error) {
-	  console.error('Fout bij het toevoegen van document:', error);
+		console.error('Fout bij het toevoegen van document:', error);
 	}
-  };
-  
+};
 
+ const handleToggleDocument = async (id: string, updatedDocument: { id: number, title: string, done: boolean }) => {
+	try {
+		await firestore.collection('tasks').doc(id).update(updatedDocument);
+		console.log('Document bijgewerkt met ID:', id);
+	} catch (error) {
+		console.error('Fout bij het bijwerken van document:', error);
+	}
+};
 export const auth = firebase.auth();
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
 export const firestore = firebase.firestore();
 export const storage = firebase.storage();
+ export { handleAddDocument, handleToggleDocument };
