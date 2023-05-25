@@ -54,7 +54,7 @@ export default function Sidebar() {
 								Dashboard
 							</span>
 						</Link>
-						<Link href="#" className={anchorStyling}>
+						<Link href="/tests/diary" className={anchorStyling}>
 							<svg
 								className={`w-6 h-6 stroke-current ${
 									isSidebarExpanded ? 'mr-2' : 'mr-2'
