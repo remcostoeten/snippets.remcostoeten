@@ -3,6 +3,12 @@ import { firestore } from '@/lib/firebase';
 import Message from '../ui-elements/Messages';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { User } from '@/lib/types';
+
+type EntryFormProps = {
+  entry?: Entry;
+  user: User;
+};
 
 type Entry = {
   id?: string;
@@ -11,14 +17,10 @@ type Entry = {
   category?: string;
 };
 
-type EntryFormProps = {
-  entry?: Entry;
-};
-
-export const EntryForm = ({ entry = {} }: EntryFormProps) => {
-  const [title, setTitle] = useState(entry.title || '');
-  const [content, setContent] = useState(entry.content || '');
-  const [category, setCategory] = useState(entry.category || '');
+export const EntryForm: React.FC<EntryFormProps> = ({ entry, user }) => {
+  const [title, setTitle] = useState(entry?.title || '');
+  const [content, setContent] = useState(entry?.content || '');
+  const [category, setCategory] = useState(entry?.category || '');
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -34,7 +36,7 @@ export const EntryForm = ({ entry = {} }: EntryFormProps) => {
 
     const categoriesArray = category.split(',').map((item) => item.trim());
 
-    if (entry.id) {
+    if (entry?.id) {
       await firestore
         .collection('entries')
         .doc(entry.id)

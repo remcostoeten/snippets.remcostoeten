@@ -1,0 +1,11 @@
+
+body {
+	position: relative;
+	overflow: hidden;
+
+	&.sidebar-expanded {
+		.main-content {
+			width: 85vw;
+		}
+	}
+}

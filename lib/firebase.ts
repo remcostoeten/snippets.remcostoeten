@@ -22,11 +22,7 @@ const firebaseConfig = {
 	done: boolean;
   };
   
-  const handleAddDocument = async (newDocument: {
-	id: number;
-	title: string;
-	done: boolean;
-  }) => {
+  const handleAddDocument = async (newDocument: Task) => {
 	try {
 	  const docRef = await firebase.firestore().collection('tasks').add(newDocument);
 	  console.log('Document added with ID:', docRef.id);
@@ -48,3 +44,4 @@ const firebaseConfig = {
   export const firestore = firebase.firestore();
   export const storage = firebase.storage();
   export { handleAddDocument, handleToggleDocument };
+  

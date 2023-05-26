@@ -1,50 +1,40 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { EntryForm } from './EntryForm';
-import { firestore } from '@/lib/firebase';
 
-type Entry = {
-	id: string;
-	title: string;
-	content: string;
-};
+interface Entry {
+  title: string;
+  content: string;
+  id: string;
+}
 
-type EntryDetailProps = {
-	entry: Entry;
-	title: string;
-	setIsEditing: Dispatch<SetStateAction<boolean>>;
-};
+interface EntryDetailProps {
+  entry: Entry;
+  deleteEntry: (id: string) => void;
+}
 
-export const EntryDetail = ({ entry, setIsEditing }: EntryDetailProps) => {
-	const [isEditingState, setIsEditingState] = useState(false);
+export const EntryDetail: React.FC<EntryDetailProps> = ({ entry, deleteEntry }) => {
+  const [isEditing, setIsEditing] = useState(false);
 
-	const deleteEntry = async (id: string) => {
-		await firestore.collection('entries').doc(id).delete();
-	};
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
 
-	return entry ? (
-		isEditingState ? (
-			<EntryForm entry={entry} />
-		) : (
-			<div className="max-w-lg mx-auto mt-4">
-				<h1 className="mb-2 text-xl font-bold">{entry.title}</h1>
-				<p className="mb-2">{entry.content}</p>
-				<div className="flex">
-					<button
-						onClick={() => setIsEditingState(true)}
-						className="px-4 py-2 bg-blue-600 text-white rounded mr-2"
-					>
-						Edit
-					</button>
-					<button
-						onClick={() => deleteEntry(entry.id)}
-						className="px-4 py-2 bg-red-600 text-white rounded"
-					>
-						Delete
-					</button>
-				</div>
-			</div>
-		)
-	) : (
-		<div>Loading...</div>
-	);
+  return entry ? (
+    <div className="max-w-lg mx-auto mt-4">
+      {isEditing ? (
+        <EntryForm entry={entry} user={undefined} />
+      ) : (
+        <>
+          <h1 className="mb-2 text-xl font-bold">{entry.title}</h1>
+          <p className="mb-2">{entry.content}</p>
+          <div className="flex">
+            <button onClick={handleEditClick} className="px-4 py-2 bg-blue-600 text-white rounded mr-2">Edit</button>
+            <button onClick={() => deleteEntry(entry.id)} className="px-4 py-2 bg-red-600 text-white rounded">Delete</button>
+          </div>
+        </>
+      )}
+    </div>
+  ) : (
+    <div>Loading...</div>
+  );
 };

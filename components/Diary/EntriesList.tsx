@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { firestore } from '../../lib/firebase';
 import { SearchBar } from './SearchBar';
 
-export const EntriesList = () => {
+export const EntriesList: React.FC<{ user: any }> = ({ user }) => {
 	const [entries, setEntries] = useState([]);
 	const [searchTerm, setSearchTerm] = useState('');
 

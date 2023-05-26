@@ -21,8 +21,8 @@
     "@types/react-dom": "18.2.4",
     "autoprefixer": "10.4.14",
     "firebase": "^9.22.1",
+    "firebase-admin": "^11.8.0",
     "framer-motion": "^10.12.16",
-    "gsap": "^3.11.5",
     "heroicons": "^2.0.18",
     "next": "13.4.3",
     "postcss": "8.4.23",
@@ -32,8 +32,6 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
-    "react-quill": "^0.0.2",
-    "react-transition-group": "^4.4.5",
     "sass": "^1.62.1",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
