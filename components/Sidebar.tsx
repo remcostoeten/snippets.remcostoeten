@@ -8,6 +8,7 @@ import {
 	Dashboard as DashboardIcon,
 } from '@mui/icons-material';
 import ColorSwitcher from './ui-elements/ColorSwitcher';
+import LogoIcon from './ui-elements/LogoIcon';
 
 export default function Sidebar() {
 	const [isSidebarExpanded, setSidebarExpanded] = useState(false);
@@ -101,7 +102,9 @@ export default function Sidebar() {
 						>
 							<AddCircleIcon />
 						</Link>
-
+						<Link href="test/logo">
+							<LogoIcon />
+						</Link>
 						<Link href="#" className={anchorStyling}>
 							<ColorSwitcher />
 						</Link>
