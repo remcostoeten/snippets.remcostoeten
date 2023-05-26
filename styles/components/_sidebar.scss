@@ -9,78 +9,57 @@
 	&.expanded {
 		width: 15vw;
 
-		a {
-			// justify-content: flex-start;
-		}
-
 		.menu-text {
 			opacity: 0;
 			animation: textDelay 0.35s 0.35s cubic-bezier(0.165, 0.84, 0.44, 1)
 				forwards;
 		}
 
-		a.icon {
+		.icon {
 			opacity: 0;
 			margin-right: 0.75rem;
 		}
 	}
 
-	@keyframes textDelay {
-		from {
-			opacity: 0;
-		}
+	.text {
+		font-size: 0.875rem;
+		font-weight: 500;
+		transition: opacity 0.3s ease;
+		opacity: 0;
+	}
 
-		to {
-			opacity: 1;
-		}
+	.icon {
+		width: 1.5rem;
+		height: 1.5rem;
+		margin-right: 0.5rem;
+		fill: currentColor;
+		transition: margin-right 0.3s ease;
 	}
 
 	a {
 		display: flex;
 		transform: translateX(10%);
+		align-items: center;
+		width: 100%;
+		padding: 0.75rem;
+		margin-top: 0.75rem;
+		color: #cbd5e1;
+		text-decoration: none;
+		transition: background-color 0.3s ease, color 0.3s ease;
+
+		&:hover {
+			background-color: #374151;
+			color: #e5e7eb;
+			.icon {
+				margin-right: 0.75rem;
+			}
+			.text {
+				opacity: 1;
+			}
+		}
 	}
 }
 
-.sidebar a {
-	display: flex;
-	align-items: center;
-	width: 100%;
-	padding: 0.75rem;
-	margin-top: 0.75rem;
-	color: #cbd5e1;
-	text-decoration: none;
-	transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.sidebar a:hover {
-	background-color: #374151;
-	color: #e5e7eb;
-}
-
-.sidebar a .icon {
-	width: 1.5rem;
-	height: 1.5rem;
-	margin-right: 0.5rem;
-	fill: currentColor;
-	transition: margin-right 0.3s ease;
-}
-
-.sidebar:hover a .icon {
-	margin-right: 0.75rem;
-}
-
-.sidebar a .text {
-	font-size: 0.875rem;
-	font-weight: 500;
-	transition: opacity 0.3s ease;
-	opacity: 0;
-}
-
-.sidebar:hover a .text {
-	opacity: 1;
-}
-
-/* Active Sidebar Item */
 .sidebar a.active {
 	background-color: #6b7280;
 	color: #e5e7eb;
@@ -88,4 +67,14 @@
 
 .sidebar a.active .icon {
 	fill: #e5e7eb;
+}
+
+@keyframes textDelay {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
 }

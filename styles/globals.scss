@@ -1,16 +1,13 @@
+@import './variables/variables';
+@import './base/body';
+@import './components/sidebar';
+@import './components/header';
+@import './components/preloader';
+@import './utillities/animations';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import './variables/_variables.scss';
-
-@import './base/_body.scss';
-
-@import './components/_loader.scss';
-@import './components/_sidebar.scss';
-@import './components/_header.scss';
-@import './components/_preloader.scss';
-@import './utillities/_animations.scss';
 
 :root {
 	--foreground-rgb: 0, 0, 0;
@@ -25,4 +22,3 @@
 		--background-end-rgb: 0, 0, 0;
 	}
 }
-

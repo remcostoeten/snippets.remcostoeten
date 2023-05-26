@@ -37,3 +37,7 @@ next-env.d.ts
 # Local Netlify folder
 .netlify
 .env.production
+components/ui-elements/Preloader.module.css
+components/ui-elements/Preloader.module.css.map
+styles/globals.css.map
+styles/components/Logo.module.css
