@@ -1,0 +1,79 @@
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	width: 60px;
+	transform: rotate(-45deg);
+	margin: auto;
+	position: fixed;
+	top: calc(50% - 30px);
+	left: calc(50% - 30px);
+	animation: scale-x 1s ease forwards;
+	animation-delay: 2.3s;
+}
+.container span {
+	flex-basis: 50%;
+	aspect-ratio: 1/1;
+	display: block;
+	transition: opacity 0.7s ease;
+}
+
+.tileOne {
+	background-color: white;
+	transform-origin: 100% 100%;
+	animation: flip-1 0.5s linear forwards;
+	border: none;
+	opacity: 0;
+	transition: opacity 0.7s ease;
+}
+.tileTwo {
+	background-color: white;
+	transform-origin: 50% 100%;
+	animation: flip-2 0.5s linear forwards;
+	animation-delay: 0.5s;
+	opacity: 0;
+}
+.tileThree {
+	background-color: white;
+	transform-origin: 50% 0%;
+	animation: flip-4 0.5s linear forwards;
+	animation-delay: 1.5s;
+	opacity: 0;
+}
+.tileFour {
+	background-color: white;
+	transform-origin: 0% 50%;
+	animation: flip-3 0.5s linear forwards;
+	animation-delay: 1s;
+	opacity: 0;
+}
+
+@keyframes flip-1 {
+	to {
+		transform: rotateY(180deg);
+		opacity: 1;
+	}
+}
+@keyframes flip-2 {
+	to {
+		transform: rotateX(180deg);
+		opacity: 1;
+	}
+}
+@keyframes flip-3 {
+	to {
+		transform: rotateY(-180deg);
+		opacity: 1;
+	}
+}
+@keyframes flip-4 {
+	to {
+		transform: rotateX(-180deg);
+		opacity: 1;
+	}
+}
+@keyframes scale-x {
+	to {
+		transform: scale(50);
+		opacity: 0;
+	}
+}

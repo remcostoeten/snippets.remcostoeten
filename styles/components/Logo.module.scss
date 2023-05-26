@@ -1,0 +1,72 @@
+@import './_logo-animations.scss';
+
+$white: #fff;
+$black: #000;
+
+$animateDuration: 1s;
+$animationDelay: 250ms;
+$timelineOne: $animateDuration;
+
+.logo {
+	width: 100%;
+	&__left {
+		opacity: 0;
+		fill: $white;
+		animation-name: fadeIn;
+		animation-fill-mode: forwards;
+		animation-duration: $timelineOne;
+		animation-timing-function: cubic-bezier(0.17, 0.67, 1, 1.23);
+		animation-iteration-count: infinite;
+	}
+
+	&__right {
+		opacity: 0;
+		fill: $white;
+		animation-name: fadeIn;
+		animation-delay: $animationDelay;
+		animation-fill-mode: forwards;
+		animation-duration: $timelineOne;
+		animation-timing-function: cubic-bezier(0.17, 0.67, 1, 1.23);
+		animation-iteration-count: infinite;
+	}
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes scaleIn {
+	0% {
+		transform: scale(0);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+@keyframes blurIn {
+	0% {
+		filter: blur(10px);
+	}
+
+	100% {
+		filter: blur(0);
+	}
+}
+
+@keyframes blurOut {
+	0% {
+		filter: blur(0);
+	}
+
+	100% {
+		filter: blur(10px);
+	}
+}

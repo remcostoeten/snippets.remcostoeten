@@ -16,6 +16,9 @@ module.exports = {
 			width: {
 				'95vw': '95vw',
 			},
+			animation: {
+				'spin-slow': 'spin 3s linear infinite',
+			},
 		},
 	},
 	plugins: [],
