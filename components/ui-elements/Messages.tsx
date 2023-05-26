@@ -23,7 +23,7 @@ const Message: React.FC<MessageProps> = ({
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			handleClose();
-		}, 5000); // Automatically hide the message after 5 seconds
+		}, 5000);
 
 		return () => {
 			clearTimeout(timer);

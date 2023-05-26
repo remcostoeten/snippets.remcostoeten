@@ -1,7 +1,8 @@
 import { auth, googleAuthProvider } from '@/lib/firebase';
 import { useState } from 'react';
-import firebase from 'firebase/app';
+import Image from 'next/image';
 import 'firebase/auth';
+
 export default function SignInButton() {
 	const user = null;
 	const username = null;
@@ -36,7 +37,8 @@ function SignInBtn() {
 		<>
 			{error && <p>{error}</p>}
 			<button className="btn-google" onClick={signInWithGoogle}>
-				<img src={'/google.png'} /> Sign in with Google
+				<Image alt="Sign in with google" fill src={'/google.png'} />{' '}
+				Sign in with Google
 			</button>
 		</>
 	);

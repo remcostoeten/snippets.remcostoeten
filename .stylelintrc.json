@@ -1,6 +1,6 @@
 {
   "extends": "stylelint-config-recommended-scss",
   "rules": {
-    "declaration-block-trailing-semicolon": "always"
+    "declaration-block-trailing-semicolon": null
   }
 }

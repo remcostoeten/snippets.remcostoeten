@@ -1,263 +1,260 @@
-@keyframes zoomInRight {
-	from {
-		opacity: 0;
-		transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);
-		animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-	}
+// $animate-duration: 1s;
+// $animate-delay: 1s;
+// $animate-repeat: 1;
+// @keyframes zoomInRight {
+// 	from {
+// 		opacity: 0;
+// 		transform: scale3d(0.1, 0.1, 0.1) translate3d(1000px, 0, 0);
+// 		animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+// 	}
 
-	60% {
-		opacity: 1;
-		transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);
-		animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-	}
-}
+// 	60% {
+// 		opacity: 1;
+// 		transform: scale3d(0.475, 0.475, 0.475) translate3d(-10px, 0, 0);
+// 		animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+// 	}
+// }
 
-@keyframes zoomInLeft {
-	from {
-		opacity: 0;
-		transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);
-		animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-	}
+// @keyframes zoomInLeft {
+// 	from {
+// 		opacity: 0;
+// 		transform: scale3d(0.1, 0.1, 0.1) translate3d(-1000px, 0, 0);
+// 		animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+// 	}
 
-	60% {
-		opacity: 1;
-		transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);
-		animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-	}
-}
+// 	60% {
+// 		opacity: 1;
+// 		transform: scale3d(0.475, 0.475, 0.475) translate3d(10px, 0, 0);
+// 		animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+// 	}
+// }
 
-@keyframes fadeIn {
-	to {
-		opacity: 1;
-	}
-}
+// @keyframes fadeIn {
+// 	to {
+// 		opacity: 1;
+// 	}
+// }
 
-@keyframes initialHide {
-	from {
-		opacity: 0;
-	}
+// @keyframes initialHide {
+// 	from {
+// 		opacity: 0;
+// 	}
 
-	to {
-		opacity: 1;
-	}
-}
+// 	to {
+// 		opacity: 1;
+// 	}
+// }
 
-@keyframes slideHeroFromLeft {
-	from {
-		transform: translate(100%, -46%);
-	}
+// @keyframes slideHeroFromLeft {
+// 	from {
+// 		transform: translate(100%, -46%);
+// 	}
 
-	to {
-		transform: translate(168%, -46%);
-	}
-}
+// 	to {
+// 		transform: translate(168%, -46%);
+// 	}
+// }
 
-@keyframes slideHeroFromRight {
-	from {
-		transform: translate(-175%, -46%);
-	}
+// @keyframes slideHeroFromRight {
+// 	from {
+// 		transform: translate(-175%, -46%);
+// 	}
 
-	to {
-		transform: translate(-160%, -46%);
-	}
-}
+// 	to {
+// 		transform: translate(-160%, -46%);
+// 	}
+// }
 
-@keyframes jackInTheBox {
-	from {
-		opacity: 0;
-		transform: scale(0.1) rotate(30deg) translate(-100%, -46%);
-		// transform-origin: center bottom;
-	}
+// @keyframes jackInTheBox {
+// 	from {
+// 		opacity: 0;
+// 		transform: scale(0.1) rotate(30deg) translate(-100%, -46%);
+// 		// transform-origin: center bottom;
+// 	}
 
-	50% {
-		opacity: 0;
-		transform: rotate(-10deg);
-	}
+// 	50% {
+// 		opacity: 0;
+// 		transform: rotate(-10deg);
+// 	}
 
-	70% {
-		transform: rotate(3deg);
-	}
+// 	70% {
+// 		transform: rotate(3deg);
+// 	}
 
-	to {
-		opacity: 1;
-		transform: scale(1) rotate(0deg) translate(-186%, -46%);
-	}
-}
+// 	to {
+// 		opacity: 1;
+// 		transform: scale(1) rotate(0deg) translate(-186%, -46%);
+// 	}
+// }
 
-@keyframes rotateFull {
-	0% {
-		transform: rotate(0deg);
-	}
+// @keyframes rotateFull {
+// 	0% {
+// 		transform: rotate(0deg);
+// 	}
 
-	50% {
-	}
+// 	50% {
+// 	}
 
-	100% {
-		transform: rotate(45deg);
-	}
-}
+// 	100% {
+// 		transform: rotate(45deg);
+// 	}
+// }
 
-@keyframes showBlur {
-	0% {
-		scale: 1;
-	}
-	15% {
-		opacity: 1;
-	}
-	100% {
-		background-color: #b755fd;
-		transform: rotate(45deg);
-		scale: 1.2;
-	}
-}
+// @keyframes showBlur {
+// 	0% {
+// 		scale: 1;
+// 	}
+// 	15% {
+// 		opacity: 1;
+// 	}
+// 	100% {
+// 		background-color: #b755fd;
+// 		transform: rotate(45deg);
+// 		scale: 1.2;
+// 	}
+// }
 
-@keyframes zoomOutLeft {
-	40% {
-		opacity: 1;
-		transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);
-	}
+// @keyframes zoomOutLeft {
+// 	40% {
+// 		opacity: 1;
+// 		transform: scale3d(0.475, 0.475, 0.475) translate3d(42px, 0, 0);
+// 	}
 
-	to {
-		opacity: 0;
-		transform: scale(0.1) translate3d(2000px, 0, 0);
-	}
-}
+// 	to {
+// 		opacity: 0;
+// 		transform: scale(0.1) translate3d(2000px, 0, 0);
+// 	}
+// }
 
-@keyframes zoomOutRight {
-	40% {
-		opacity: 1;
-		transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);
-	}
+// @keyframes zoomOutRight {
+// 	40% {
+// 		opacity: 1;
+// 		transform: scale3d(0.475, 0.475, 0.475) translate3d(-42px, 0, 0);
+// 	}
 
-	to {
-		opacity: 0;
-		transform: scale(0.1) translate3d(2000px, 0, 0);
-	}
-}
+// 	to {
+// 		opacity: 0;
+// 		transform: scale(0.1) translate3d(2000px, 0, 0);
+// 	}
+// }
+// .animate {
+// 	&__animated {
+// 		animation-duration: $animate-duration;
+// 		animation-fill-mode: both;
+// 	}
 
-$animate-duration: 1s;
-$animate-delay: 1s;
-$animate-repeat: 1;
+// 	&__infinite {
+// 		animation-iteration-count: infinite;
+// 	}
 
-.animate {
-	&__animated {
-		animation-duration: $animate-duration;
-		animation-fill-mode: both;
-	}
+// 	&__repeat {
+// 		animation-iteration-count: $animate-repeat;
+// 	}
 
-	&__infinite {
-		animation-iteration-count: infinite;
-	}
+// 	&__fadeIn {
+// 		animation-name: fadeIn 1s 1s ease-in-out forwards;
+// 	}
 
-	&__repeat {
-		animation-iteration-count: $animate-repeat;
-	}
+// 	&__hide {
+// 		animation: initialHide 1s;
+// 	}
 
-	&__fadeIn {
-		animation-name: fadeIn 1s 1s ease-in-out forwards;
-	}
+// 	&__jackInTheBox {
+// 		animation-name: jackInTheBox;
+// 	}
 
-	&__hide {
-		animation: initialHide 1s;
-	}
+// 	&__zoomInLeft {
+// 		animation-name: zoomInLeft;
+// 	}
 
-	&__jackInTheBox {
-		animation-name: jackInTheBox;
-	}
+// 	&__zoomInRight {
+// 		animation-name: zoomInLeft;
+// 	}
 
-	&__zoomInLeft {
-		animation-name: zoomInLeft;
-	}
+// 	&__delay--100ms {
+// 		animation-delay: 100ms;
+// 	}
 
-	&__zoomInRight {
-		animation-name: zoomInLeft;
-	}
+// 	&__delay--250ms {
+// 		animation-delay: 250ms;
+// 	}
 
-	&__delay--100ms {
-		animation-delay: 100ms;
-	}
+// 	&__delay--500ms {
+// 		animation-delay: 500ms;
+// 	}
 
-	&__delay--250ms {
-		animation-delay: 250ms;
-	}
+// 	&__delay--600ms {
+// 		animation-delay: 600ms;
+// 	}
 
-	&__delay--500ms {
-		animation-delay: 500ms;
-	}
+// 	&__delay--700ms {
+// 		animation-delay: 700ms;
+// 	}
 
-	&__delay--600ms {
-		animation-delay: 600ms;
-	}
+// 	&__delay--750ms {
+// 		animation-delay: 750ms;
+// 	}
 
-	&__delay--700ms {
-		animation-delay: 700ms;
-	}
+// 	&__delay--800ms {
+// 		animation-delay: 800ms;
+// 	}
 
-	&__delay--750ms {
-		animation-delay: 750ms;
-	}
+// 	&__delay--900ms {
+// 		animation-delay: 900ms;
+// 	}
 
-	&__delay--800ms {
-		animation-delay: 800ms;
-	}
+// 	&__delay--1000ms {
+// 		animation-delay: 1000ms;
+// 	}
 
-	&__delay--900ms {
-		animation-delay: 900ms;
-	}
+// 	&__delay--1100ms {
+// 		animation-delay: 1100ms;
+// 	}
 
-	&__delay--1000ms {
-		animation-delay: 1000ms;
-	}
+// 	&__delay--1200ms {
+// 		animation-delay: 1200ms;
+// 	}
 
-	&__delay--1100ms {
-		animation-delay: 1100ms;
-	}
+// 	&__delay--1250ms {
+// 		animation-delay: 1250ms;
+// 	}
 
-	&__delay--1200ms {
-		animation-delay: 1200ms;
-	}
+// 	&__delay--1300ms {
+// 		animation-delay: 1300ms;
+// 	}
 
-	&__delay--1250ms {
-		animation-delay: 1250ms;
-	}
+// 	&__delay--1400ms {
+// 		animation-delay: 1400ms;
+// 	}
 
-	&__delay--1300ms {
-		animation-delay: 1300ms;
-	}
+// 	&__delay--1500ms {
+// 		animation-delay: 1500ms;
+// 	}
 
-	&__delay--1400ms {
-		animation-delay: 1400ms;
-	}
+// 	&__delay--1600ms {
+// 		animation-delay: 1600ms;
+// 	}
+// }
+// .animate {
+// 	&__jack-in-the-box {
+// 		.animate__jackInTheBox {
+// 			animation-name: jackInTheBox;
+// 		}
+// 	}
+// }
 
-	&__delay--1500ms {
-		animation-delay: 1500ms;
-	}
+// .animate__zoomOutRight {
+// 	animation-name: zoomOutRight;
+// 	transform-origin: right center;
+// }
 
-	&__delay--1600ms {
-		animation-delay: 1600ms;
-	}
-}
+// .animate__zoomOutLeft {
+// 	animation-name: zoomOutLeft;
+// 	transform-origin: left center;
+// }
 
-.animate {
-	&__jack-in-the-box {
-		.animate__jackInTheBox {
-			animation-name: jackInTheBox;
-		}
-	}
-}
-
-.animate__zoomOutRight {
-	animation-name: zoomOutRight;
-	transform-origin: right center;
-}
-
-.animate__zoomOutLeft {
-	animation-name: zoomOutLeft;
-	transform-origin: left center;
-}
-
-@keyframes stroke-dashoffset-animate {
-	to {
-		stroke-dashoffset: 0;
-	}
-}
+// @keyframes stroke-dashoffset-animate {
+// 	to {
+// 		stroke-dashoffset: 0;
+// 	}
+// }
