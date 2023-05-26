@@ -3,7 +3,6 @@ import '../styles/globals.scss';
 import Loader from '@/components/ui-elements/Loader';
 import Sidebar from '@/components/Sidebar';
 import TopNotice from '@/components/ui-elements/TopNotice';
-import Preloader from '@/components/ui-elements/Preloader';
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
