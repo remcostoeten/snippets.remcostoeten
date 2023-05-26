@@ -22,9 +22,17 @@ type Task = {
 };
 
 const fetchTasks = async () => {
-  const taskCollection = await firestore.collection('tasks').get();
-  return taskCollection.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Task));
-};
+	const taskCollection = await firestore.collection('tasks').get();
+	return taskCollection.docs.map((doc) => {
+	  const taskData = doc.data();
+	  return {
+		...taskData,
+		id: doc.id,
+		date: taskData.date.toDate().toISOString(), // Convert date to ISO string
+	  };
+	});
+  };
+  
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const tasks = await fetchTasks();
