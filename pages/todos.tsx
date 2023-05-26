@@ -123,7 +123,7 @@ export default function Todo({ tasks: initialTasks }) {
         >
           experiments.remcostoeten.com
         </Link>
-        {''} which is my "staging" environment where I am building my
+        {''} which is my staging environment where I am building my
         new portfolio site. Besides that, I have some other projects I
         have laying around such as several browser extensions and NPM
         packages, which I want to finish someday.
