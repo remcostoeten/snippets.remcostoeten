@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-const App: React.FC = () => {
+const Preloader: React.FC = () => {
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
 			document.body.classList.add('animationPartTwo');
@@ -13,13 +13,6 @@ const App: React.FC = () => {
 
 	return (
 		<div className="logo">
-			<div className="position">
-				<h1 className="logo__text">
-					<span className="text-wrapper">
-						<span className="letters">remcostoeten</span>
-					</span>
-				</h1>
-			</div>
 			<h2 className="text">
 				<span className="r">r</span>
 				<span className="e">e</span>
@@ -61,4 +54,4 @@ const App: React.FC = () => {
 	);
 };
 
-export default App;
+export default Preloader;

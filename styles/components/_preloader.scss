@@ -1,14 +1,196 @@
-.loader {
-	border-top-color: transparent;
-	border-right-color: transparent;
-	animation-duration: 1.5s;
-}
+$white: #fff;
+$black: #101010;
+$color-primary: #606cdb;
 
-@keyframes spin {
+@import url('https://fonts.googleapis.com/css?family=Gabriel+Sans:bold');
+
+$animationDuration: 1s;
+$animationDelay: 250ms;
+$bezierOne: cubic-bezier(0.86, -0.12, 0, 1);
+$animationFill: infinite;
+
+$logoSize: 250px;
+
+@keyframes reveal {
 	0% {
-		transform: rotate(0);
+		width: 0px;
+		opacity: 0;
 	}
 	100% {
-		transform: rotate(360deg);
+		width: fit-content;
+		opacity: 1;
+	}
+}
+
+.logo {
+	display: grid;
+	place-items: center;
+	width: 100vw;
+	height: 100vh;
+	background: $black;
+
+	.text {
+		opacity: 0;
+	}
+
+	&__right,
+	&__left {
+		scale: 0.1;
+		position: absolute;
+		fill: $color-primary;
+		animation: scaleIn 2s $bezierOne $animationFill,
+			fadeIn 2s $bezierOne $animationFill;
+	}
+}
+
+.animationPartTwo {
+	.r,
+	.e,
+	.m,
+	.c,
+	.o,
+	.s,
+	.t,
+	.oo,
+	.ee,
+	.tt,
+	.eee,
+	.n,
+	.text {
+		opacity: 1 !important;
+		transition: 500ms $bezierOne;
+	}
+
+	$baseDelay: 800ms;
+	.s {
+		transition-delay: $baseDelay;
+	}
+	.t {
+		transition-delay: $baseDelay + 25ms;
+	}
+	.o {
+		transition-delay: $baseDelay + 30ms;
+	}
+	.c {
+		transition-delay: $baseDelay + 32ms;
+	}
+	.o {
+		transition-delay: $baseDelay + 40ms;
+	}
+	.c {
+		transition-delay: $baseDelay + 45ms;
+	}
+	.oo {
+		transition-delay: $baseDelay + 35ms;
+	}
+	.m {
+		transition-delay: $baseDelay + 60ms;
+	}
+	.e {
+		transition-delay: $baseDelay + 75ms;
+	}
+	.ee {
+		transition-delay: $baseDelay + 45ms;
+	}
+	.tt {
+		transition-delay: $baseDelay + 75ms;
+	}
+	.eee {
+		transition-delay: $baseDelay + 100ms;
+	}
+	.r {
+		transition-delay: $baseDelay + 110ms;
+	}
+	.n {
+		transition-delay: $baseDelay + 125ms;
+	}
+
+	.logo {
+		&__right {
+			animation: pathSlideRight 1800ms 500ms $bezierOne $animationFill;
+		}
+
+		&__left {
+			animation: pathSlideLeft 1800ms 500ms $bezierOne $animationFill;
+		}
+	}
+
+	h2 {
+		color: $white;
+		font-size: 120px;
+		position: absolute;
+		transform: translate(-29px, -34px);
+
+		span {
+			opacity: 0;
+
+			@for $i from 1 through 12 {
+				&:nth-child(#{$i}) {
+					animation-delay: 100ms * $i;
+				}
+			}
+		}
+	}
+}
+
+.r,
+.e,
+.m,
+.c,
+.o,
+.s,
+.t,
+.oo,
+.ee,
+.tt,
+.eee,
+.n,
+.text {
+	opacity: 0;
+}
+
+@keyframes letterShow {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes scaleIn {
+	from {
+		scale: 0;
+	}
+	to {
+		scale: 0.1;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes pathSlideLeft {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(-145px);
+	}
+}
+
+@keyframes pathSlideRight {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translate(130px, -10px);
 	}
 }
