@@ -41,3 +41,5 @@ components/ui-elements/Preloader.module.css
 components/ui-elements/Preloader.module.css.map
 styles/globals.css.map
 styles/components/Logo.module.css
+*.css.map
+```
