@@ -25,7 +25,7 @@ const Preloader: React.FC = () => {
 		<>
 		
 		<div className={`logo ${logoClass}`}>
-		<button className='bg-red-400 absolute z-50 top-0' onClick={toggleLogoClass}>Toggle logo class</button>
+		//<button className='bg-red-400 absolute z-50 top-0' onClick={toggleLogoClass}>Toggle logo class</button>
 
 			<h2 className="text">
 				<span className="r">r</span>
