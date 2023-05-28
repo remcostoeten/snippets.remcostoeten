@@ -7,8 +7,12 @@ $color-primary: #606cdb;
 $animationDuration: 1s;
 $animationDelay: 250ms;
 // $bezierOne: ease-in-out;
-$bezierOne: cubic-bezier(0.86, -0.12, 0, 1);
+$bezierInitial: ease;
+$bezierOne: ease;
+// $bezierOne: cubic-bezier(0.86, -0.12, 0, 1);
 $animationFill: forwards;
+
+$baseDelay: 1555ms;
 
 $logoSize: 250px;
 
@@ -23,26 +27,54 @@ $logoSize: 250px;
 	}
 }
 
-.logo {
-	display: grid;
-	place-items: center;
-	width: 100vw;
-	height: 100vh;
-	background: $black;
-	// animation: load 1s $bezierOne forwards, load 1s 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse forwards;
-
-	&__right,
-	&__left {
-		scale: 0.1;
-		position: absolute;
-		fill: $color-primary;
-		animation: scaleIn 1s 500ms $bezierOne $animationFill,
-			fadeIn 1s 500ms $bezierOne $animationFill;
-	}
-}
-$baseDelay: 1555ms;
-
 .animationPartTwo {
+	.logo {
+		.text {
+			scale: 0;
+			animation: initialHideScale 1s $bezierOne forwards;
+		}
+
+		&__left {
+			animation: dontShowInitial 500ms forwards,
+				left 1s 500ms $bezierOne forwards;
+		}
+
+		&__right {
+			animation: dontShowInitial 500ms forwards,
+				right 1s 500ms $bezierOne forwards;
+		}
+
+		&__left,
+		&__right {
+			opacity: 0;
+			scale: 0.1;
+		}
+
+		@keyframes left {
+			0% {
+				transform: translateX(0px);
+			}
+
+			100% {
+				transform: translateX(-128px);
+			}
+		}
+
+		@keyframes right {
+			0% {
+				transform: translateX(0px);
+			}
+
+			100% {
+				transform: translate(125px, -10px);
+			}
+		}
+	}
+
+	.text {
+		position: absolute;
+	}
+
 	.r,
 	.e,
 	.m,
@@ -55,77 +87,56 @@ $baseDelay: 1555ms;
 	.tt,
 	.eee,
 	.n {
-		opacity: 1 !important;
-		transition: 500ms $bezierOne;
+		opacity: 1;
+		animation: dontShowInitial 300ms forwards;
+		transition: 100ms $bezierOne;
 	}
 
-	$baseDelay: 900ms;
+	$baseDelay: 800ms;
 	.s {
-		transition-delay: $baseDelay;
+		animation: dontShowInitial 300ms forwards;
 	}
 	.t {
-		transition-delay: $baseDelay + 25ms;
+		animation: dontShowInitial 300ms forwards + 25ms;
 	}
 	.o {
-		transition-delay: $baseDelay + 30ms;
+		animation: dontShowInitial 300ms forwards + 30ms;
 	}
 	.c {
-		transition-delay: $baseDelay + 32ms;
+		animation: dontShowInitial 300ms forwards + 32ms;
 	}
 	.o {
-		transition-delay: $baseDelay + 40ms;
+		animation: dontShowInitial 300ms forwards + 40ms;
 	}
 	.c {
-		transition-delay: $baseDelay + 45ms;
+		animation: dontShowInitial 300ms forwards + 45ms;
 	}
 	.oo {
-		transition-delay: $baseDelay + 35ms;
+		animation: dontShowInitial 300ms forwards + 35ms;
 	}
 	.m {
-		transition-delay: $baseDelay + 60ms;
+		animation: dontShowInitial 300ms forwards + 60ms;
 	}
 	.e {
-		transition-delay: $baseDelay + 75ms;
+		animation: dontShowInitial 300ms forwards + 75ms;
 	}
 	.ee {
-		transition-delay: $baseDelay + 45ms;
+		animation: dontShowInitial 300ms forwards + 45ms;
 	}
 	.tt {
-		transition-delay: $baseDelay + 75ms;
+		animation: dontShowInitial 300ms forwards + 75ms;
 	}
 	.eee {
-		transition-delay: $baseDelay + 100ms;
+		animation: dontShowInitial 300ms forwards + 100ms;
 	}
 	.r {
-		transition-delay: $baseDelay + 110ms;
+		animation: dontShowInitial 300ms forwards + 110ms;
 	}
 	.n {
-		transition-delay: $baseDelay + 125ms;
-	}
-
-	.logo {
-		&__left,
-		&__right {
-			scale: 0.1;
-		}
-
-		&__right {
-			animation: pathSlideRight 1500ms 100ms $bezierOne $animationFill;
-		}
-
-		&__left {
-			animation: pathSlideLeft 1500ms 100ms $bezierOne $animationFill;
-		}
+		animation: dontShowInitial 300ms forwards + 125ms;
 	}
 
 	.text {
-		color: $white;
-		position: absolute;
-		font-size: 5rem;
-		opacity: 0;
-		transform: translate(-29px, -30px);
-		animation: delay 1.15s ease-in-out forwards;
-
 		@media screen and (max-width: 1500px) {
 			font-size: 3.4rem;
 		}
@@ -141,6 +152,56 @@ $baseDelay: 1555ms;
 				}
 			}
 		}
+	}
+}
+
+.logo {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 100vw;
+	height: 100vh;
+	background: $black;
+	position: relative;
+
+	.text {
+		color: $white;
+		transform: translateY(-19px);
+	}
+
+	&__right,
+	&__left {
+		fill: $color-primary;
+		opacity: 0;
+		scale: 0;
+		animation: fadeIn 1s 250ms $bezierOne forwards,
+			scaleIn 1s 250ms forwards;
+	}
+
+	&::after {
+		content: '';
+		animation: pageIn 500ms $bezierOne forwards;
+		background-color: $black;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		z-index: -1;
+		left: 0;
+	}
+}
+
+@keyframes dontShowInitial {
+	0% {
+		opacity: 0;
+	}
+
+	90% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
 	}
 }
 
@@ -190,26 +251,35 @@ $baseDelay: 1555ms;
 	}
 }
 
-@keyframes delay {
+@keyframes pageIn {
 	0% {
-		opacity: 0;
-	}
-
-	90% {
-		opacity: 0;
+		height: 0;
+		border-radius: 30%;
 	}
 
 	100% {
-		opacity: 1;
+		height: 100%;
+		border-radius: 0;
 	}
 }
-	
-@keyframes load {
+@keyframes pageOut {
 	0% {
-		height: 0vh;
+		height: 100%;
 	}
 
 	100% {
-		height: 100vh;
+		height: 0;
+	}
+}
+
+@keyframes initialHideScale {
+	0% {
+		scale: 0;
+	}
+	75% {
+		scale: 0;
+	}
+	100% {
+		scale: 1;
 	}
 }

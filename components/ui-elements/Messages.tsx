@@ -7,7 +7,7 @@ interface MessageProps {
 	iconBackgroundColor: string;
 	backgroundColor?: string;
 	textColor?: string;
-	onClose?: () => void; // Optional callback function for closing the message
+	onClose?: () => void;
 }
 
 const Message: React.FC<MessageProps> = ({

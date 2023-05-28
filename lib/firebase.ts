@@ -3,6 +3,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
+import { firestore } from './firebase';
 
 const firebaseConfig = {
 	apiKey: "AIzaSyB_OxFAbOowfYUU9v730OONfdj0ch1MuSE",
@@ -42,7 +43,6 @@ const firebaseConfig = {
   
   export const auth = firebase.auth();
   export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-  export const firestore = firebase.firestore();
   export const storage = firebase.storage();
   export { handleAddDocument, handleToggleDocument };
   
