@@ -7,12 +7,14 @@ const App: React.FC = () => {
 		}, 2000);
 
 		return () => {
+			document.body.classList.remove('animationPartTwo');
+
 			clearTimeout(timeoutId);
 		};
 	}, []);
 
 	return (
-		<div className="logo">
+		<><div className={` ${logoClass}`}>
 			<div className="position">
 				<h1 className="logo__text">
 					<span className="text-wrapper">
@@ -57,7 +59,13 @@ const App: React.FC = () => {
 					></path>
 				</g>
 			</svg>
-		</div>
+		</div><button onClick="toggleClassLogo()">Toggle class logo</button><script>
+				function toggleClassLogo()
+				var logo = document.getElementById("class-logo");
+				logo.classList.toggle("empty");
+				}
+			</script></></>
+		
 	);
 };
 

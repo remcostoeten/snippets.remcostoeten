@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 
 const Preloader: React.FC = () => {
+	const [logoClass, setLogoClass] = useState('');
+	const [bodyClass, setBodyClass] = useState('');
+
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
-			document.body.classList.add('animationPartTwo');
+			setBodyClass('animationPartTwo');
 		}, 2000);
 
 		return () => {
@@ -11,8 +14,19 @@ const Preloader: React.FC = () => {
 		};
 	}, []);
 
+	const toggleLogoClass = () => {
+		setLogoClass((prevClass) => (prevClass === 'empty' ? '' : 'empty'));
+	    setBodyClass('');
+  };
+	  const clearBodyClass = () => {
+		setBodyClass('');
+	  };
 	return (
-		<div className="logo">
+		<>
+		
+		<div className={`logo ${logoClass}`}>
+		<button className='bg-red-400 absolute z-50 top-0' onClick={toggleLogoClass}>Toggle logo class</button>
+
 			<h2 className="text">
 				<span className="r">r</span>
 				<span className="e">e</span>
@@ -44,7 +58,7 @@ const Preloader: React.FC = () => {
 					></path>
 				</g>
 			</svg>
-		</div>
+		</div></>
 	);
 };
 

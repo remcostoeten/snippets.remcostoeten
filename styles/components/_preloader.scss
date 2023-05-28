@@ -6,6 +6,7 @@ $color-primary: #606cdb;
 
 $animationDuration: 1s;
 $animationDelay: 250ms;
+// $bezierOne: ease-in-out;
 $bezierOne: cubic-bezier(0.86, -0.12, 0, 1);
 $animationFill: forwards;
 
@@ -28,19 +29,11 @@ $logoSize: 250px;
 	width: 100vw;
 	height: 100vh;
 	background: $black;
-	animation: load 1s $bezierOne forwards;
-	@keyframes load {
-		0% {
-			height: 0vh;
-		}
+	// animation: load 1s $bezierOne forwards, load 1s 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse forwards;
 
-		100% {
-			height: 100vh;
-		}
-	}
 	&__right,
 	&__left {
-		scale: 0;
+		scale: 0.1;
 		position: absolute;
 		fill: $color-primary;
 		animation: scaleIn 1s 500ms $bezierOne $animationFill,
@@ -117,11 +110,11 @@ $baseDelay: 1555ms;
 		}
 
 		&__right {
-			animation: pathSlideRight 1500ms 500ms $bezierOne $animationFill;
+			animation: pathSlideRight 1500ms 100ms $bezierOne $animationFill;
 		}
 
 		&__left {
-			animation: pathSlideLeft 1500ms 500ms $bezierOne $animationFill;
+			animation: pathSlideLeft 1500ms 100ms $bezierOne $animationFill;
 		}
 	}
 
@@ -129,7 +122,10 @@ $baseDelay: 1555ms;
 		color: $white;
 		position: absolute;
 		font-size: 5rem;
-		transform: translate(-29px, -39px);
+		opacity: 0;
+		transform: translate(-29px, -30px);
+		animation: delay 1.15s ease-in-out forwards;
+
 		@media screen and (max-width: 1500px) {
 			font-size: 3.4rem;
 		}
@@ -191,5 +187,29 @@ $baseDelay: 1555ms;
 	}
 	100% {
 		transform: translate(110px, -20px);
+	}
+}
+
+@keyframes delay {
+	0% {
+		opacity: 0;
+	}
+
+	90% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+	
+@keyframes load {
+	0% {
+		height: 0vh;
+	}
+
+	100% {
+		height: 100vh;
 	}
 }
