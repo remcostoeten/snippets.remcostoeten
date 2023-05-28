@@ -14,13 +14,13 @@ const Preloader: React.FC = () => {
 		};
 	}, []);
 
-	const toggleLogoClass = () => {
+	/*const toggleLogoClass = () => {
 		setLogoClass((prevClass) => (prevClass === 'empty' ? '' : 'empty'));
 	    setBodyClass('');
   };
 	  const clearBodyClass = () => {
 		setBodyClass('');
-	  };
+	  };*/
 	return (
 		<>
 		
