@@ -99,13 +99,22 @@ body.sidebar-expanded .main-content {
   place-items: center;
   width: 100vw;
   height: 100vh;
-  background: #101010;
+  background: #202328;
+  animation: load 1s cubic-bezier(0.86, -0.12, 0, 1) forwards;
+}
+@keyframes load {
+  0% {
+    height: 0vh;
+  }
+  100% {
+    height: 100vh;
+  }
 }
 .logo__right, .logo__left {
-  scale: 0.1;
+  scale: 0;
   position: absolute;
   fill: #606cdb;
-  animation: scaleIn 2s cubic-bezier(0.86, -0.12, 0, 1) forwards, fadeIn 1500ms cubic-bezier(0.86, -0.12, 0, 1) forwards;
+  animation: scaleIn 1s 500ms cubic-bezier(0.86, -0.12, 0, 1) forwards, fadeIn 1s 500ms cubic-bezier(0.86, -0.12, 0, 1) forwards;
 }
 
 .animationPartTwo .r,
@@ -165,73 +174,68 @@ body.sidebar-expanded .main-content {
 .animationPartTwo .n {
   transition-delay: 1025ms;
 }
+.animationPartTwo .logo__left, .animationPartTwo .logo__right {
+  scale: 0.1;
+}
 .animationPartTwo .logo__right {
-  animation: slideRight 1500ms 500ms cubic-bezier(0.86, -0.12, 0, 1) forwards;
-  transform: translateX(0);
-}
-@keyframes slideRight {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(130px);
-  }
-}
-@keyframes slideLeft {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-130px);
-  }
+  animation: pathSlideRight 1500ms 500ms cubic-bezier(0.86, -0.12, 0, 1) forwards;
 }
 .animationPartTwo .logo__left {
-  animation: slideLeft 1500ms 500ms cubic-bezier(0.86, -0.12, 0, 1) infinite;
-  transform: translateX(0);
+  animation: pathSlideLeft 1500ms 500ms cubic-bezier(0.86, -0.12, 0, 1) forwards;
 }
-.animationPartTwo h2 {
-  color: #fff;
-  font-size: 120px;
+.animationPartTwo .text {
+  color: #e4e7ec;
   position: absolute;
-  transform: translate(-29px, 11px);
+  font-size: 5rem;
+  transform: translate(-29px, -39px);
 }
-.animationPartTwo h2 span {
+@media screen and (max-width: 1500px) {
+  .animationPartTwo .text {
+    font-size: 3.4rem;
+  }
+}
+@media screen and (max-width: 1205px) {
+  .animationPartTwo .text {
+    font-size: 2.4rem;
+  }
+}
+.animationPartTwo .text span {
   opacity: 0;
 }
-.animationPartTwo h2 span:nth-child(1) {
+.animationPartTwo .text span:nth-child(1) {
   animation-delay: 100ms;
 }
-.animationPartTwo h2 span:nth-child(2) {
+.animationPartTwo .text span:nth-child(2) {
   animation-delay: 200ms;
 }
-.animationPartTwo h2 span:nth-child(3) {
+.animationPartTwo .text span:nth-child(3) {
   animation-delay: 300ms;
 }
-.animationPartTwo h2 span:nth-child(4) {
+.animationPartTwo .text span:nth-child(4) {
   animation-delay: 400ms;
 }
-.animationPartTwo h2 span:nth-child(5) {
+.animationPartTwo .text span:nth-child(5) {
   animation-delay: 500ms;
 }
-.animationPartTwo h2 span:nth-child(6) {
+.animationPartTwo .text span:nth-child(6) {
   animation-delay: 600ms;
 }
-.animationPartTwo h2 span:nth-child(7) {
+.animationPartTwo .text span:nth-child(7) {
   animation-delay: 700ms;
 }
-.animationPartTwo h2 span:nth-child(8) {
+.animationPartTwo .text span:nth-child(8) {
   animation-delay: 800ms;
 }
-.animationPartTwo h2 span:nth-child(9) {
+.animationPartTwo .text span:nth-child(9) {
   animation-delay: 900ms;
 }
-.animationPartTwo h2 span:nth-child(10) {
+.animationPartTwo .text span:nth-child(10) {
   animation-delay: 1000ms;
 }
-.animationPartTwo h2 span:nth-child(11) {
+.animationPartTwo .text span:nth-child(11) {
   animation-delay: 1100ms;
 }
-.animationPartTwo h2 span:nth-child(12) {
+.animationPartTwo .text span:nth-child(12) {
   animation-delay: 1200ms;
 }
 
@@ -272,7 +276,7 @@ body.sidebar-expanded .main-content {
     transform: translateX(0);
   }
   100% {
-    transform: translate(130px, -20px);
+    transform: translate(110px, -20px);
   }
 }
 .link {

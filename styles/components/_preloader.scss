@@ -1,5 +1,5 @@
-$white: #fff;
-$black: #101010;
+$white: #e4e7ec;
+$black: #202328;
 $color-primary: #606cdb;
 
 @import url('https://fonts.googleapis.com/css?family=Gabriel+Sans:bold');
@@ -28,16 +28,26 @@ $logoSize: 250px;
 	width: 100vw;
 	height: 100vh;
 	background: $black;
+	animation: load 1s $bezierOne forwards;
+	@keyframes load {
+		0% {
+			height: 0vh;
+		}
 
+		100% {
+			height: 100vh;
+		}
+	}
 	&__right,
 	&__left {
-		scale: 0.1;
+		scale: 0;
 		position: absolute;
 		fill: $color-primary;
-		animation: scaleIn 2s $bezierOne $animationFill,
-			fadeIn 1500ms $bezierOne $animationFill;
+		animation: scaleIn 1s 500ms $bezierOne $animationFill,
+			fadeIn 1s 500ms $bezierOne $animationFill;
 	}
 }
+$baseDelay: 1555ms;
 
 .animationPartTwo {
 	.r,
@@ -101,43 +111,31 @@ $logoSize: 250px;
 	}
 
 	.logo {
+		&__left,
 		&__right {
-			animation: slideRight 1500ms 500ms $bezierOne $animationFill;
-			transform: translateX(0);
-			@keyframes slideRight {
-				from {
-					transform: translateX(0);
-				}
+			scale: 0.1;
+		}
 
-				to {
-					transform: translateX(130px);
-				}
-			}
-
-			@keyframes slideLeft {
-				from {
-					transform: translateX(0);
-				}
-
-				to {
-					transform: translateX(-130px);
-				}
-			}
-			// animation: pathSlideRight 1500ms 500ms $bezierOne $animationFill;
+		&__right {
+			animation: pathSlideRight 1500ms 500ms $bezierOne $animationFill;
 		}
 
 		&__left {
-			animation: slideLeft 1500ms 500ms $bezierOne infinite;
-			transform: translateX(0);
+			animation: pathSlideLeft 1500ms 500ms $bezierOne $animationFill;
 		}
 	}
 
-	h2 {
+	.text {
 		color: $white;
-		font-size: 120px;
 		position: absolute;
-		transform: translate(-29px, 11px);
-
+		font-size: 5rem;
+		transform: translate(-29px, -39px);
+		@media screen and (max-width: 1500px) {
+			font-size: 3.4rem;
+		}
+		@media screen and (max-width: 1205px) {
+			font-size: 2.4rem;
+		}
 		span {
 			opacity: 0;
 
@@ -192,6 +190,6 @@ $logoSize: 250px;
 		transform: translateX(0);
 	}
 	100% {
-		transform: translate(130px, -20px);
+		transform: translate(110px, -20px);
 	}
 }
