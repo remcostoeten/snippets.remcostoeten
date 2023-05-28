@@ -32,12 +32,6 @@ const Preloader: React.FC = () => {
 				data-name="Layer 1"
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 84.51 86.13"
-				style={{
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					margin: '0 auto',
-				}}
 			>
 				<g transform="translate(42.255, 43.065)">
 					<path

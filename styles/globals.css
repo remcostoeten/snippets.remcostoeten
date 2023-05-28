@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Gabriel+Sans:bold");
 body {
   position: relative;
   overflow: hidden;
@@ -82,18 +83,196 @@ body.sidebar-expanded .main-content {
   height: 102vh;
 }
 
-.loader {
-  border-top-color: transparent;
-  border-right-color: transparent;
-  animation-duration: 1.5s;
-}
-
-@keyframes spin {
+@keyframes reveal {
   0% {
-    transform: rotate(0);
+    width: 0px;
+    opacity: 0;
   }
   100% {
-    transform: rotate(360deg);
+    width: -moz-fit-content;
+    width: fit-content;
+    opacity: 1;
+  }
+}
+.logo {
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: #101010;
+}
+.logo__right, .logo__left {
+  scale: 0.1;
+  position: absolute;
+  fill: #606cdb;
+  animation: scaleIn 2s cubic-bezier(0.86, -0.12, 0, 1) forwards, fadeIn 1500ms cubic-bezier(0.86, -0.12, 0, 1) forwards;
+}
+
+.animationPartTwo .r,
+.animationPartTwo .e,
+.animationPartTwo .m,
+.animationPartTwo .c,
+.animationPartTwo .o,
+.animationPartTwo .s,
+.animationPartTwo .t,
+.animationPartTwo .oo,
+.animationPartTwo .ee,
+.animationPartTwo .tt,
+.animationPartTwo .eee,
+.animationPartTwo .n {
+  opacity: 1 !important;
+  transition: 500ms cubic-bezier(0.86, -0.12, 0, 1);
+}
+.animationPartTwo .s {
+  transition-delay: 900ms;
+}
+.animationPartTwo .t {
+  transition-delay: 925ms;
+}
+.animationPartTwo .o {
+  transition-delay: 930ms;
+}
+.animationPartTwo .c {
+  transition-delay: 932ms;
+}
+.animationPartTwo .o {
+  transition-delay: 940ms;
+}
+.animationPartTwo .c {
+  transition-delay: 945ms;
+}
+.animationPartTwo .oo {
+  transition-delay: 935ms;
+}
+.animationPartTwo .m {
+  transition-delay: 960ms;
+}
+.animationPartTwo .e {
+  transition-delay: 975ms;
+}
+.animationPartTwo .ee {
+  transition-delay: 945ms;
+}
+.animationPartTwo .tt {
+  transition-delay: 975ms;
+}
+.animationPartTwo .eee {
+  transition-delay: 1000ms;
+}
+.animationPartTwo .r {
+  transition-delay: 1010ms;
+}
+.animationPartTwo .n {
+  transition-delay: 1025ms;
+}
+.animationPartTwo .logo__right {
+  animation: slideRight 1500ms 500ms cubic-bezier(0.86, -0.12, 0, 1) forwards;
+  transform: translateX(0);
+}
+@keyframes slideRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(130px);
+  }
+}
+@keyframes slideLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-130px);
+  }
+}
+.animationPartTwo .logo__left {
+  animation: slideLeft 1500ms 500ms cubic-bezier(0.86, -0.12, 0, 1) infinite;
+  transform: translateX(0);
+}
+.animationPartTwo h2 {
+  color: #fff;
+  font-size: 120px;
+  position: absolute;
+  transform: translate(-29px, 11px);
+}
+.animationPartTwo h2 span {
+  opacity: 0;
+}
+.animationPartTwo h2 span:nth-child(1) {
+  animation-delay: 100ms;
+}
+.animationPartTwo h2 span:nth-child(2) {
+  animation-delay: 200ms;
+}
+.animationPartTwo h2 span:nth-child(3) {
+  animation-delay: 300ms;
+}
+.animationPartTwo h2 span:nth-child(4) {
+  animation-delay: 400ms;
+}
+.animationPartTwo h2 span:nth-child(5) {
+  animation-delay: 500ms;
+}
+.animationPartTwo h2 span:nth-child(6) {
+  animation-delay: 600ms;
+}
+.animationPartTwo h2 span:nth-child(7) {
+  animation-delay: 700ms;
+}
+.animationPartTwo h2 span:nth-child(8) {
+  animation-delay: 800ms;
+}
+.animationPartTwo h2 span:nth-child(9) {
+  animation-delay: 900ms;
+}
+.animationPartTwo h2 span:nth-child(10) {
+  animation-delay: 1000ms;
+}
+.animationPartTwo h2 span:nth-child(11) {
+  animation-delay: 1100ms;
+}
+.animationPartTwo h2 span:nth-child(12) {
+  animation-delay: 1200ms;
+}
+
+@keyframes letterShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes scaleIn {
+  from {
+    scale: 0;
+  }
+  to {
+    scale: 0.1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pathSlideLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-145px);
+  }
+}
+@keyframes pathSlideRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translate(130px, -20px);
   }
 }
 .link {
