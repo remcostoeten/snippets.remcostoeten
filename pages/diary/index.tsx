@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { AuthContext } from '@/lib/AuthContext';
 import { User } from '@/lib/types';
-import { EntryForm } from '@/components/diary/EntryForm';
-import { EntriesList } from '@/components/diary/EntriesList';
 
+import { EntriesList } from '@/components/Diary/EntriesList';
+import { EntryForm } from '@/components/Diary/EntryForm';
 export default function Index() {
 	const { currentUser } = useContext(AuthContext);
 
