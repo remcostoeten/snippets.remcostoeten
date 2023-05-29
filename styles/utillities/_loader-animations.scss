@@ -1,28 +1,23 @@
 @keyframes slideleft {
 	0% {
-		transform: translateX(0px);
+		transform: translateX(0);
 	}
-
 	100% {
 		transform: translateX(-128px);
 	}
 }
-
 @keyframes slideRight {
 	0% {
-		transform: translateX(0px);
+		transform: translateX(0);
 	}
-
 	100% {
 		transform: translate(125px, -19px);
 	}
 }
-
 @keyframes left {
 	0% {
 		filter: drop-shadow(10px 26px 9px rgba(32, 35, 40, 0.7));
 	}
-
 	80% {
 		filter: drop-shadow(10px 26px 9px rgba(32, 35, 40, 0));
 	}
@@ -31,12 +26,10 @@
 		transform: translateX(-128px);
 	}
 }
-
 @keyframes pageScaleOut {
 	0% {
 		scale: 1;
 	}
-
 	100% {
 		scale: 0;
 		opacity: 0;
@@ -46,16 +39,13 @@
 	0% {
 		filter: drop-shadow(10px 26px 9px rgba(32, 35, 40, 0.7));
 	}
-
 	80% {
 		filter: drop-shadow(10px 26px 9px rgba(32, 35, 40, 0));
 	}
-
 	100% {
 		transform: translate(125px, -15px);
 	}
 }
-
 @keyframes logoScaleIn {
 	from {
 		scale: 0;
@@ -64,7 +54,6 @@
 		scale: 0.1;
 	}
 }
-
 @keyframes fullHide {
 	0% {
 		opacity: 0;
@@ -79,22 +68,18 @@
 		opacity: 1;
 	}
 }
-
 @keyframes initialFade {
 	0% {
 		opacity: 0;
 	}
-
 	100% {
 		opacity: 1;
 	}
 }
-
 @keyframes initialScale {
 	0% {
 		transform: scale(0);
 	}
-
 	100% {
 		transform: scale(1);
 	}

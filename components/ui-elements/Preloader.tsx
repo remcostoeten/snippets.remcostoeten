@@ -1,6 +1,3 @@
-import ReloadPage from '@/lib/ReloadPageButton';
-import ReloadDivNext from '@/lib/Reload__Next';
-import { Divider } from '@mui/material';
 import React, { useEffect } from 'react';
 
 const Preloader: React.FC = () => {

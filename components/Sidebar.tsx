@@ -64,7 +64,6 @@ export default function Sidebar() {
 						</Link>
 
 						<Link href="/todos" className={anchorStyling}>
-							<PlaylistAddCheckIcon />
 							<span
 								className={`ml-2 text-sm menu-text font-medium ${
 									isSidebarExpanded ? 'flex' : 'hidden'

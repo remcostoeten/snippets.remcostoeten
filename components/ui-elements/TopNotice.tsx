@@ -1,7 +1,8 @@
-import { auth, googleAuthProvider } from '@/lib/firebase';
 import Link from 'next/link';
 import { User } from 'firebase/auth';
 import { useState, useEffect } from 'react';
+import { auth, googleAuthProvider } from '@/lib/firebase';
+
 export default function TopNotice() {
 	const [user, setUser] = useState<User | null>(null);
 
