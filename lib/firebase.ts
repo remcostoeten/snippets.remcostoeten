@@ -3,6 +3,8 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
+import { getFirestore } from "firebase/firestore";
+
 const firebaseConfig = {
 	apiKey: "AIzaSyB_OxFAbOowfYUU9v730OONfdj0ch1MuSE",
 	authDomain: "remcostoeten-docs.firebaseapp.com",
@@ -43,4 +45,4 @@ const firebaseConfig = {
   export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
   export const storage = firebase.storage();
   export { handleAddDocument, handleToggleDocument };
-  export const firestore = firebase.firestore(); 
+  export const firestore = getFirestore();

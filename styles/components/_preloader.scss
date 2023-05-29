@@ -17,6 +17,8 @@ $letterDelay: 50ms;
 	position: relative;
 
 	.logo {
+		z-index: 200;
+
 		&__text {
 			transform: translateY(-31px);
 			$textInDuration: 1250ms;
@@ -240,7 +242,7 @@ body:not(.animationPartTwo) {
 @keyframes pageIn {
 	0% {
 		height: 0;
-		border-radius: 8px;
+		border-radius: 40px;
 		border-radius: 10px;
 	}
 
