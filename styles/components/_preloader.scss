@@ -152,7 +152,7 @@ body:not(.animationPartTwo) {
 	width: 100vw;
 	height: 100vh;
 	background: $black;
-	position: relative;
+	position: fixed;
 	animation: pageIn 750ms cubic-bezier(0.97, 0.1, 0.01, 1) forwards,
 		pageIn 1s 3s cubic-bezier(0.97, 0.1, 0.01, 1) forwards reverse;
 
@@ -241,6 +241,7 @@ body:not(.animationPartTwo) {
 	0% {
 		height: 0;
 		border-radius: 8px;
+		border-radius: 10px;
 	}
 
 	100% {
@@ -252,10 +253,12 @@ body:not(.animationPartTwo) {
 @keyframes pageOut {
 	0% {
 		height: 100%;
+		position: absolute;
 	}
 
 	100% {
-		height: 0;
+		position: absolute;
+		height: 50%;
 	}
 }
 

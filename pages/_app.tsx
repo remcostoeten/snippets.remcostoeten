@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
 			<Preloader />
-			{/* <AuthProvider>
+			<AuthProvider>
 				<TopNotice />
 				<div className="flex">
 					<Sidebar />
@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 						<Component {...pageProps} />
 					</main>
 				</div>
-			</AuthProvider> */}
+			</AuthProvider>
 		</>
 	);
 }
