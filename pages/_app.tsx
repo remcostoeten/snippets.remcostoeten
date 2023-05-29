@@ -6,6 +6,7 @@ import TopNotice from '@/components/ui-elements/TopNotice';
 import { AuthProvider } from '@/lib/AuthContext';
 import Preloader from '@/components/ui-elements/Preloader';
 import { components } from './../slices/index';
+import ReloadPage from '@/lib/ReloadPageButton';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const [loading, setLoading] = useState(true);
@@ -25,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
 			<Preloader />
-			<AuthProvider>
+			{/* <AuthProvider>
 				<TopNotice />
 				<div className="flex">
 					<Sidebar />
@@ -33,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 						<Component {...pageProps} />
 					</main>
 				</div>
-			</AuthProvider>
+			</AuthProvider> */}
 		</>
 	);
 }

@@ -1,9 +1,5 @@
-$white: #e4e7ec;
-$black: #202328;
-$color-primary: #606cdb;
-
+@import '../utillities/_loader-animations.scss';
 @import url('https://fonts.googleapis.com/css?family=Gabriel+Sans:bold');
-
 $animationDuration: 1s;
 $animationDelay: 250ms;
 // $bezierOne: ease-in-out;
@@ -11,146 +7,140 @@ $bezierInitial: ease;
 $bezierOne: ease;
 // $bezierOne: cubic-bezier(0.86, -0.12, 0, 1);
 $animationFill: forwards;
-
 $baseDelay: 1555ms;
-
 $logoSize: 250px;
+$slideDuration: 750ms;
+$delayDuration: 500ms;
+$letterDelay: 50ms;
 
-@keyframes reveal {
-	0% {
-		width: 0px;
-		opacity: 0;
+.animationPartTwo {
+	position: relative;
+
+	.logo {
+		&__text {
+			transform: translateY(-31px);
+			$textInDuration: 1250ms;
+			$delayDuration: calc(200ms * 2.5);
+			animation: initialHideScale $bezierOne forwards;
+
+			@media screen and (max-width: 1199px) {
+				font-size: 2.4rem;
+			}
+			@media screen and (min-width: 1200px) and (max-width: 1499px) {
+				font-size: 3.4rem;
+			}
+			@media screen and (min-width: 1500px) {
+				font-size: 7rem;
+			}
+
+			.r,
+			.e,
+			.m,
+			.c,
+			.o,
+			.s,
+			.t,
+			.tt,
+			.oo,
+			.ee,
+			.tt,
+			.eee,
+			.n {
+				opacity: 0;
+				animation: fadeIn 400ms ease-in-out forwards;
+			}
+
+			.s {
+				animation-delay: 50ms;
+			}
+			.t {
+				animation-delay: $letterDelay + 100ms;
+			}
+			.o {
+				animation-delay: $letterDelay + 200ms;
+			}
+			.oo {
+				animation-delay: $letterDelay + 200ms;
+			}
+			.c {
+				animation-delay: $letterDelay + 220ms;
+			}
+			.e {
+				animation: fullHide 490ms ease-in-out forwards;
+			}
+			.m {
+				animation: fullHide 475ms ease-in-out forwards;
+			}
+			.tt {
+				animation: fullHide 475ms ease-in-out forwards;
+			}
+
+			.ee {
+				animation: fullHide 500ms ease-in-out forwards;
+			}
+			.n {
+				animation: fullHide 500ms ease-in-out forwards;
+			}
+			.eee {
+				animation: fullHide 480ms ease-in-out forwards;
+			}
+
+			.tt {
+				animation: fullHide 475ms ease-in-out forwards;
+			}
+			.r {
+				animation: fullHide 550ms ease-in-out forwards;
+			}
+		}
 	}
-	100% {
-		width: fit-content;
-		opacity: 1;
+}
+.logo {
+	&__left,
+	&__Right {
+		animation: initialFade 1s 250ms $bezierOne forwards,
+			initialScale 1s 250ms $bezierOne forwards;
 	}
 }
 
-.animationPartTwo {
+body:not(.animationPartTwo) {
 	.logo {
-		.text {
-			scale: 0;
-			animation: initialHideScale 1s $bezierOne forwards;
-		}
-
-		&__left {
-			animation: dontShowInitial 500ms forwards,
-				left 1s 500ms $bezierOne forwards;
-		}
-
-		&__right {
-			animation: dontShowInitial 500ms forwards,
-				right 1s 500ms $bezierOne forwards;
+		svg {
+			opacity: 0;
+			transform: scale(0);
+			animation: initialFade 1s 400ms $bezierOne forwards,
+				initialScale 1s 400ms $bezierOne forwards;
 		}
 
 		&__left,
 		&__right {
+		}
+
+		&__text {
 			opacity: 0;
-			scale: 0.1;
-		}
-
-		@keyframes left {
-			0% {
-				transform: translateX(0px);
-			}
-
-			100% {
-				transform: translateX(-128px);
-			}
-		}
-
-		@keyframes right {
-			0% {
-				transform: translateX(0px);
-			}
-
-			100% {
-				transform: translate(125px, -10px);
-			}
 		}
 	}
-
-	.text {
-		position: absolute;
-	}
-
-	.r,
-	.e,
-	.m,
-	.c,
-	.o,
-	.s,
-	.t,
-	.oo,
-	.ee,
-	.tt,
-	.eee,
-	.n {
-		opacity: 1;
-		animation: dontShowInitial 300ms forwards;
-		transition: 100ms $bezierOne;
-	}
-
-	$baseDelay: 800ms;
-	.s {
-		animation: dontShowInitial 300ms forwards;
-	}
-	.t {
-		animation: dontShowInitial 300ms forwards + 25ms;
-	}
-	.o {
-		animation: dontShowInitial 300ms forwards + 30ms;
-	}
-	.c {
-		animation: dontShowInitial 300ms forwards + 32ms;
-	}
-	.o {
-		animation: dontShowInitial 300ms forwards + 40ms;
-	}
-	.c {
-		animation: dontShowInitial 300ms forwards + 45ms;
-	}
-	.oo {
-		animation: dontShowInitial 300ms forwards + 35ms;
-	}
-	.m {
-		animation: dontShowInitial 300ms forwards + 60ms;
-	}
-	.e {
-		animation: dontShowInitial 300ms forwards + 75ms;
-	}
-	.ee {
-		animation: dontShowInitial 300ms forwards + 45ms;
-	}
-	.tt {
-		animation: dontShowInitial 300ms forwards + 75ms;
-	}
-	.eee {
-		animation: dontShowInitial 300ms forwards + 100ms;
-	}
-	.r {
-		animation: dontShowInitial 300ms forwards + 110ms;
-	}
-	.n {
-		animation: dontShowInitial 300ms forwards + 125ms;
-	}
-
-	.text {
-		@media screen and (max-width: 1500px) {
-			font-size: 3.4rem;
+}
+.animationPartTwo {
+	.logo {
+		&__text {
+			opacity: 1;
+			animation: pageScaleOut 500ms 1400ms $bezierOne forwards;
+			transform-origin: top;
 		}
-		@media screen and (max-width: 1205px) {
-			font-size: 2.4rem;
-		}
-		span {
-			opacity: 0;
 
-			@for $i from 1 through 12 {
-				&:nth-child(#{$i}) {
-					animation-delay: 100ms * $i;
-				}
-			}
+		svg {
+			transform-origin: top;
+			animation: pageScaleOut 500ms 1400ms $bezierOne forwards;
+			z-index: 10;
+		}
+
+		&__left {
+			animation: left $slideDuration cubic-bezier(1, 0.11, 0, 1.03)
+				forwards;
+		}
+		&__right {
+			animation: right $slideDuration cubic-bezier(1, 0.11, 0, 1.03)
+				forwards;
 		}
 	}
 }
@@ -163,31 +153,18 @@ $logoSize: 250px;
 	height: 100vh;
 	background: $black;
 	position: relative;
+	animation: pageIn 750ms cubic-bezier(0.97, 0.1, 0.01, 1) forwards,
+		pageIn 1s 3s cubic-bezier(0.97, 0.1, 0.01, 1) forwards reverse;
 
-	.text {
+	&__text {
 		color: $white;
-		transform: translateY(-19px);
+		position: absolute;
 	}
 
 	&__right,
 	&__left {
 		fill: $color-primary;
-		opacity: 0;
-		scale: 0;
-		animation: fadeIn 1s 250ms $bezierOne forwards,
-			scaleIn 1s 250ms forwards;
-	}
-
-	&::after {
-		content: '';
-		animation: pageIn 500ms $bezierOne forwards;
-		background-color: $black;
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0;
-		z-index: -1;
-		left: 0;
+		scale: 0.1;
 	}
 }
 
@@ -223,7 +200,16 @@ $logoSize: 250px;
 		scale: 0.1;
 	}
 }
-
+@keyframes SfadeIn {
+	from {
+		opacity: 0;
+		scale: 0;
+	}
+	to {
+		scale: 1;
+		opacity: 1;
+	}
+}
 @keyframes fadeIn {
 	from {
 		opacity: 0;
@@ -254,14 +240,15 @@ $logoSize: 250px;
 @keyframes pageIn {
 	0% {
 		height: 0;
-		border-radius: 30%;
+		border-radius: 8px;
 	}
 
 	100% {
-		height: 100%;
+		height: 100vh;
 		border-radius: 0;
 	}
 }
+
 @keyframes pageOut {
 	0% {
 		height: 100%;
