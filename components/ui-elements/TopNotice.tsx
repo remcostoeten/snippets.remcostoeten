@@ -7,12 +7,12 @@ import { AuthContext } from '@/lib/AuthContext';
 import Message from '../ui-elements/Messages';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 export default function TopNotice() {
-	const { currentUser, setCurrentUser } = useContext(AuthContext);
 	const [error, setError] = useState(false);
+	const [currentUser, setCurrentUser] = useState<User | null>(null);
 	const [success, setSuccess] = useState(false);
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) =>
-			setCurrentUser(currentUser),
+			setCurrentUser(setCurrentUser),
 		);
 
 		return () => unsubscribe();
@@ -20,7 +20,6 @@ export default function TopNotice() {
 
 	const signOut = async () => {
 		await auth.signOut();
-		setCurrentUser(null);
 		setSuccess(true);
 	};
 
@@ -51,7 +50,7 @@ export default function TopNotice() {
 					className="absolute left-[max(45rem,calc(50%+8rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
 					aria-hidden="true"
 				></div>
-				<div className="flex md: flex-wrap items-center gap-x-2 gap-y-1 items-center">
+				<div className="flex md: flex-wrap  gap-x-2 gap-y-1 items-center">
 					<p className="text-sm leading-6 text-gray-400">
 						You’re currently on{' '}
 						<span className="font-semibold">
@@ -114,4 +113,7 @@ export default function TopNotice() {
 			)}
 		</>
 	);
+}
+function setCurrentUser(currentUser: any): void {
+	throw new Error('Function not implemented.');
 }

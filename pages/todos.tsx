@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Link from 'next/link';
 import {
 	firestore,
@@ -11,6 +11,8 @@ import Head from 'next/head';
 import Badge from '@/components/ui-elements/Badge';
 import { GetServerSideProps } from 'next';
 import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
+import { AuthContext } from '../lib/AuthContext';
+import { useRouter } from 'next/router';
 
 const todoCategories = [
 	'snippets.remcostoeten',
@@ -48,9 +50,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 export default function Todo({ tasks: initialTasks }) {
+	const { currentUser } = useContext(AuthContext);
 	const [tasks, setTasks] = useState<Task[]>(initialTasks);
 	const [newTask, setNewTask] = useState('');
 	const [selectedCategory, setSelectedCategory] = useState('');
+	const router = useRouter();
 
 	const addTask = async (): Promise<void> => {
 		if (newTask) {
@@ -88,6 +92,22 @@ export default function Todo({ tasks: initialTasks }) {
 
 		setTasks(updatedTasks);
 	};
+
+	useEffect(() => {
+		if (!currentUser) {
+			setTimeout(() => {
+				router.push('/aa');
+			}, 2000);
+		}
+	}, [currentUser, router]);
+
+	if (!currentUser) {
+		return (
+			<div>
+				<p>Please log in to view this content.</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className="h-screen bg-white rounded-lg p-4">

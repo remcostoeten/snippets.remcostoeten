@@ -4,8 +4,7 @@
 @import './components/header';
 @import './components/preloader';
 @import './utillities/animations';
-@import './utillities/utillitie-classes';
-
+@import './utillities/_classes.scss';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
