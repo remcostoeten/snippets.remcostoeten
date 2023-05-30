@@ -9,6 +9,8 @@ import {
 } from '@mui/icons-material';
 import ColorSwitcher from './ui-elements/ColorSwitcher';
 import LogoIcon from './ui-elements/LogoIcon';
+import { User } from 'firebase/auth';
+import { auth, signInWithPopup } from '@/lib/firebase';
 
 export default function Sidebar() {
 	const [isSidebarExpanded, setSidebarExpanded] = useState(false);

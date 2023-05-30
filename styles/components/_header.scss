@@ -4,3 +4,32 @@
 		height: 102vh;
 	}
 }
+
+.top-nav {
+	.font-bold,
+	.font-semibold {
+		position: relative;
+		transition: 250ms ease-in-out all;
+
+		&:hover {
+			transition: 250ms ease-in-out all;
+			&::after {
+				transition: 250ms ease-in-out all;
+				background-color: $color-primary;
+			}
+		}
+	}
+
+	&::after {
+		content: '';
+		width: 100%;
+		height: 1px;
+		background-color: transparent;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+	}
+	.link-arrow {
+		display: none;
+	}
+}
