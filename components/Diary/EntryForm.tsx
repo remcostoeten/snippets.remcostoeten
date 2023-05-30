@@ -3,12 +3,12 @@ import { firestore } from '@/lib/firebase';
 import Message from '../ui-elements/Messages';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import { User } from '@/lib/types';
+import { AppUser } from '@/lib/types';
 import { doc, updateDoc, collection, addDoc } from 'firebase/firestore';
 
 type EntryFormProps = {
 	entry?: Entry;
-	user: User;
+	user: AppUser;
 };
 
 type Entry = {

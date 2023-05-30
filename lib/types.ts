@@ -1,40 +1,35 @@
-import react, { ReactNode } from "react";	
+import { ReactNode } from "react";
 
-export interface user {
-	name: string;
-	user: string;
+export interface AppUser {
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
+  emailVerified?: boolean;
 }
 
-export interface User {
-	displayName: ReactNode;
-	name: string;
-	user: string;
+export interface DocumentItem {
+  id: string;
+  title: string;
+  category: string;
+  content: string;
 }
 
-export interface document {
-	id: string;
-	title: string;
-	category: string;
-	content: string;
-  }
+export interface HomeProps {
+  user: AppUser;
+  documents: DocumentData[];
+}
 
-  export interface HomeProps {
-	user: user;
-	documents: DocumentData[]; 
-  }
-  
-export interface  DocumentData {
-	id: string;
-	title: string;
-	content: string;
-  };
+export interface DocumentData {
+  id: string;
+  title: string;
+  content: string;
+}
 
-
-  export interface Entry  {
-	id?: string;
-	date: Date;
-	title: string;
-	content: string;
-	userId: string;
-  };
-  
+export interface Entry {
+  id?: string;
+  date: Date;
+  title: string;
+  content: string;
+  userId: string;
+}

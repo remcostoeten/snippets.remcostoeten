@@ -1,10 +1,9 @@
 import { useEffect, useState, ChangeEvent, useContext } from 'react';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { auth, googleAuthProvider } from '../lib/firebase';
 import Image from 'next/image';
 import { AuthContext } from '@/lib/AuthContext';
 import { signInWithPopup } from 'firebase/auth';
-import { User } from '@/lib/types';
 const LoginPage = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');

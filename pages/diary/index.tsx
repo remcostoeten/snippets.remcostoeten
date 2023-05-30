@@ -3,9 +3,8 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { EntriesList } from '@/components/Diary/EntriesList';
 import { EntryForm } from '@/components/Diary/EntryForm';
-import { User } from '@/lib/types';
 import { IncomingMessage } from 'http';
-
+import { User } from 'firebase/auth';
 interface CustomIncomingMessage extends IncomingMessage {
 	locals?: {
 		user?: User;

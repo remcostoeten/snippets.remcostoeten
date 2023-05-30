@@ -4,13 +4,11 @@ import { auth, googleAuthProvider } from '../lib/firebase';
 import Image from 'next/image';
 import { AuthContext } from '@/lib/AuthContext';
 import { signInWithPopup } from 'firebase/auth';
-import { User } from '@/lib/types';
 const LoginPage = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const router = useRouter();
 	const { currentUser, setCurrentUser } = useContext(AuthContext);
-	const [error, setError] = useState(false);
 	const [success, setSuccess] = useState(false);
 
 	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +25,7 @@ const LoginPage = () => {
 		);
 
 		return () => unsubscribe();
-	}, []);
+	}, [currentUser]);
 
 	const signOut = async () => {
 		await auth.signOut();

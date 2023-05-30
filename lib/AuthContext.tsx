@@ -1,10 +1,10 @@
 import React, { useState, useEffect, createContext } from 'react';
 import { auth } from './firebase';
-import { User } from './types';
+import { AppUser } from './types';
 
 interface AuthContextProps {
-	currentUser: User | null;
-	setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>;
+	currentUser: AppUser | null;
+	setCurrentUser: React.Dispatch<React.SetStateAction<AppUser | null>>;
 }
 
 export const AuthContext = createContext<AuthContextProps | null>(null);
@@ -14,16 +14,20 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-	const [currentUser, setCurrentUser] = useState<User | null>(null);
+	const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
 	const [pending, setPending] = useState(true);
 
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user: any) => {
 			if (user) {
 				setCurrentUser({
-					...user,
-					name: user.name || '', //\
+					uid: user.uid,
+					displayName: user.displayName || '',
+					email: user.email || '',
+					photoURL: user.photoURL || '',
 				});
+			} else {
+				setCurrentUser(null);
 			}
 			setPending(false);
 		});

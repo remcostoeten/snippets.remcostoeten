@@ -21,7 +21,7 @@ interface NavigationItem {
 }
 
 interface UserProps {
-	user: User | null;
+	user: Partial<User> | null;
 }
 
 const navigationItems: NavigationItem[] = [
