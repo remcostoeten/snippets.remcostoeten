@@ -2,5 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
 }
+nextConfig.images = {
+  domains: ['images.prismic.io', 'img.freepik.com', 'images.unsplash.com'],
+}
+
 
 module.exports = nextConfig

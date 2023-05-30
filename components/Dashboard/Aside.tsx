@@ -12,7 +12,7 @@ import {
 	Dashboard as DashboardIcon,
 } from '@mui/icons-material';
 export default function Aside(): JSX.Element {
-	const [user, loading, error] = useAuthState(auth);
+const user = useAuthState(auth);
 
 	return (
 		<aside className="ml-[-100%] fixed z-10 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
@@ -79,7 +79,7 @@ export default function Aside(): JSX.Element {
 					</li>
 					<li>
 						<Link
-							href="#"
+							href="diary"
 							className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group"
 						>
 							<svg
