@@ -19,6 +19,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 		if (typeof window !== 'undefined') {
 			const visitedBefore = localStorage.getItem('visitedBefore');
+			document.body.classList.add('loading');
+			setTimeout(() => {
+				document.body.classList.remove('loading');
+			}, 3500);
+
 			if (!visitedBefore && mounted) {
 				setFirstVisit(true);
 				localStorage.setItem('visitedBefore', 'true');
@@ -35,7 +40,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 			{firstVisit && <Preloader />}
 			<TopNotice />
 			<AuthProvider>
-				<div className="flex">
+				<div className="flex content">
+					<Aside user={currentUser} />
 					<Component {...pageProps} />
 				</div>
 			</AuthProvider>

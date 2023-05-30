@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 const Preloader: React.FC = () => {
 	useEffect(() => {
+		document.body.classList.add('loader');
 		const timeoutId = setTimeout(() => {
 			document.body.classList.add('animationPartTwo');
 		}, 2000);
