@@ -1,21 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import firebase from 'firebase/app';
+import Image from 'next/image';
 import 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import Link from 'next/link';
 import {
-	AddCircle as AddCircleIcon,
-	Home as HomeIcon,
-	PlaylistAddCheck as PlaylistAddCheckIcon,
-	SpeakerNotes as SpeakerNotesIcon,
-	Dashboard as DashboardIcon,
+  AddCircle as AddCircleIcon,
+  Home as HomeIcon,
+  PlaylistAddCheck as PlaylistAddCheckIcon,
+  SpeakerNotes as SpeakerNotesIcon,
+  Dashboard as DashboardIcon,
 } from '@mui/icons-material';
-export default function Aside(): JSX.Element {
-const user = useAuthState(auth);
 
+export default function Aside(): JSX.Element {
+	const [user, setUser] = useState(null);
+	
 	return (
-		<aside className="ml-[-100%] fixed z-10 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
+		<aside className="ml-[-100%]  z-10 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
 			<div>
 				<div className="-mx-6 px-6 py-4">
 					<Link
@@ -25,7 +27,7 @@ const user = useAuthState(auth);
 					></Link>
 				</div>
 				<div className="mt-8 text-center">
-					<img
+					<Image width={100} height={100}
 						src={
 							user?.photoURL ||
 							'https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp'

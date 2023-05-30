@@ -20,7 +20,7 @@ const DashboardPage = () => {
 
   useEffect(() => {
     if (!user) {
-      router.push('/login'); // Redirect to login page if user is not authenticated
+      router.push('/login'); 
     }
   }, [user, router]);
 

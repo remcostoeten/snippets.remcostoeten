@@ -1,10 +1,9 @@
-// pages/index.tsx
-
 import { useEffect, useState } from 'react';
 import { auth } from '@/lib/firebase';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { Suspense } from 'react';
+import Aside from './Aside';
 
 const DashboardPage = () => {
   const [user, setUser] = useState(null);
@@ -19,13 +18,15 @@ const DashboardPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login'); // Redirect to login page if user is not authenticated
+    if (user !== null && !user) {
+      router.push('/login');
     }
   }, [user, router]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div className="flex">
+        <Aside/>
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 w-full">
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -42,7 +43,8 @@ const DashboardPage = () => {
             transition={{ duration: 0.5 }}
           >
             <p className="text-xl mb-2">Name: {user.displayName}</p>
-            <p className="text-xl mb-2">Email: {user.email}</p>          </motion.div>
+            <p className="text-xl mb-2">Email: {user.email}</p>
+          </motion.div>
         </Suspense>
       ) : (
         <p className="text-xl mb-2">Loading...</p>
@@ -55,7 +57,7 @@ const DashboardPage = () => {
       >
         Current date: {new Date().toLocaleDateString()}
       </motion.p>
-    </div>
+    </div></div>
   );
 };
 

@@ -17,12 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<Suspense fallback={<Preloader />}>
 				<AuthProvider>
 					<TopNotice />
-					<div className="flex">
-						<Aside />
-						<main className="main-content flex flex-col flex-1 h-screen bg-white rounded-lg p-4 w-95">
 							<Component {...pageProps} />
-						</main>
-					</div>
 				</AuthProvider>
 			</Suspense>
 		</>

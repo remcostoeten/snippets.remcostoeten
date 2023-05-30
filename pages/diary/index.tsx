@@ -1,22 +1,28 @@
-import { useContext } from 'react';
-import { AuthContext } from '@/lib/AuthContext';
-import { User } from '@/lib/types';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { EntriesList } from '@/components/Diary/EntriesList';
 import { EntryForm } from '@/components/Diary/EntryForm';
+import { User } from '@/lib/types';
 
-export default function Index() {
-	const { currentUser } = useContext(AuthContext);
+export default function Index({ user }: { user: User | null }) {
+  const router = useRouter();
 
-	if (!currentUser) {
-		return <div>Please log in to view this page.</div>;
-	}
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user]);
 
-	const user: User = currentUser;
-
-	return (
-		<div>
-			<EntryForm user={user} />
-			<EntriesList user={user} />
-		</div>
-	);
+  return user ? (
+    <div>
+      <EntryForm user={user} />
+      <EntriesList user={user} />
+    </div>
+  ) : null;
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const user = req.locals?.user || null;
+  return { props: { user } };
+};
