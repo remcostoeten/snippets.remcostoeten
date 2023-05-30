@@ -13,6 +13,7 @@ import {
 } from '@mui/icons-material';
 import { AuthContext } from '@/lib/AuthContext';
 import { User } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 interface NavigationItem {
 	href: string;
