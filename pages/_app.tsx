@@ -1,6 +1,8 @@
 import { User } from 'firebase/auth';
 import { AuthContext, AuthProvider } from '@/lib/AuthContext';
 import { AppProps } from 'next/app';
+import '../styles/globals.scss';
+
 import { useRouter } from 'next/router';
 import { useEffect, useState, useContext } from 'react';
 import Aside from '@/components/Dashboard/Aside';
