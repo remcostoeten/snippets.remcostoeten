@@ -86,7 +86,7 @@ const skeletonProfile = (
 
 const skeletonNavigationItems = (
 	<ul className="space-y-2 tracking-wide mt-8">
-		{[1, 2, 3, 4, 5].map((index) => (
+		{[1, 2, 3, 4].map((index) => (
 			<li key={index}>
 				<div className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group bg-gray-200 animate-pulse">
 					<div className="w-6 h-6 bg-gray-300"></div>
@@ -98,7 +98,27 @@ const skeletonNavigationItems = (
 			<div className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group bg-gray-200 animate-pulse">
 				<Link
 					className="font-bold text-lg text-gray-900 align-right"
-					href="tests"
+					href="/"
+				>
+					Home
+				</Link>
+			</div>
+		</li>
+		<li>
+			<div className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group bg-gray-200 animate-pulse">
+				<Link
+					className="font-bold text-lg text-gray-900 align-right"
+					href="login"
+				>
+					Login
+				</Link>
+			</div>
+		</li>
+		<li>
+			<div className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group bg-gray-200 animate-pulse">
+				<Link
+					className="font-bold text-lg text-gray-900 align-right"
+					href="tests/preloader"
 				>
 					Infinite preloader
 				</Link>

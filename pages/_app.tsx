@@ -6,6 +6,7 @@ import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useCallback } from 'react';
 import Aside from '@/components/Dashboard/Aside';
+import Message from '@/components/ui-elements/Messages';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();

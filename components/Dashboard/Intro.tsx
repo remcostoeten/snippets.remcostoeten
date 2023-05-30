@@ -17,7 +17,7 @@ const DashboardPage = () => {
 
 		return () => unsubscribe();
 	}, []);
-	l;
+
 	useEffect(() => {
 		if (user === null) {
 			router.push('/login');
