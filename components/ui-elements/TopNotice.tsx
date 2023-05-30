@@ -11,9 +11,9 @@ export default function TopNotice() {
 	const [error, setError] = useState(false);
 	const [success, setSuccess] = useState(false);
 	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) => {
-			setCurrentUser(user);
-		});
+		const unsubscribe = auth.onAuthStateChanged((user) =>
+			setCurrentUser(currentUser),
+		);
 
 		return () => unsubscribe();
 	}, []);
@@ -87,9 +87,7 @@ export default function TopNotice() {
 				</div>{' '}
 				{currentUser ? (
 					<div className="flex items-center">
-						<span className="text-white">
-							{currentUser.displayName}
-						</span>
+						<span className="text-white">{auth.name}</span>
 						<button
 							onClick={signOut}
 							className="ml-4 px-4 py-2 text-sm font-medium text-blue-500 rounded  bg-grey-400 hover:bg-blue-200"

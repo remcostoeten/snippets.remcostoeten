@@ -4,6 +4,7 @@ import Message from '../ui-elements/Messages';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { User } from '@/lib/types';
+import { doc, updateDoc, collection, addDoc } from 'firebase/firestore';
 
 type EntryFormProps = {
 	entry?: Entry;
@@ -37,12 +38,15 @@ export const EntryForm: React.FC<EntryFormProps> = ({ entry, user }) => {
 		const categoriesArray = category.split(',').map((item) => item.trim());
 
 		if (entry?.id) {
-			await firestore
-				.collection('entries')
-				.doc(entry.id)
-				.update({ title, content, category: categoriesArray });
+			const docRef = doc(firestore, 'entries', entry.id);
+			await updateDoc(docRef, {
+				title,
+				content,
+				category: categoriesArray,
+			});
 		} else {
-			await firestore.collection('entries').add({
+			const entriesCollection = collection(firestore, 'entries');
+			await addDoc(entriesCollection, {
 				title,
 				content,
 				category: categoriesArray,

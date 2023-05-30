@@ -4,6 +4,7 @@ import { auth, googleAuthProvider } from '../lib/firebase';
 import Image from 'next/image';
 import { AuthContext } from '@/lib/AuthContext';
 import { signInWithPopup } from 'firebase/auth';
+import { User } from '@/lib/types';
 const LoginPage = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -21,9 +22,9 @@ const LoginPage = () => {
 	};
 
 	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) => {
-			setCurrentUser(user);
-		});
+		const unsubscribe = auth.onAuthStateChanged((user) =>
+			setCurrentUser(currentUser),
+		);
 
 		return () => unsubscribe();
 	}, []);

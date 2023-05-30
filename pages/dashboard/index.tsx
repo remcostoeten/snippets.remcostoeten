@@ -1,14 +1,14 @@
-import Aside from '@/components/Dashboard/Aside'
-import DashboardPage from '@/components/Dashboard/Intro'
-import React from 'react'
+import Aside from '@/components/Dashboard/Aside';
+import DashboardPage from '@/components/Dashboard/Intro';
+import React from 'react';
 
 export default function index() {
-  return (
-    <>
-    <div className="flex">
-        <Aside />
-        <DashboardPage />
-    </div>
-    </>
-  )
+	return (
+		<>
+			<div className="flex">
+				<Aside user={undefined} />
+				<DashboardPage />
+			</div>
+		</>
+	);
 }

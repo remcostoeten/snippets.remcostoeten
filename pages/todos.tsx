@@ -10,6 +10,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Head from 'next/head';
 import Badge from '@/components/ui-elements/Badge';
 import { GetServerSideProps } from 'next';
+import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
 
 const todoCategories = [
 	'snippets.remcostoeten',
@@ -26,7 +27,9 @@ type Task = {
 };
 
 const fetchTasks = async () => {
-	const taskCollection = await firestore.collection('tasks').get();
+	const taskCollectionRef = collection(firestore, 'tasks');
+	const taskCollection = await getDocs(taskCollectionRef);
+
 	return taskCollection.docs.map((doc) => {
 		const taskData = doc.data();
 		return {
@@ -66,6 +69,13 @@ export default function Todo({ tasks: initialTasks }) {
 		}
 	};
 
+	const deleteTask = async (id: string) => {
+		const taskRef = doc(firestore, 'tasks', id);
+		await deleteDoc(taskRef);
+		const updatedTasks = tasks.filter((task) => task.id !== id);
+		setTasks(updatedTasks);
+	};
+
 	const toggleTask = async (id: string) => {
 		const updatedTasks = tasks.map((task) => {
 			if (task.id === id) {
@@ -76,12 +86,6 @@ export default function Todo({ tasks: initialTasks }) {
 			return task;
 		});
 
-		setTasks(updatedTasks);
-	};
-
-	const deleteTask = async (id: string) => {
-		await firestore.collection('tasks').doc(id).delete();
-		const updatedTasks = tasks.filter((task) => task.id !== id);
 		setTasks(updatedTasks);
 	};
 

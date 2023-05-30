@@ -1,9 +1,12 @@
+import react, { ReactNode } from "react";	
+
 export interface user {
 	name: string;
 	user: string;
 }
 
 export interface User {
+	displayName: ReactNode;
 	name: string;
 	user: string;
 }

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { CustomDocumentData } from '../lib/firestore';
+import { CustomDocumentData } from '../lib/firebase';
 
 interface TreeViewProps {
 	documents: CustomDocumentData[];

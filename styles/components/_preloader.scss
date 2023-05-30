@@ -15,8 +15,6 @@ $letterDelay: 50ms;
 	position: relative;
 
 	.logo {
-		z-index: 200;
-
 		&__text {
 			transform: translateY(-31px);
 			$textInDuration: 1250ms;
@@ -95,6 +93,7 @@ $letterDelay: 50ms;
 	}
 }
 .logo {
+	z-index: 1000;
 	&__left,
 	&__Right {
 		animation: initialFade 1s 250ms $bezierOne forwards,

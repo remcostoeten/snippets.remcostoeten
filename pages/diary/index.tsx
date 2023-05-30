@@ -4,25 +4,33 @@ import { useEffect } from 'react';
 import { EntriesList } from '@/components/Diary/EntriesList';
 import { EntryForm } from '@/components/Diary/EntryForm';
 import { User } from '@/lib/types';
+import { IncomingMessage } from 'http';
+
+interface CustomIncomingMessage extends IncomingMessage {
+	locals?: {
+		user?: User;
+	};
+}
 
 export default function Index({ user }: { user: User | null }) {
-  const router = useRouter();
+	const router = useRouter();
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user]);
+	useEffect(() => {
+		if (!user) {
+			router.push('/login');
+		}
+	}, [user]);
 
-  return user ? (
-    <div>
-      <EntryForm user={user} />
-      <EntriesList user={user} />
-    </div>
-  ) : null;
+	return user ? (
+		<div>
+			<EntryForm user={user} />
+			<EntriesList user={user} />
+		</div>
+	) : null;
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const user = req.locals?.user || null;
-  return { props: { user } };
+	const customReq = req as CustomIncomingMessage; // Cast 'req' to CustomIncomingMessage
+	const user = customReq?.locals?.user || null;
+	return { props: { user } };
 };

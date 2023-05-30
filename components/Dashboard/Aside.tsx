@@ -9,6 +9,7 @@ import {
 	AttachMoney as AttachMoneyIcon,
 	IntegrationInstructionsSharp,
 	Logout,
+	Home,
 } from '@mui/icons-material';
 import { auth } from '@/lib/firebase';
 import { User } from 'firebase/auth';
@@ -27,7 +28,7 @@ const navigationItems: NavigationItem[] = [
 	{
 		href: '/',
 		label: 'Dashboard',
-		icon: <AddHomeIcon />,
+		icon: <Home />,
 	},
 	{
 		href: 'todos',
