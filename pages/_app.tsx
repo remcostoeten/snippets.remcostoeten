@@ -19,10 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 		if (typeof window !== 'undefined') {
 			const visitedBefore = localStorage.getItem('visitedBefore');
-			document.body.classList.add('loading');
-			setTimeout(() => {
-				document.body.classList.remove('loading');
-			}, 3500);
+			setTimeout(() => {}, 3500);
 
 			if (!visitedBefore && mounted) {
 				setFirstVisit(true);

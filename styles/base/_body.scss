@@ -10,22 +10,6 @@ body {
 	}
 }
 
-body {
-	opacity: 0.1;
-	filter: blur(5px);
-
-	&.loader {
-		opacity: 1;
-		filter: blur(0);
-	}
-}
-
-.loading {
-	.content {
-		opacity: 0.1;
-		filter: blur(5px);
-	}
-}
 @keyframes loadBlur {
 	from {
 		opacity: 0.3;
