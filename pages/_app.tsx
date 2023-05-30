@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }) {
 			<TopNotice />
 			<AuthProvider>
 				<div className="flex content">
-					<Aside />
+					<Aside user={undefined} />
 					<Component {...pageProps} />
 				</div>
 			</AuthProvider>
