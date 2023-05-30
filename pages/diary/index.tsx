@@ -17,7 +17,7 @@ export default function Index({ user }: { user: User | null }) {
 
 	useEffect(() => {
 		if (!user) {
-			router.push('/login');
+			router.push('/');
 		}
 	}, [user]);
 
