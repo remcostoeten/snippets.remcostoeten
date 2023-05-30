@@ -6,19 +6,20 @@ import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useContext } from 'react';
 import Aside from '@/components/Dashboard/Aside';
+import { User } from '@/lib/types';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
 	const [firstVisit, setFirstVisit] = useState(false);
 	const authContext = useContext(AuthContext);
-	const currentUser = authContext ? authContext.currentUser : null;
+	const currentUser = authContext?.currentUser || null;
 
 	useEffect(() => {
 		let mounted = true;
 
 		if (typeof window !== 'undefined') {
 			const visitedBefore = localStorage.getItem('visitedBefore');
-			if (visitedBefore && mounted) {
+			if (!visitedBefore && mounted) {
 				setFirstVisit(true);
 				localStorage.setItem('visitedBefore', 'true');
 			}
@@ -34,18 +35,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 			{firstVisit && <Preloader />}
 			<TopNotice />
 			<AuthProvider>
-<<<<<<< HEAD
-				<TopNotice />
-				<div className="flex h-full">
-					<Aside user={undefined} />
-					<Component {...pageProps} />
-				</div>{' '}
-=======
 				<div className="flex">
-					<Aside user={currentUser} />
 					<Component {...pageProps} />
 				</div>
->>>>>>> xxx
 			</AuthProvider>
 		</>
 	);

@@ -12,7 +12,7 @@ export default function TopNotice() {
 	const [success, setSuccess] = useState(false);
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) =>
-			setCurrentUser(setCurrentUser),
+			setCurrentUser(user),
 		);
 
 		return () => unsubscribe();
