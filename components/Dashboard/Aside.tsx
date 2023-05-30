@@ -58,19 +58,18 @@ const Navigation = () => {
 		<ul className="space-y-2 tracking-wide mt-8">
 			{navigationItems.map((item) => (
 				<li key={item.href}>
-					<Link href={item.href}>
-						<a className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+					<Link href={item.href} className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
 							{item.icon}
 							<span className="group-hover:text-gray-700">
 								{item.label}
 							</span>
-						</a>
 					</Link>
 				</li>
 			))}
 		</ul>
 	);
 };
+  
 
 const skeletonProfile = (
 	<div className="mt-8 text-center">

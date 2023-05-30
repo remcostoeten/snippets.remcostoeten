@@ -1,50 +1,51 @@
 import { useEffect, useState, ChangeEvent, useContext } from 'react';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { auth, googleAuthProvider } from '../lib/firebase';
 import Image from 'next/image';
 import { AuthContext } from '@/lib/AuthContext';
 import { signInWithPopup } from 'firebase/auth';
+
 const LoginPage = () => {
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const router = useRouter();
-	const { currentUser, setCurrentUser } = useContext(AuthContext);
-	const [success, setSuccess] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const router = useRouter();
+  const { currentUser, setCurrentUser } = useContext(AuthContext);
+  const [success, setSuccess] = useState(false);
 
-	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setEmail(e.target.value);
-	};
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
 
-	const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setPassword(e.target.value);
-	};
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
 
-	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) =>
-			setCurrentUser(currentUser),
-		);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) =>
+      setCurrentUser(user), // Set the user instead of currentUser
+    );
 
-		return () => unsubscribe();
-	}, [currentUser]);
+    return () => unsubscribe();
+  }, [setCurrentUser]);
 
-	const signOut = async () => {
-		await auth.signOut();
-		setCurrentUser(null);
-		setSuccess(true);
-		router.push('/');
-	};
+  const signOut = async () => {
+    await auth.signOut();
+    setCurrentUser(null);
+    setSuccess(true);
+    router.push('/');
+  };
 
-	const signIn = async () => {
-		await signInWithPopup(auth, googleAuthProvider);
-		setSuccess(true);
-		router.push('/');
-	};
+  const signIn = async () => {
+    await signInWithPopup(auth, googleAuthProvider);
+    router.push('/');
+    setSuccess(true);
+  };
 
-	useEffect(() => {
-		if (currentUser && success) {
-			router.push('/');
-		}
-	}, [currentUser, success]);
+  useEffect(() => {
+    if (currentUser && success) {
+      router.push('/');
+    }
+  }, [currentUser, success, router]);
 
 	return (
 		<div className="border-red-500 bg-gray-50  flex items-center justify-center w-full">
@@ -57,7 +58,6 @@ const LoginPage = () => {
 						If you have an account, please login
 					</p>
 					<form className="flex flex-col gap-4 items-center">
-						<label>Email</label>
 						<input
 							type="email"
 							className="p-2 m-5 mb-1 rounded-xl border"
@@ -67,7 +67,6 @@ const LoginPage = () => {
 							onChange={handleEmailChange}
 						/>
 						<div className="relative">
-							<label>Password</label>
 							<input
 								type="password"
 								className="w-full p-2 rounded-xl border"
@@ -108,9 +107,6 @@ const LoginPage = () => {
 						Login with Google
 					</button>
 
-					<div className=" mt-1 text-xs border-b py-6 border-gray-400">
-						<a href="">Forgot your password..</a>
-					</div>
 
 					<div className="text-sm flex justify-between items-center mt-3">
 						<p>If you do not have an account...</p>
