@@ -58,12 +58,12 @@ const Navigation = () => {
 			{navigationItems.map((item) => (
 				<li key={item.href}>
 					<Link href={item.href}>
-						<span className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+						<a className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
 							{item.icon}
 							<span className="group-hover:text-gray-700">
 								{item.label}
 							</span>
-						</span>
+						</a>
 					</Link>
 				</li>
 			))}
@@ -123,7 +123,7 @@ const UserProfile = ({ user }: UserProps) => {
 	);
 };
 
-export default function Aside(): JSX.Element {
+export default function Aside({ user }: UserProps): JSX.Element {
 	const router = useRouter();
 	const { currentUser } = useContext(AuthContext);
 
