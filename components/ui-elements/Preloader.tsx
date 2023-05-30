@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 const Preloader: React.FC = () => {
-	const [isLoading, setIsLoading] = useState(true);
-
 	useEffect(() => {
-		const timer = setTimeout(() => {
-			setIsLoading(false);
-		}, 2000); // You can adjust the time as per your requirement
+		const timeoutId = setTimeout(() => {
+			document.body.classList.add('animationPartTwo');
+		}, 2000);
 
-		return () => clearTimeout(timer);
+		return () => {
+			clearTimeout(timeoutId);
+		};
 	}, []);
+
 	return (
 		<>
 			<div className="logo">
