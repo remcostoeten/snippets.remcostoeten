@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 		if (typeof window !== 'undefined') {
 			const visitedBefore = localStorage.getItem('visitedBefore');
-			if (!visitedBefore && mounted) {
+			if (visitedBefore && mounted) {
 				setFirstVisit(true);
 				localStorage.setItem('visitedBefore', 'true');
 			}

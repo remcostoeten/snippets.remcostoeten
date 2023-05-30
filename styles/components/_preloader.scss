@@ -20,6 +20,7 @@ $letterDelay: 50ms;
 			$textInDuration: 1250ms;
 			$delayDuration: calc(200ms * 2.5);
 			animation: initialHideScale $bezierOne forwards;
+			font-size: 6.6rem;
 
 			@media screen and (max-width: 1199px) {
 				font-size: 2.4rem;
@@ -27,8 +28,11 @@ $letterDelay: 50ms;
 			@media screen and (min-width: 1200px) and (max-width: 1499px) {
 				font-size: 3.4rem;
 			}
-			@media screen and (min-width: 1500px) {
-				font-size: 7rem;
+			@media screen and (min-width: 1500px) and (max-width: 1920px) {
+				font-size: 5rem;
+			}
+			@media screen and (min-width: 2560px) {
+				font-size: 7.5rem;
 			}
 
 			.r,
@@ -94,6 +98,7 @@ $letterDelay: 50ms;
 }
 .logo {
 	z-index: 1000;
+
 	&__left,
 	&__Right {
 		animation: initialFade 1s 250ms $bezierOne forwards,
@@ -158,6 +163,7 @@ body:not(.animationPartTwo) {
 	&__text {
 		color: $white;
 		position: absolute;
+		scale: 0.9;
 	}
 
 	&__right,
@@ -223,7 +229,7 @@ body:not(.animationPartTwo) {
 		transform: translateX(0);
 	}
 	100% {
-		transform: translateX(-145px);
+		transform: translateX(-155px);
 	}
 }
 
@@ -232,7 +238,7 @@ body:not(.animationPartTwo) {
 		transform: translateX(0);
 	}
 	100% {
-		transform: translate(110px, -20px);
+		transform: translate(120px, -20px);
 	}
 }
 
