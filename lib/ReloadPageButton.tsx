@@ -9,12 +9,10 @@ const ReloadPage: React.FC = () => {
 	};
 
 	const removeBodyclassAndReAddClass = () => {
-		document.body.classList.toggle('animationPartTwo');
-		// document.body.classList.remove('logo');
-		// document.body.classList.add('logo');
+		document.body.classList.remove('animationPartTwo');
 
 		setTimeout(() => {
-			document.body.classList.toggle('animationPartTwo');
+			document.body.classList.add('animationPartTwo');
 		}, 2000);
 	};
 
@@ -26,7 +24,7 @@ const ReloadPage: React.FC = () => {
 		<>
 			<button
 				className=" absolute bg-indigo-400 r-0 top-20 z-50"
-				onClick={removeBodyclassAndReAddClass}
+				onClick={handleReload}
 			>
 				Reload classes Page
 			</button>

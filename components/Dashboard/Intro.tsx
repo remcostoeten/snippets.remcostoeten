@@ -7,25 +7,23 @@ import Aside from './Aside';
 
 const DashboardPage = () => {
 	const [user, setUser] = useState(null);
-	const [loading, setLoading] = useState(true); // Added loading state
+	const [loading, setLoading] = useState(true);
 	const router = useRouter();
-
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((currentUser) => {
 			setUser(currentUser);
-			setLoading(false); // Set loading to false when data is fetched
+			setLoading(false);
 		});
 
 		return () => unsubscribe();
 	}, []);
+	l;
+	useEffect(() => {
+		if (user === null) {
+			router.push('/login');
+		}
+	}, [user, router]);
 
-	// useEffect(() => {
-	// 	if (user !== null && !user) {
-	// 		router.push('/login');
-	// 	}
-	// }, [user, router]);
-
-	// Skeleton Content for Dashboard
 	const skeletonContent = (
 		<div className="flex flex-col items-center justify-center h-screen bg-gray-100 w-full">
 			<motion.h1
@@ -50,7 +48,6 @@ const DashboardPage = () => {
 
 	return (
 		<div className="flex flex-1">
-			<Aside user={user} />
 			<div className="flex flex-col items-center justify-center h-screen bg-gray-100 w-full">
 				{loading ? (
 					skeletonContent

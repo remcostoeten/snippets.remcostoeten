@@ -15,6 +15,7 @@ module.exports = {
 			},
 			width: {
 				'95vw': '95vw',
+				'93vh': '93vh',
 			},
 			animation: {
 				'spin-slow': 'spin 3s linear infinite',

@@ -43,3 +43,4 @@ styles/globals.css.map
 styles/components/Logo.module.css
 *.css.map
 ```
+components/ui-elements/npm/*

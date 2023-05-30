@@ -5,6 +5,7 @@ import { AuthProvider } from '@/lib/AuthContext';
 import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useCallback } from 'react';
+import Aside from '@/components/Dashboard/Aside';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
@@ -31,7 +32,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 			{firstVisit && <Preloader />}
 			<AuthProvider>
 				<TopNotice />
-				<Component {...pageProps} />
+				<div className="flex h-full">
+					<Aside user={undefined} />
+					<Component {...pageProps} />
+				</div>{' '}
 			</AuthProvider>
 		</>
 	);
