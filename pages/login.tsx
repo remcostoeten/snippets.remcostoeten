@@ -1,13 +1,16 @@
-import { useEffect, useState, ChangeEvent } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect, useState, ChangeEvent, useContext } from 'react';
+import { Router, useRouter } from 'next/router';
 import { auth, googleAuthProvider } from '../lib/firebase';
 import Image from 'next/image';
-
+import { AuthContext } from '@/lib/AuthContext';
+import { signInWithPopup } from 'firebase/auth';
 const LoginPage = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [error, setError] = useState('');
 	const router = useRouter();
+	const { currentUser, setCurrentUser } = useContext(AuthContext);
+	const [error, setError] = useState(false);
+	const [success, setSuccess] = useState(false);
 
 	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setEmail(e.target.value);
@@ -17,34 +20,26 @@ const LoginPage = () => {
 		setPassword(e.target.value);
 	};
 
-	const handleLogin = async () => {
-		try {
-			await auth.signInWithEmailAndPassword(email, password);
-			router.push('/dashboard');
-		} catch (error) {
-			setError('Failed to login. Please check your credentials.');
-		}
+	useEffect(() => {
+		const unsubscribe = auth.onAuthStateChanged((user) => {
+			setCurrentUser(user);
+		});
+
+		return () => unsubscribe();
+	}, []);
+
+	const signOut = async () => {
+		await auth.signOut();
+		setCurrentUser(null);
+		setSuccess(true);
+		router.push('/');
 	};
 
-	const signInWithPopup(auth, provider)
-		.then((result) => {
-			// This gives you a Google Access Token. You can use it to access the Google API.
-			var credential = GoogleAuthProvider.credentialFromResult(result);
-			var token = credential.accessToken;
-			// The signed-in user info.
-			var user = result.user;
-			// ...
-		})
-		.catch((error) => {
-			// Handle Errors here.
-			var errorCode = error.code;
-			var errorMessage = error.message;
-			// The email of the user's account used.
-			var email = error.email;
-			// The AuthCredential type that was used.
-			var credential = GoogleAuthProvider.credentialFromError(error);
-			// ...
-		});
+	const signIn = async () => {
+		await signInWithPopup(auth, googleAuthProvider);
+		setSuccess(true);
+		router.push('/');
+	};
 
 	return (
 		<div className="border-red-500 bg-gray-50 min-h-screen flex items-center justify-center">
@@ -75,7 +70,7 @@ const LoginPage = () => {
 						</div>
 						<button
 							className="bg-[#002074] rounded-xl py-2 text-white max-w-full px-10 hover:scale-105 duration-300"
-							onClick={handleLogin}
+							onClick={signIn}
 						>
 							Login
 						</button>
@@ -89,7 +84,7 @@ const LoginPage = () => {
 
 					<button
 						className="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300"
-						onClick={handleGoogleLogin}
+						onClick={signIn}
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"

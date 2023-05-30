@@ -1,4 +1,5 @@
-import { Suspense } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { AppProps } from 'next/app';
 import '../styles/globals.scss';
@@ -17,11 +18,31 @@ const Aside = dynamic(() => import('@/components/Dashboard/Aside'), {
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+	const [isLoading, setIsLoading] = useState(true);
+	const router = useRouter();
+
+	useEffect(() => {
+		const handleRouteChangeComplete = () => {
+			setIsLoading(false);
+		};
+
+		router.events.on('routeChangeComplete', handleRouteChangeComplete);
+
+		return () => {
+			router.events.off('routeChangeComplete', handleRouteChangeComplete);
+		};
+	}, []);
+
 	return (
 		<AuthProvider>
-			<TopNotice />
-			{/* <Aside /> */}
-			<Component {...pageProps} />
+			{isLoading ? (
+				<Preloader />
+			) : (
+				<>
+					<TopNotice />
+					<Component {...pageProps} />
+				</>
+			)}
 		</AuthProvider>
 	);
 }
