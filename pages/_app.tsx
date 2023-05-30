@@ -1,14 +1,17 @@
 import Preloader from '@/components/ui-elements/Preloader';
 import '../styles/globals.scss';
 import TopNotice from '@/components/ui-elements/TopNotice';
-import { AuthProvider } from '@/lib/AuthContext';
+import { AuthProvider, AuthContext } from '@/lib/AuthContext';
 import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import Aside from '@/components/Dashboard/Aside';
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
 	const [firstVisit, setFirstVisit] = useState(false);
+	const authContext = useContext(AuthContext);
+	const currentUser = authContext ? authContext.currentUser : null;
 
 	useEffect(() => {
 		let mounted = true;
@@ -29,9 +32,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
 			{firstVisit && <Preloader />}
+			<TopNotice />
 			<AuthProvider>
-				<TopNotice />
-				<Component {...pageProps} />
+				<div className="flex">
+					<Aside user={currentUser} />
+					<Component {...pageProps} />
+				</div>
 			</AuthProvider>
 		</>
 	);
