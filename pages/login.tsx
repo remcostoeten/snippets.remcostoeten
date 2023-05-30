@@ -40,6 +40,12 @@ const LoginPage = () => {
 		router.push('/');
 	};
 
+	useEffect(() => {
+		if (currentUser && success) {
+			router.push('/');
+		}
+	}, [currentUser, success]);
+
 	return (
 		<div className="border-red-500 bg-gray-50  flex items-center justify-center w-full">
 			<div className="bg-gray-100  text-center p-5 flex rounded-2xl flex w-full align-middle shadow-lg wrapper-height mt-8 mr-8 mb-2">

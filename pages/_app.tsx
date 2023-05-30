@@ -1,25 +1,24 @@
-import { User } from 'firebase/auth';
-import { AuthContext, AuthProvider } from '@/lib/AuthContext';
-import { AppProps } from 'next/app';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { AuthProvider } from '@/lib/AuthContext';
+import Preloader from '@/components/ui-elements/Preloader';
+import TopNotice from '@/components/ui-elements/TopNotice';
+import Aside from '@/components/Dashboard/Aside';
+
 import '../styles/globals.scss';
 
-import { useRouter } from 'next/router';
-import { useEffect, useState, useContext } from 'react';
-import Aside from '@/components/Dashboard/Aside';
-import TopNotice from '@/components/ui-elements/TopNotice';
-import Preloader from './tests/preloader';
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }) {
 	const router = useRouter();
 	const [firstVisit, setFirstVisit] = useState(false);
-	const authContext = useContext(AuthContext);
-	const currentUser: Partial<User> = authContext?.currentUser || null;
 
 	useEffect(() => {
 		let mounted = true;
 
 		if (typeof window !== 'undefined') {
 			const visitedBefore = localStorage.getItem('visitedBefore');
-			setTimeout(() => {}, 3500);
+			setTimeout(() => {
+				// i; This line seems to be an error and can be removed
+			}, 3500);
 
 			if (!visitedBefore && mounted) {
 				setFirstVisit(true);
@@ -38,7 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<TopNotice />
 			<AuthProvider>
 				<div className="flex content">
-					<Aside user={currentUser} />
+					<Aside />
 					<Component {...pageProps} />
 				</div>
 			</AuthProvider>

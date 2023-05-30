@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -11,7 +11,7 @@ import {
 	Logout,
 	Home,
 } from '@mui/icons-material';
-import { auth } from '@/lib/firebase';
+import { AuthContext } from '@/lib/AuthContext';
 import { User } from 'firebase/auth';
 
 interface NavigationItem {
@@ -46,11 +46,6 @@ const navigationItems: NavigationItem[] = [
 		icon: <AttachMoneyIcon />,
 	},
 	{
-		href: 'expenses',
-		label: 'Expenses',
-		icon: <AttachMoneyIcon />,
-	},
-	{
 		href: 'docs',
 		label: 'Docs',
 		icon: <IntegrationInstructionsSharp />,
@@ -63,12 +58,12 @@ const Navigation = () => {
 			{navigationItems.map((item) => (
 				<li key={item.href}>
 					<Link href={item.href}>
-						<a className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
+						<span className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
 							{item.icon}
 							<span className="group-hover:text-gray-700">
 								{item.label}
 							</span>
-						</a>
+						</span>
 					</Link>
 				</li>
 			))}
@@ -128,8 +123,9 @@ const UserProfile = ({ user }: UserProps) => {
 	);
 };
 
-export default function Aside({ user }: UserProps): JSX.Element {
+export default function Aside(): JSX.Element {
 	const router = useRouter();
+	const { currentUser } = useContext(AuthContext);
 
 	const handleLogout = () => {
 		auth.signOut();
@@ -140,47 +136,33 @@ export default function Aside({ user }: UserProps): JSX.Element {
 		<aside className="ml-[-100%] z-10 pb-3 px-6 w-full flex flex-col justify-between h-full border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%]">
 			<div>
 				<div className="-mx-6 px-6 py-4">
-					<a
+					<Link
 						className="flex justify-between w-full align-middle"
 						href="#"
 						title="home"
-					></a>
+					></Link>
 				</div>
-				{user ? (
+				{currentUser ? (
 					<>
 						<div className="mt-8 text-center">
 							<Image
 								width={100}
 								height={100}
 								src={
-									user.photoURL ||
+									currentUser.photoURL ||
 									'https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp'
 								}
-								alt={user.displayName || 'Unknown User'}
+								alt={currentUser.displayName || 'Unknown User'}
 								className="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28"
 							/>
 							<h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
-								{user.displayName || 'Unknown User'}
+								{currentUser.displayName || 'Unknown User'}
 							</h5>
 							<span className="hidden text-gray-400 lg:block">
 								Admin
 							</span>
 						</div>
-						<ul className="space-y-2 tracking-wide mt-8">
-							{navigationItems.map((item) => (
-								<li key={item.href}>
-									<a
-										href={item.href}
-										className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group"
-									>
-										{item.icon}
-										<span className="group-hover:text-gray-700">
-											{item.label}
-										</span>
-									</a>
-								</li>
-							))}
-						</ul>
+						<Navigation />
 					</>
 				) : (
 					<>
