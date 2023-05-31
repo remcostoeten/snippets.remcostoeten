@@ -19,34 +19,33 @@ const auth = getAuth(app);
 const firestore = getFirestore(app);
 const storage = getStorage(app);
 const googleAuthProvider = new GoogleAuthProvider();
-export interface CustomDocumentData {
-	id: string;
-	title: string;
-	content: string;
-  }
   
 type Task = {
   id: string;
   title: string;
   done: boolean;
 };
+
+export interface CustomDocumentData {
+  id: string;
+  title: string;
+  content: string;
+}
+
 export async function getDocuments(): Promise<CustomDocumentData[]> {
-	const documentsCollection = collection(firestore, 'documents');
-	const snapshot = await getDocs(documentsCollection);
+  const documentsCollection = collection(firestore, 'documents');
+  const snapshot = await getDocs(documentsCollection);
+
+  const documents = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    title: doc.data().title,
+    content: doc.data().content,
+  }));
+
+  return documents;
+}
   
-	const documents = snapshot.docs.map((doc) => ({
-	  id: doc.id,
-	  title: doc.data().title,
-	  content: doc.data().content,
-	}));
   
-	return documents;
-  }
-  export interface CustomDocumentData {
-	id: string;
-	title: string;
-	content: string;
-  }
 const handleAddDocument = async (newDocument: Task) => {
   try {
     const docRef = await addDoc(collection(firestore, 'tasks'), newDocument);
