@@ -5,6 +5,7 @@ import Preloader from '@/components/ui-elements/Preloader';
 import TopNotice from '@/components/ui-elements/TopNotice';
 import Aside from '@/components/Dashboard/Aside';
 import '../styles/globals.scss';
+import Head from 'next/head';
 
 function MyApp({ Component, pageProps }) {
 	const router = useRouter();
@@ -35,7 +36,17 @@ function MyApp({ Component, pageProps }) {
 	return (
 		<>
 			<Preloader />
-			<div className={`content-wrapper ${isLoading ? 'loading' : ''}`}>
+			<div
+				className={`roboto content-wrapper ${
+					isLoading ? 'loading' : ''
+				}`}
+			>
+				<Head>
+					<link
+						rel="stylesheet"
+						href="https://fonts.googleapis.com/css?family=Roboto:400,500,900&display=swap"
+					/>
+				</Head>
 				{shouldRenderAside && <TopNotice />}
 				<AuthProvider>
 					<div className="flex content">

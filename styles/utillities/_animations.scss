@@ -3,6 +3,7 @@
 	width: 100px;
 	max-width: 150px;
 	overflow: hidden;
+
 	&--arrow {
 		span {
 			position: absolute;
@@ -15,6 +16,17 @@
 				animation: swipeLeftBlur 0.5s cubic-bezier(0.23, 1, 0.32, 1);
 			}
 		}
+	}
+}
+
+@keyframes infiniteRotate {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate3d(1, 1, 1, 45deg);
+		transform: rotate(360deg);
 	}
 }
 

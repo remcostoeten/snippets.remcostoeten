@@ -1,6 +1,15 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-const Dropdown = () => {
+const DropdownItem = ({ item, href }) => (
+	<a
+		href={href}
+		className="block w-full px-4 py-2 font-medium text-gray-700 whitespace-no-wrap hover:bg-gray-100 focus:outline-none hover:text-gray-900 focus:text-gray-900 focus:shadow-outline transition duration-300 ease-in-out"
+	>
+		{item}
+	</a>
+);
+
+const Dropdown = ({ items, href }) => {
 	const [isVisible, setIsVisible] = useState(false);
 
 	const handleMouseOver = () => {
@@ -11,15 +20,14 @@ const Dropdown = () => {
 		setIsVisible(false);
 	};
 
-	const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+	const handleKeyDown = (event) => {
 		if (event.key === 'Enter') {
 			setIsVisible(!isVisible);
 		}
 	};
 
 	return (
-		<div id="app" className="antialiased font-sans py-16">
-			{/* This empty div is only for demo purposes and it's used so you can close the menu on a touchscreen device. Normally you'd handle it differently by not using hover states on mobile, but by using real clicks. */}
+		<div id="app" className={`antialiased font-sans py-16 ${href}`}>
 			<div
 				className="fixed inset-0"
 				onClick={() => setIsVisible(false)}
@@ -56,30 +64,13 @@ const Dropdown = () => {
 						<div className="relative py-1 bg-white border border-gray-200 rounded-md shadow-xl">
 							<div className="absolute top-0 w-4 h-4 origin-center transform rotate-45 translate-x-5 -translate-y-2 bg-white border-t border-l border-gray-200 rounded-sm pointer-events-none"></div>
 							<div className="relative">
-								<a
-									href="#"
-									className="block w-full px-4 py-2 font-medium text-gray-700 whitespace-no-wrap hover:bg-gray-100 focus:outline-none hover:text-gray-900 focus:text-gray-900 focus:shadow-outline transition duration-300 ease-in-out"
-								>
-									Submenu Link #1
-								</a>
-								<a
-									href="#"
-									className="block w-full px-4 py-2 font-medium text-gray-700 whitespace-no-wrap hover:bg-gray-100 focus:outline-none hover:text-gray-900 focus:text-gray-900 focus:shadow-outline transition duration-300 ease-in-out"
-								>
-									Submenu Link #2
-								</a>
-								<a
-									href="#"
-									className="block w-full px-4 py-2 font-medium text-gray-700 whitespace-no-wrap hover:bg-gray-100 focus:outline-none hover:text-gray-900 focus:text-gray-900 focus:shadow-outline transition duration-300 ease-in-out"
-								>
-									Submenu Link #3
-								</a>
-								<a
-									href="#"
-									className="block w-full px-4 py-2 font-medium text-gray-700 whitespace-no-wrap hover:bg-gray-100 focus:outline-none hover:text-gray-900 focus:text-gray-900 focus:shadow-outline transition duration-300 ease-in-out"
-								>
-									Submenu Link #4
-								</a>
+								{items.map((item, index) => (
+									<DropdownItem
+										key={index}
+										item={item.name}
+										href={item.href}
+									/>
+								))}
 							</div>
 						</div>
 					</div>

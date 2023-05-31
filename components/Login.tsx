@@ -26,7 +26,7 @@ const LoginPage = () => {
 		);
 
 		return () => unsubscribe();
-	}, []);
+	}, [currentUser]);
 
 	const signOut = async () => {
 		await auth.signOut();

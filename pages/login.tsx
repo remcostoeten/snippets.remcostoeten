@@ -4,6 +4,9 @@ import { auth, googleAuthProvider } from '../lib/firebase';
 import Image from 'next/image';
 import { AuthContext } from '@/lib/AuthContext';
 import { signInWithPopup } from 'firebase/auth';
+import IconButton from '@/components/ui-elements/IconButton';
+import { GitHub, Google } from '@mui/icons-material';
+import Dropdown from '@/components/authentication/Dropdown';
 
 const LoginPage = () => {
 	const [email, setEmail] = useState('');
@@ -11,6 +14,12 @@ const LoginPage = () => {
 	const router = useRouter();
 	const { currentUser, setCurrentUser } = useContext(AuthContext);
 	const [success, setSuccess] = useState(false);
+
+	const items = [
+		{ name: 'Register', href: '/register' },
+		{ name: 'remcostoeten.com', href: 'https://remcostoeten.com' },
+		{ name: 'Dutch', href: '.nl' },
+	];
 
 	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setEmail(e.target.value);
@@ -47,98 +56,121 @@ const LoginPage = () => {
 		}
 	}, [currentUser, success, router]);
 
+	useEffect(() => {
+		const shapesContainer = document.querySelector('.shapes');
+		const parallaxStrength = 50; // Adjust this value to control the parallax effect strength
+
+		const handleMouseMove = (e: MouseEvent) => {
+			const { clientX, clientY } = e;
+			const centerX = window.innerWidth / 2;
+			const centerY = window.innerHeight / 2;
+			const moveX = (clientX - centerX) / parallaxStrength;
+			const moveY = (clientY - centerY) / parallaxStrength;
+
+			(
+				shapesContainer as HTMLElement
+			).style.transform = `translate(${moveX}px, ${moveY}px)`;
+		};
+		window.addEventListener('mousemove', handleMouseMove);
+
+		return () => {
+			window.removeEventListener('mousemove', handleMouseMove);
+		};
+	}, []);
+
+	useEffect(() => {
+		const shapesContainerTwo = document.querySelector(
+			'.shape',
+		) as HTMLElement;
+		const parallaxStrengthTwo = 50; // Adjust this value to control the parallax effect strength
+
+		const handleMouseMove = (e: MouseEvent) => {
+			const { clientX, clientY } = e;
+			const centerX = window.innerWidth / 2;
+			const centerY = window.innerHeight / 2;
+			const moveX = (clientX - centerX) / parallaxStrengthTwo;
+			const moveY = (clientY - centerY) / parallaxStrengthTwo;
+
+			shapesContainerTwo.style.transform = `translate(${-moveX}px, ${moveY}px)`;
+		};
+
+		window.addEventListener('mousemove', handleMouseMove);
+
+		return () => {
+			window.removeEventListener('mousemove', handleMouseMove);
+		};
+	}, []);
+
 	return (
 		<>
-			<main className="flex bg-dark-purple">
-				<aside className="wrapper w-1/3  w-screen h-screen  pl-6 pt-12">
-					<h1 className="text-white text-xl">
-						Here design is borne and grow... Be the part of this
-						interesting world ... !!
-					</h1>
+			<main className="flex bg-white w-full">
+				<aside className="wrapper xl:w-1/5 bg-dark-purple rounded-br-3xl rounded-tr-3xl h-screen pl-6 pt-12 flex flex-col">
+					<div className="h-1/3 pr-24 text-9xl">
+						<h1 className="h-1/3 pr-24 text-2xl text-offWhite p-9 pl-2 pt-2">
+							Hey... why not just login? it`s super easy nowdays
+							with username and password, google or discord.
+						</h1>
+					</div>
+					<div className="flex relative shapes scale-125">
+						<Image
+							src="/shapetwo.png"
+							alt="Remco Stoeten login page"
+							width={256}
+							height={160}
+							className="shapes__four"
+						/>
+						<Image
+							src="/shapeThree.png"
+							alt="Remco Stoeten login page"
+							width={74}
+							height={79}
+							className="shapes__three"
+						/>
+						<Image
+							src="/shapes.png"
+							alt="Remco Stoeten login page"
+							width={524}
+							height={503}
+							className="shapes__one"
+						/>
+						<Image
+							src="/ball.png"
+							alt="Remco Stoeten login page"
+							width={235}
+							height={235}
+							className="shapes__two"
+						/>
+					</div>
 				</aside>
 				<article className="bg-white rounded-bl-3xl rounded-tl-3xl rounded-r-md  p-32 w-2/3">
-					<h1 className="text-back text-size[128px]">Welcome !!</h1>
-				</article>{' '}
+					<Dropdown
+						href="absolute r-0 custom-dropdown"
+						items={items}
+					/>
+
+					<div className="screen-one">
+						<h1 className="text-back text-size[128px]">
+							Welcome !!
+						</h1>
+					</div>
+					<div className="screen-two">
+						<div className="flex justify-between">
+							<IconButton
+								color="text-slate-400"
+								icon={<Google />}
+								text="Sign in with Google"
+							/>
+							<IconButton
+								color="text-slate-400"
+								icon={<GitHub />}
+								text="Sign in with Github"
+							/>
+						</div>
+						<span className="uppercase text-trueGray-400">or</span>
+					</div>
+				</article>
 			</main>
 		</>
-		// <div className="border-red-500 bg-gray-50  flex items-center justify-center w-full">
-		// 	<div className="bg-gray-100  text-center p-5 flex rounded-2xl flex w-full align-middle shadow-lg wrapper-height mt-8 mr-8 mb-2">
-		// 		<div className="px-5">
-		// 			<h2 className="text-2xl font-bold text-[#002D74] text-center">
-		// 				Login
-		// 			</h2>
-		// 			<p className="text-sm mt-4 text-[#002D74]">
-		// 				If you have an account, please login
-		// 			</p>
-		// 			<form className="flex flex-col gap-4 items-center">
-		// 				<input
-		// 					type="email"
-		// 					className="p-2 m-5 mb-1 rounded-xl border"
-		// 					name="email"
-		// 					placeholder="Enter Username/email"
-		// 					value={email}
-		// 					onChange={handleEmailChange}
-		// 				/>
-		// 				<div className="relative">
-		// 					<input
-		// 						type="password"
-		// 						className="w-full p-2 rounded-xl border"
-		// 						name="password"
-		// 						placeholder="Enter Password"
-		// 						value={password}
-		// 						onChange={handlePasswordChange}
-		// 					/>
-		// 				</div>
-		// 				<button
-		// 					className="bg-[#002074] rounded-xl py-2 text-white max-w-full px-10 hover:scale-105 duration-300"
-		// 					onClick={signIn}
-		// 				>
-		// 					Login
-		// 				</button>
-		// 			</form>
-
-		// 			<div className="mt-7 grid grid-cols-3 items-center text-gray-500">
-		// 				<hr className="border-gray-500" />
-		// 				<p className="text-center text-sm">OR</p>
-		// 				<hr className="border-gray-500" />
-		// 			</div>
-
-		// 			<button
-		// 				className="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300"
-		// 				onClick={signIn}
-		// 			>
-		// 				<svg
-		// 					xmlns="http://www.w3.org/2000/svg"
-		// 					width="25px"
-		// 					height="25px"
-		// 					fill="currentColor"
-		// 					className="bi bi-google mr-3"
-		// 					viewBox="0 0 16 16"
-		// 				>
-		// 					<path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
-		// 				</svg>
-		// 				Login with Google
-		// 			</button>
-
-		// 			<div className="text-sm flex justify-between items-center mt-3">
-		// 				<p>If you do not have an account...</p>
-		// 				<button className="py-2 px-24 ml-3 bg-white border rounded-xl hover:scale-110 duration-300 border-blue-400  ">
-		// 					Register
-		// 				</button>
-		// 			</div>
-		// 		</div>
-
-		// 		<div className="md:block hidden">
-		// 			<Image
-		// 				width={364}
-		// 				height={546}
-		// 				src="/login.png"
-		// 				className="rounded-2xl"
-		// 				alt="page img"
-		// 			/>
-		// 		</div>
-		// 	</div>
-		// </div>
 	);
 };
 
