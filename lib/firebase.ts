@@ -13,7 +13,7 @@ const firebaseConfig = {
   appId: "1:457325786920:web:782eb6f05bb419f900c21d"
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
@@ -45,6 +45,26 @@ export async function getDocuments(): Promise<CustomDocumentData[]> {
   return documents;
 }
   
+export async function getNotes(userId) {
+	const notesCollection = collection(firestore, `users/${userId}/notes`);
+	const snapshot = await getDocs(notesCollection);
+  
+	const notes = snapshot.docs.map((doc) => ({
+	  id: doc.id,
+	  ...doc.data(),
+	}));
+  
+	return notes;
+  }
+
+export async function handleAddNote(userId: string, note: any) {
+	try {
+	  const docRef = await addDoc(collection(firestore, `users/${userId}/notes`), note);
+	  console.log('Note added with ID:', docRef.id);
+	} catch (error) {
+	  console.error('Error adding note:', error);
+	}
+  };
   
 const handleAddDocument = async (newDocument: Task) => {
   try {

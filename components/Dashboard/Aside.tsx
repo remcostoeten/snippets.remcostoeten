@@ -9,7 +9,10 @@ import {
 	AttachMoney as AttachMoneyIcon,
 	IntegrationInstructionsSharp,
 	Logout,
+	BuildCircle,
+	MarkUnreadChatAlt,
 	Home,
+	ViewKanban,
 } from '@mui/icons-material';
 import { AuthContext } from '@/lib/AuthContext';
 import { User } from 'firebase/auth';
@@ -53,23 +56,43 @@ const navigationItems: NavigationItem[] = [
 	},
 ];
 
+const navigationItemsTwo: NavigationItem[] = [
+	{
+		href: 'url-extract',
+		label: 'Url extract tool',
+		icon: <BuildCircle />,
+	},
+	{
+		href: 'whataspp-demo',
+		label: 'Whatsapp export demo',
+		icon: <MarkUnreadChatAlt />,
+	},
+	{
+		href: 'kanban-board',
+		label: 'Kanban board',
+		icon: <ViewKanban />,
+	},
+];
+
 const Navigation = () => {
 	return (
 		<ul className="space-y-2 tracking-wide mt-8">
 			{navigationItems.map((item) => (
 				<li key={item.href}>
-					<Link href={item.href} className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group">
-							{item.icon}
-							<span className="group-hover:text-gray-700">
-								{item.label}
-							</span>
+					<Link
+						href={item.href}
+						className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group"
+					>
+						{item.icon}
+						<span className="group-hover:text-gray-700">
+							{item.label}
+						</span>
 					</Link>
 				</li>
 			))}
 		</ul>
 	);
 };
-  
 
 const skeletonProfile = (
 	<div className="mt-8 text-center">
@@ -108,11 +131,8 @@ const UserProfile = ({ user }: UserProps) => {
 			<Image
 				width={100}
 				height={100}
-				src={
-					user?.photoURL ||
-					'https://tailus.io/sources/blocks/stats-cards/preview/images/second_user.webp'
-				}
-				alt={user?.displayName || 'Unknown User'}
+				src={user?.photoURL || '/buu.png'}
+				alt={user?.displayName || 'Django wagner'}
 				className="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28"
 			/>
 			<h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
@@ -129,7 +149,7 @@ export default function Aside({ user }: UserProps): JSX.Element {
 
 	const handleLogout = () => {
 		auth.signOut();
-		router.push('/'); // Replace '/login' with the desired page path
+		router.push('/');
 	};
 
 	return (

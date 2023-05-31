@@ -1,8 +1,12 @@
 import { Html, Head, Main, NextScript } from 'next/document';
+import { Roboto } from '@next/font/google';
 
 export default function Document() {
+	const roboto = Roboto({
+		weight: ['500', '400', '900'],
+	});
 	return (
-		<Html lang="en">
+		<Html className={roboto.className}>
 			<Head />
 			<body>
 				<Main />

@@ -1,26 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-const ReloadButton = () => {
-	const [isAnimating, setIsAnimating] = useState(false);
+const PreloaderInfinite: React.FC = () => {
+	const reloadAnimation = () => {
+		if (typeof document !== 'undefined') {
+			const body = document.body;
+			body.classList.remove('animationPartTwo');
+			body.classList.remove('loader');
 
-	const handleReload = () => {
-		setIsAnimating(true);
-		setTimeout(() => {
-			setIsAnimating(false);
-		}, 10); // A small delay to allow the animation to restart
+			setTimeout(() => {
+				body.classList.add('loader');
+				setTimeout(() => {
+					body.classList.add('animationPartTwo');
+				}, 0);
+			}, 0);
+		}
 	};
 
-	return (
-		<button
-			className={`reload-button ${isAnimating ? 'animating' : ''}`}
-			onClick={handleReload}
-		>
-			Reload
-		</button>
-	);
-};
-
-const Preloader = () => {
 	useEffect(() => {
 		document.body.classList.add('loader');
 		const timeoutId = setTimeout(() => {
@@ -34,6 +29,9 @@ const Preloader = () => {
 
 	return (
 		<>
+			<button className="reload-button" onClick={reloadAnimation}>
+				Reload Animation
+			</button>{' '}
 			<div className="logo">
 				<h2 className="logo__text">
 					<span className="r">r</span>
@@ -71,4 +69,4 @@ const Preloader = () => {
 	);
 };
 
-export default Preloader;
+export default PreloaderInfinite;

@@ -4,26 +4,25 @@ import { AuthProvider } from '@/lib/AuthContext';
 import Preloader from '@/components/ui-elements/Preloader';
 import TopNotice from '@/components/ui-elements/TopNotice';
 import Aside from '@/components/Dashboard/Aside';
-
 import '../styles/globals.scss';
 
 function MyApp({ Component, pageProps }) {
 	const router = useRouter();
-	const [firstVisit, setFirstVisit] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		let mounted = true;
 
 		if (typeof window !== 'undefined') {
 			const visitedBefore = localStorage.getItem('visitedBefore');
-			setTimeout(() => {
-				// i; This line seems to be an error and can be removed
-			}, 3500);
 
 			if (!visitedBefore && mounted) {
-				setFirstVisit(true);
 				localStorage.setItem('visitedBefore', 'true');
 			}
+
+			setTimeout(() => {
+				setIsLoading(false);
+			}, 3500);
 		}
 
 		return () => {
@@ -31,16 +30,20 @@ function MyApp({ Component, pageProps }) {
 		};
 	}, []);
 
+	const shouldRenderAside = router.pathname !== '/login';
+
 	return (
 		<>
-			{firstVisit && <Preloader />}
-			<TopNotice />
-			<AuthProvider>
-				<div className="flex content">
-					<Aside user={undefined} />
-					<Component {...pageProps} />
-				</div>
-			</AuthProvider>
+			<Preloader />
+			<div className={`content-wrapper ${isLoading ? 'loading' : ''}`}>
+				{shouldRenderAside && <TopNotice />}
+				<AuthProvider>
+					<div className="flex content">
+						{shouldRenderAside && <Aside user={undefined} />}
+						<Component {...pageProps} />
+					</div>
+				</AuthProvider>
+			</div>
 		</>
 	);
 }

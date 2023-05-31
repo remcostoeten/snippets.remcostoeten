@@ -11,6 +11,17 @@ $slideDuration: 750ms;
 $delayDuration: 500ms;
 $letterDelay: 50ms;
 
+.content-wrapper {
+	opacity: 1;
+	transition: opacity 0.1s;
+}
+
+.content-wrapper.loading {
+	opacity: 0.1;
+	background-color: black;
+	filter: blur(8px);
+}
+
 .animationPartTwo {
 	position: relative;
 
@@ -32,7 +43,7 @@ $letterDelay: 50ms;
 				font-size: 5rem;
 			}
 			@media screen and (min-width: 2560px) {
-				font-size: 7.5rem;
+				font-size: 8.5rem;
 			}
 
 			@media screen and (max-width: 768px) {
