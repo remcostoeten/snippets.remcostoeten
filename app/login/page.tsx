@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState, ChangeEvent } from 'react';
 import { useRouter } from 'next/router';
 import { auth, googleAuthProvider } from '../../lib/firebase';

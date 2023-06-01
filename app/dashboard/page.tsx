@@ -1,3 +1,4 @@
+'use client';
 import Aside from '@/components/Dashboard/Aside';
 import DashboardPage from '@/components/Dashboard/Intro';
 import React from 'react';

@@ -1,5 +1,4 @@
-// pages/index.tsx
-
+'use client';
 import { useEffect, useState } from 'react';
 import { auth } from '@/lib/firebase';
 import { motion } from 'framer-motion';
