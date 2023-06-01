@@ -3,9 +3,8 @@ import { useAuth } from '@/lib/useAuth';
 import { Calendar } from 'react-calendar';
 import { motion } from 'framer-motion';
 
-const CalendarView = () => {
+const CalendarView = ({ notes }) => {
 	const { currentUser } = useAuth();
-	const [notes, setNotes] = useState([]);
 	const [selectedDate, setSelectedDate] = useState(null);
 
 	// Fetch notes from Firebase when currentUser or selectedDate changes

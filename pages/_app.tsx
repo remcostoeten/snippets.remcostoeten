@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
 			const visitedBefore = localStorage.getItem('visitedBefore');
 
 			if (!visitedBefore && mounted) {
-				localStorage.setItem('visitedBefore', 'true');
+				localStorage.setItem('visitedBefore', 'false');
 			}
 
 			setTimeout(() => {
@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }) {
 		};
 	}, []);
 
-	const shouldRenderAside = router.pathname !== '/login';
+	const shouldRenderAside = router.pathname !== '';
 
 	return (
 		<>
@@ -47,11 +47,14 @@ function MyApp({ Component, pageProps }) {
 						href="https://fonts.googleapis.com/css?family=Roboto:400,500,900&display=swap"
 					/>
 				</Head>
-				{shouldRenderAside && <TopNotice />}
+				{/* {shouldRenderAside && <TopNotice />} */}
+				<TopNotice />
 				<AuthProvider>
 					<div className="flex content">
-						{shouldRenderAside && <Aside user={undefined} />}
-						<Component {...pageProps} />
+						{/* {shouldRenderAside && <Aside user={undefined} />} */}
+						<div className="h-screen bg-white rounded-lg p-4">
+							<Component {...pageProps} />
+						</div>
 					</div>
 				</AuthProvider>
 			</div>

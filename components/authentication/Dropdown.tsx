@@ -29,7 +29,7 @@ const Dropdown = ({ items, href }) => {
 	return (
 		<div id="app" className={`antialiased font-sans py-16 ${href}`}>
 			<div
-				className="fixed inset-0"
+				className="fixed inset-0 -z-10"
 				onClick={() => setIsVisible(false)}
 			></div>
 			<div

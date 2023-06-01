@@ -39,11 +39,12 @@
 	&__two {
 		filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
 		position: absolute;
+		z-index: 200;
 	}
 
 	&__four {
-		right: -70px;
-		top: -60px;
+		right: -60px;
+		top: -75px;
 		animation: infiniteRotate 30s linear infinite reverse;
 	}
 }
@@ -57,5 +58,28 @@
 .screen-one {
 	h1 {
 		font-size: 128px;
+		font-weight: 700;
+	}
+}
+
+.input {
+	border-bottom: 1px solid #ccc;
+	border-radius: none;
+	border-left: transparent;
+	border-right: transparent;
+	background: none;
+	z-index: 100;
+	border-top: transparent;
+}
+
+.borderbottom {
+	border-bottom: 50px solid #1a0b26;
+}
+
+.icon-button {
+	transition: 250ms ease-in-out all;
+
+	&::hover {
+		scale: 1.1;
 	}
 }

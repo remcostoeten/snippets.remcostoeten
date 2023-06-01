@@ -2,7 +2,7 @@ body {
 	min-height: 100vh;
 	position: relative;
 	overflow: hidden;
-
+	background-color: #e6e1e1;
 	&.sidebar-expanded {
 		.main-content {
 			width: 85vw;

@@ -13,6 +13,7 @@ import {
 	MarkUnreadChatAlt,
 	Home,
 	ViewKanban,
+	Login,
 } from '@mui/icons-material';
 import { AuthContext } from '@/lib/AuthContext';
 import { User } from 'firebase/auth';
@@ -53,6 +54,11 @@ const navigationItems: NavigationItem[] = [
 		href: 'docs',
 		label: 'Docs',
 		icon: <IntegrationInstructionsSharp />,
+	},
+	{
+		href: 'login',
+		label: 'Login',
+		icon: <Login />,
 	},
 ];
 
@@ -153,7 +159,7 @@ export default function Aside({ user }: UserProps): JSX.Element {
 	};
 
 	return (
-		<aside className="ml-[-100%] z-10 pb-3 px-6 w-full flex flex-col justify-between h-full border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%]">
+		<aside className="ml-[-100%] z-10 pb-3 px-6 w-full flex flex-col justify-between h-full border-r bg-background transition duration-300 md:w-3/12 lg:ml-0 lg:w-[15%] h-screen bg-white">
 			<div>
 				<div className="-mx-6 px-6 py-4">
 					<Link
@@ -191,15 +197,7 @@ export default function Aside({ user }: UserProps): JSX.Element {
 					</>
 				)}
 			</div>
-			<div className="px-6 -mx-6 pt-4 flex justify-between items-center border-t">
-				<button
-					className="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-600 group"
-					onClick={handleLogout}
-				>
-					<Logout />
-					<span className="group-hover:text-gray-700">Logout</span>
-				</button>
-			</div>
+			<div className="px-6 -mx-6 pt-4 flex justify-between items-center border-t"></div>
 		</aside>
 	);
 }

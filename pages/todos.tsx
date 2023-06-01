@@ -110,7 +110,7 @@ export default function Todo({ tasks: initialTasks }) {
 	}
 
 	return (
-		<div className="h-screen bg-white rounded-lg p-4">
+		<>
 			<Head>
 				<title>Todo List</title>
 				<meta
@@ -121,7 +121,7 @@ export default function Todo({ tasks: initialTasks }) {
 			<h1 className="text-2xl text-slate-950 font-bold mb-4">
 				Roadmap for the Site
 			</h1>
-			<p className="mb-6 text-slate-800 top-nav relative isolate items-center gap-x-6 overflow-hidden text-gray-400 px-6 py-1.5 sm:px-1.5 sm:before:flex-1 md:w-2/4">
+			<p className="mb-6 text-slate-800 top-nav relative isolate items-center gap-x-6 overflow-hidden px-6 py-1.5 sm:px-1.5 sm:before:flex-1 md:w-2/4">
 				This To-Do list outlines the upcoming features and to-dos I have
 				lined up for all my sites and other random projects related to
 				development. Mainly working on{' '}
@@ -237,6 +237,6 @@ export default function Todo({ tasks: initialTasks }) {
 					</ul>
 				</div>
 			))}
-		</div>
+		</>
 	);
 }

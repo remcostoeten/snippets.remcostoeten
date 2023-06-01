@@ -22,8 +22,8 @@ export default function Dashboard() {
 			>
 				{isAddingNote ? 'Close' : 'Add Note'}
 			</button>
-			{isAddingNote && <AddNote />}
-			<CalendarView />
+			{isAddingNote && <AddNote setNotes={setNotes} />}
+			<CalendarView notes={notes} />
 		</motion.div>
 	);
 }

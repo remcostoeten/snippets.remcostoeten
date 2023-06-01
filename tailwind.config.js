@@ -17,10 +17,20 @@ module.exports = {
 				offWhite: '#f5f5f5',
 				'light-purple': '#66328e',
 				'dark-purple': '#1a0b26',
+				'light-grey': '#6c7293',
+				'border-color': '#2c2e33',
 			},
+			borderColor: {
+				'border-color': '#2c2e33',
+			},
+
 			backgroundColor: {
+				'background-accent': '#191c24',
+				black: '#000000',
+				'light-grey': '#6c7293',
 				'dark-purple': '#1a0b26',
 				'light-purple': '#66328e',
+				'accent-color': '#22242e',
 			},
 			width: {
 				'95vw': '95vw',
