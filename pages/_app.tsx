@@ -52,7 +52,7 @@ function MyApp({ Component, pageProps }) {
 				<AuthProvider>
 					<div className="flex content">
 						{/* {shouldRenderAside && <Aside user={undefined} />} */}
-						<div className="h-screen bg-white rounded-lg p-4">
+						<div className="h-screen bg-white w-full">
 							<Component {...pageProps} />
 						</div>
 					</div>

@@ -3,12 +3,18 @@ import { useRouter } from 'next/router';
 import { auth, googleAuthProvider } from '../lib/firebase';
 import Image from 'next/image';
 import { AuthContext } from '@/lib/AuthContext';
-import { signInWithPopup } from 'firebase/auth';
+import {
+	createUserWithEmailAndPassword,
+	signInWithPopup,
+	updateProfile,
+} from 'firebase/auth';
 import IconButton from '@/components/ui-elements/IconButton';
-import { GitHub, Google } from '@mui/icons-material';
 import Dropdown from '@/components/authentication/Dropdown';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
+import { motion, AnimatePresence } from 'framer-motion';
+import GithubLogo from '@/components/ui-elements/GithubLogo';
+import Googlelogo from '@/components/ui-elements/Googlelogo';
 
 const LoginPage = () => {
 	const [email, setEmail] = useState('');
@@ -16,8 +22,11 @@ const LoginPage = () => {
 	const router = useRouter();
 	const { currentUser, setCurrentUser } = useContext(AuthContext);
 	const [success, setSuccess] = useState(false);
-	const [showSecondArticle, setShowSecondArticle] = useState(false);
-	const [showPassword, setShowPassword] = useState(false); // Add this state
+	const [showPassword, setShowPassword] = useState(false);
+	const [showRegister, setShowRegister] = useState(false);
+	const [IsRegistered, setIsRegistered] = useState(false);
+	const [showConfetti, setShowConfetti] = useState(false);
+	const [name, setName] = useState('');
 
 	const items = [
 		{ name: 'Register', href: '/register' },
@@ -36,6 +45,43 @@ const LoginPage = () => {
 
 	const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value);
+	};
+
+	const handleRegisterForm = () => {
+		setShowRegister((prevShowRegister) => !prevShowRegister);
+	};
+
+	const user = auth.currentUser;
+	const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		try {
+			const result = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password,
+			);
+			console.log(result);
+			setIsRegistered(true);
+			// setShowConfetti(true);
+
+			if (auth.currentUser) {
+				await updateProfile(auth.currentUser, {
+					displayName: name,
+				});
+				if (auth.currentUser.displayName) {
+					toast.success(
+						`Welcome aboard ${auth.currentUser.displayName}!`,
+					);
+				} else {
+					toast.success(`Welcome aboard ${auth.currentUser.email}!`);
+				}
+			}
+		} catch (error) {
+			console.error(error);
+			toast.error(
+				'Something went wrong, probably a typo or already got an account? If this keeps happening contact the admin.',
+			);
+		}
 	};
 
 	useEffect(() => {
@@ -66,7 +112,12 @@ const LoginPage = () => {
 	}, [currentUser, success, router]);
 
 	return (
-		<main className="flex bg-white w-full">
+		<motion.main
+			className="flex bg-white w-full"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 1 }}
+		>
 			<aside className="wrapper xl:w-1/5 bg-dark-purple rounded-tr-3xl h-screen pl-6 pt-12 flex flex-col">
 				<div className="h-1/3  text-9xl">
 					<h1 className="h-1/3 pr-8 text-xl text-offWhite p-9 pl-6 pt-6">
@@ -107,74 +158,150 @@ const LoginPage = () => {
 					/>
 				</div>
 			</aside>
-			<article className="bg-white  rounded-tl-3xl rounded-r-md borderbottom  p-32 w-full	 grid content-center justify-start">
+			<article className="bg-white rounded-tl-3xl rounded-r-md borderbottom p-48 w-full grid content-center justify-start text-4xl">
 				<div className="custom-dropdown">
 					<Dropdown items={items} href={undefined} />
-				</div>
-				<div className="screen-one flex ">
-					<form className="screen-two">
-						<h2 className="text-3xl mb-8 font-bold ">Welcome!</h2>
-						<div className="flex flex-col lg:flex-row mb-2 justify-between">
-							<IconButton
-								color="text-red-400"
-								icon={<Google />}
-								onClick={handleLoginFormSubmit}
-								text="Sign in with Google"
-							/>
-							<IconButton
-								color="text-slate-400"
-								icon={<GitHub />}
-								text="Sign in with Github"
-							/>
-						</div>
-						<div className="flex text-center text-xl justify-center font-normal py-8 text-gray-400">
-							-or-
-						</div>
-						<div className="flex flex-col">
-							<div className="flex text-gray-400 flex-col">
+				</div>{' '}
+				<AnimatePresence>
+					{showRegister ? (
+						<motion.form
+							className="flex flex-col"
+							initial={{ opacity: 0, scale: 0.8 }}
+							animate={{ opacity: 1, scale: 1 }}
+							exit={{ opacity: 0, scale: 0.8 }}
+							transition={{ duration: 0.5 }}
+							onSubmit={handleSignup}
+						>
+							<h2 className="text-7xl mb-24 font-bold">
+								Register here
+							</h2>
+							<div className="flex flex-col sm:flex-row mb-6 justify-between">
+								<IconButton
+									color="text-slate-400"
+									svg={<Googlelogo />}
+									onClick={handleLoginFormSubmit}
+									text="Sign in with Google"
+								/>
+								<IconButton
+									color="text-slate-400"
+									svg={<GithubLogo />}
+									text="Sign in with Github"
+								/>
+							</div>
+							<div className="flex text-center text-4xl justify-center font-normal py-12 text-gray-400">
+								-or-
+							</div>
+							<div className="flex flex-col">
+								<input
+									type="text"
+									className="input p-6 my-15 border"
+									placeholder="your display name"
+									value={name}
+									onChange={(event) =>
+										setName(event.target.value)
+									}
+								/>
 								<input
 									type="email"
-									className="input p-2 my-5  border"
+									className="input p-6 my-15 border"
 									name="email"
-									placeholder="Enter Username/email"
+									placeholder="your email to sign in with"
 									value={email}
 									onChange={handleEmailChange}
 								/>
-							</div>
-							<div className="flex text-gray-400 flex-col relative">
 								<input
 									type={showPassword ? 'text' : 'password'}
-									className="input p-2 my-5  border"
+									className="input p-6 my-15 border"
 									name="password"
-									placeholder="Password"
+									placeholder="your password to sign in with"
 									value={password}
 									onChange={handlePasswordChange}
 								/>
-								<span
-									onClick={() =>
-										setShowPassword(!showPassword)
-									}
-									className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-500"
+								<button
+									className="font-medium mr-6 bg-[#bb93e2] rounded-xl py-6 text-white max-w-full pxjustify-center w-full font-medium mr-6 bg-[#bb93e2] rounded-xl py-6 text-white max-w-full px-42 hover:scale-105 cursor-pointer duration-300 p-14 mt-10 flex-42 hover:scale-105 cursor-pointer duration-300 mb-8"
+									type="submit"
 								>
-									{showPassword ? 'Hide' : 'Show'}
+									Register
+								</button>
+								<span>
+									Already registered? Login{' '}
+									<Link
+										onClick={handleRegisterForm}
+										className="text-blue-200"
+										href="#"
+									>
+										here
+									</Link>
 								</span>
 							</div>
-						</div>
-						<div className="flex">
+						</motion.form>
+					) : (
+						<motion.form
+							className="flex flex-col"
+							initial={{ opacity: 0, scale: 0.8 }}
+							animate={{ opacity: 1, scale: 1 }}
+							exit={{ opacity: 0, scale: 0.8 }}
+							transition={{ duration: 0.5 }}
+							onSubmit={handleLoginFormSubmit}
+						>
+							<h2 className="text-7xl mb-24 font-bold">
+								Login here!
+							</h2>
+							<div className="flex flex-col sm:flex-row mb-6 justify-between">
+								<IconButton
+									color="text-slate-400"
+									svg={<Googlelogo />}
+									onClick={handleLoginFormSubmit}
+									text="Sign in with Google"
+								/>
+								<IconButton
+									color="text-slate-400"
+									svg={<GithubLogo />}
+									text="Sign in with Github"
+								/>
+							</div>
+							<div className="flex text-center text-4xl justify-center font-normal py-12 text-gray-400">
+								-or-
+							</div>
+
+							<input
+								type="email"
+								className="input p-2 my-5  border"
+								name="email"
+								placeholder="Enter Username/email"
+								value={email}
+								onChange={handleEmailChange}
+							/>
+							<input
+								type={showPassword ? 'text' : 'password'}
+								className="input p-6 my-15 border"
+								name="password"
+								placeholder="your password to sign in with"
+								value={password}
+								onChange={handlePasswordChange}
+							/>
 							<button
-								className="font-medium mr-2 bg-[#bb93e2] rounded-xl py-2 text-white max-w-full px-14 hover:scale-105 cursor-pointer duration-300"
-								onClick={signIn}
+								className="font-medium mr-6 bg-[#bb93e2] rounded-xl py-6 text-white max-w-full pxjustify-center w-full font-medium mr-6 bg-[#bb93e2] rounded-xl py-6 text-white max-w-full px-42 hover:scale-105 cursor-pointer duration-300 p-14 mt-10 flex-42 hover:scale-105 cursor-pointer duration-300 mb-8"
+								type="submit"
 							>
 								Login
 							</button>
 							<span>
-								Not registered? Click <Link href="#">here</Link>
+								Not registered? Register{' '}
+								<Link
+									onClick={handleRegisterForm}
+									className="text-blue-200"
+									href="#"
+								>
+									here
+								</Link>
 							</span>
-						</div>
-					</form>
-				</div>
+						</motion.form>
+					)}
+				</AnimatePresence>
 			</article>
-		</main>
+			<div className="borderbottom"></div>
+		</motion.main>
 	);
 };
 
