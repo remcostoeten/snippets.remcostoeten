@@ -1,37 +1,43 @@
-	{
-		"compilerOptions": {
-			"target": "es5",
-			"lib": [
-				"dom",
-				"dom.iterable",
-				"esnext"
-			],
-			"allowJs": true,
-			"skipLibCheck": true,
-			"strict": false,
-			"forceConsistentCasingInFileNames": true,
-			"noEmit": true,
-			"jsx": "react",
-			"esModuleInterop": true,
-			"module": "esnext",
-			"moduleResolution": "node",
-			"resolveJsonModule": true,
-			"isolatedModules": true,
-			"jsx": "preserve",
-			"incremental": true,
-			"paths": {
-				"@/*": [
-					"./*"
-				]
-			}
-		},
-		"include": [
-			"next-env.d.ts",
-			"**/*.ts",
-			"**/*.tsx",
-			"lib/firebase.js"
-		],
-		"exclude": [
-			"node_modules"
-		]
-	}
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "strictNullChecks": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "lib/firebase.js",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

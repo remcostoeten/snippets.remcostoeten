@@ -18,12 +18,6 @@ const DashboardPage = () => {
 		return () => unsubscribe();
 	}, []);
 
-	// useEffect(() => {
-	// 	if (!user) {
-	// 		router.push('/login'); // Redirect to login page if user is not authenticated
-	// 	}
-	// }, [user, router]);
-
 	return (
 		<div className="flex flex-col items-center justify-center h-screen bg-gray-100">
 			<motion.h1

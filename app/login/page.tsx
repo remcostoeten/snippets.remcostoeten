@@ -1,10 +1,11 @@
-import { useEffect, useState, ChangeEvent, useContext } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import { useRouter } from 'next/router';
-import { auth, googleAuthProvider } from '../lib/firebase';
+import { auth, googleAuthProvider } from '../../lib/firebase';
 import Image from 'next/image';
 import { AuthContext } from '@/lib/AuthContext';
 import {
 	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
 	signInWithPopup,
 	updateProfile,
 } from 'firebase/auth';
@@ -20,11 +21,11 @@ const LoginPage = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const router = useRouter();
-	const { currentUser, setCurrentUser } = useContext(AuthContext);
+	const [currentUser, setCurrentUser] = useState(null);
 	const [success, setSuccess] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const [showRegister, setShowRegister] = useState(false);
-	const [IsRegistered, setIsRegistered] = useState(false);
+	const [isRegistered, setIsRegistered] = useState(false);
 	const [showConfetti, setShowConfetti] = useState(false);
 	const [name, setName] = useState('');
 
@@ -34,9 +35,23 @@ const LoginPage = () => {
 		{ name: 'Dutch', href: '.nl' },
 	];
 
-	const handleLoginFormSubmit = (e) => {
+	const handleLoginFormSubmit = async (e) => {
 		e.preventDefault();
-		signIn();
+		try {
+			const credentials = await signInWithEmailAndPassword(
+				auth,
+				email,
+				password,
+			);
+			if (credentials.user) {
+				setCurrentUser(credentials.user);
+				setSuccess(true);
+				router.push('/');
+			}
+		} catch (error) {
+			console.error('Error signing in with email and password', error);
+			// Display a suitable error message
+		}
 	};
 
 	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +66,6 @@ const LoginPage = () => {
 		setShowRegister((prevShowRegister) => !prevShowRegister);
 	};
 
-	const user = auth.currentUser;
 	const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		try {
@@ -62,7 +76,6 @@ const LoginPage = () => {
 			);
 			console.log(result);
 			setIsRegistered(true);
-			// setShowConfetti(true);
 
 			if (auth.currentUser) {
 				await updateProfile(auth.currentUser, {
@@ -90,7 +103,7 @@ const LoginPage = () => {
 		);
 
 		return () => unsubscribe();
-	}, [setCurrentUser]);
+	}, []);
 
 	const signOut = async () => {
 		await auth.signOut();
@@ -158,10 +171,12 @@ const LoginPage = () => {
 					/>
 				</div>
 			</aside>
+			{/* Rest of the code... */}
 			<article className="bg-white rounded-tl-3xl rounded-r-md borderbottom p-48 w-full grid content-center justify-start text-4xl">
 				<div className="custom-dropdown">
 					<Dropdown items={items} href={undefined} />
-				</div>{' '}
+				</div>
+
 				<AnimatePresence>
 					{showRegister ? (
 						<motion.form
@@ -170,6 +185,7 @@ const LoginPage = () => {
 							animate={{ opacity: 1, scale: 1 }}
 							exit={{ opacity: 0, scale: 0.8 }}
 							transition={{ duration: 0.5 }}
+							key="registerForm"
 							onSubmit={handleSignup}
 						>
 							<h2 className="text-7xl mb-24 font-bold">
@@ -242,23 +258,32 @@ const LoginPage = () => {
 							animate={{ opacity: 1, scale: 1 }}
 							exit={{ opacity: 0, scale: 0.8 }}
 							transition={{ duration: 0.5 }}
+							key="loginForm"
 							onSubmit={handleLoginFormSubmit}
 						>
 							<h2 className="text-7xl mb-24 font-bold">
 								Login here!
 							</h2>
 							<div className="flex flex-col sm:flex-row mb-6 justify-between">
-								<IconButton
-									color="text-slate-400"
-									svg={<Googlelogo />}
-									onClick={handleLoginFormSubmit}
-									text="Sign in with Google"
-								/>
-								<IconButton
-									color="text-slate-400"
-									svg={<GithubLogo />}
-									text="Sign in with Github"
-								/>
+								<div className="flex flex-col sm:flex-row mb-6 justify-between">
+									<IconButton
+										color="text-slate-400"
+										svg={<Googlelogo />}
+										onClick={() =>
+											signInWithPopup(
+												auth,
+												googleAuthProvider,
+											)
+										} // <- Here
+										text="Sign in with Google"
+									/>
+									<IconButton
+										color="text-slate-400"
+										svg={<GithubLogo />}
+										// TODO: Handle GitHub authentication here
+										text="Sign in with Github"
+									/>
+								</div>
 							</div>
 							<div className="flex text-center text-4xl justify-center font-normal py-12 text-gray-400">
 								-or-

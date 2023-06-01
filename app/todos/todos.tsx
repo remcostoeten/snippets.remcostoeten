@@ -4,14 +4,14 @@ import {
 	firestore,
 	handleAddDocument,
 	handleToggleDocument,
-} from '../lib/firebase';
+} from '../../lib/firebase';
 import firebase from 'firebase/compat/app';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Head from 'next/head';
 import Badge from '@/components/ui-elements/Badge';
 import { GetServerSideProps } from 'next';
 import { collection, getDocs, doc, deleteDoc } from 'firebase/firestore';
-import { AuthContext } from '../lib/AuthContext';
+import { AuthContext } from '../../lib/AuthContext';
 import { useRouter } from 'next/router';
 
 const todoCategories = [

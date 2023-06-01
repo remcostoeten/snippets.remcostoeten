@@ -4,6 +4,7 @@ import { auth, googleAuthProvider } from '../lib/firebase';
 import Image from 'next/image';
 import { AuthContext } from '@/lib/AuthContext';
 import { signInWithPopup } from 'firebase/auth';
+
 const LoginPage = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -21,12 +22,12 @@ const LoginPage = () => {
 	};
 
 	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) =>
-			setCurrentUser(currentUser),
-		);
+		const unsubscribe = auth.onAuthStateChanged((user) => {
+			setCurrentUser(user);
+		});
 
 		return () => unsubscribe();
-	}, [currentUser]);
+	}, [setCurrentUser]);
 
 	const signOut = async () => {
 		await auth.signOut();
@@ -51,6 +52,7 @@ const LoginPage = () => {
 					<p className="text-sm mt-4 text-[#002D74]">
 						If you have an account, please login
 					</p>
+
 					<form className="flex flex-col gap-4 items-center">
 						<label>Email</label>
 						<input
@@ -114,7 +116,6 @@ const LoginPage = () => {
 						</button>
 					</div>
 				</div>
-
 				<div className="md:block hidden">
 					<Image
 						width={364}
@@ -124,6 +125,11 @@ const LoginPage = () => {
 						alt="page img"
 					/>
 				</div>
+				{currentUser && (
+					<span className="text-white">
+						{currentUser.displayName}
+					</span>
+				)}{' '}
 			</div>
 		</div>
 	);

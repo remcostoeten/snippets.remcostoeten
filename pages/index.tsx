@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { AuthContext } from '@/lib/AuthContext';
 import Aside from '@/components/Dashboard/Aside';
 import DashboardPage from '@/components/Dashboard/Intro';
-import LoginPage from './login';
+import LoginPage from '../app/login/page';
 
 export default function Index() {
 	const { currentUser } = useContext(AuthContext);

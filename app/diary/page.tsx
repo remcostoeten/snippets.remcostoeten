@@ -6,7 +6,6 @@ import { useAuth } from '@/lib/useAuth';
 
 export default function Dashboard() {
 	const [isAddingNote, setIsAddingNote] = useState(false);
-	const { currentUser } = useAuth();
 	const [notes, setNotes] = useState([]);
 
 	return (

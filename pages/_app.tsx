@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/react'; // Update the import statement
 import { AuthProvider } from '@/lib/AuthContext';
 import Preloader from '@/components/ui-elements/Preloader';
 import TopNotice from '@/components/ui-elements/TopNotice';
@@ -23,9 +24,23 @@ function MyApp({ Component, pageProps }) {
 		}
 	}, []);
 
+	useEffect(() => {
+		const fetchSession = async () => {
+			const session = await getSession();
+			console.log(session);
+
+			if (session) {
+				setIsLoading(false); // Set isLoading to false if session exists
+			}
+		};
+
+		fetchSession();
+	}, []);
+
 	return (
 		<>
-			{!hasVisited && <Preloader />}
+			{(!hasVisited || isLoading) && <Preloader />}{' '}
+			{/* Show loader if hasVisited is false or isLoading is true */}
 			<div
 				className={`roboto content-wrapper ${
 					isLoading ? 'loading' : ''
