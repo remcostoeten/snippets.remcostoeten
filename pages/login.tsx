@@ -76,7 +76,7 @@ const LoginPage = () => {
 				</div>
 				<div className="flex relative shapes scale-125 -right-16">
 					<Image
-						src="/authentication/pinkoval.png.png"
+						src="/authentication/pinkoval.png"
 						alt="Remco Stoeten login page"
 						width={256}
 						height={160}
@@ -114,9 +114,9 @@ const LoginPage = () => {
 				<div className="screen-one flex ">
 					<form className="screen-two">
 						<h2 className="text-3xl mb-8 font-bold ">Welcome!</h2>
-						<div className="flex flex-col sm:flex-row mb-2 justify-between">
+						<div className="flex flex-col lg:flex-row mb-2 justify-between">
 							<IconButton
-								color="text-slate-400"
+								color="text-red-400"
 								icon={<Google />}
 								onClick={handleLoginFormSubmit}
 								text="Sign in with Google"

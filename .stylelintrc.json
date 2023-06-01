@@ -1,6 +1,13 @@
 {
-  "extends": "stylelint-config-recommended-scss",
-  "rules": {
-    "declaration-block-trailing-semicolon": null
+	"plugins": [
+	  "stylelint-scss"
+	],
+	"rules": {
+	  "block-no-empty": true,
+	  "color-no-invalid-hex": true,
+	
+	  "scss/dollar-variable-pattern": "^foo",
+	  "scss/percent-placeholder-pattern": "^foo"
+	}
   }
-}
+  
