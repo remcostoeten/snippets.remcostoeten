@@ -6,36 +6,26 @@ import TopNotice from '@/components/ui-elements/TopNotice';
 import Aside from '@/components/Dashboard/Aside';
 import '../styles/globals.scss';
 import Head from 'next/head';
+import { motion } from 'framer-motion';
 
 function MyApp({ Component, pageProps }) {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(true);
+	const [hasVisited, setHasVisited] = useState(false);
 
 	useEffect(() => {
-		let mounted = true;
-
-		if (typeof window !== 'undefined') {
-			const visitedBefore = localStorage.getItem('visitedBefore');
-
-			if (!visitedBefore && mounted) {
-				localStorage.setItem('visitedBefore', 'false');
-			}
-
-			setTimeout(() => {
-				setIsLoading(false);
-			}, 3500);
+		const visited = localStorage.getItem('hasVisited');
+		if (visited) {
+			setHasVisited(true);
+			setIsLoading(false);
+		} else {
+			localStorage.setItem('hasVisited', 'true');
 		}
-
-		return () => {
-			mounted = false;
-		};
 	}, []);
-
-	const shouldRenderAside = router.pathname !== '';
 
 	return (
 		<>
-			<Preloader />
+			{!hasVisited && <Preloader />}
 			<div
 				className={`roboto content-wrapper ${
 					isLoading ? 'loading' : ''
@@ -50,12 +40,17 @@ function MyApp({ Component, pageProps }) {
 				{/* {shouldRenderAside && <TopNotice />} */}
 				<TopNotice />
 				<AuthProvider>
-					<div className="flex content">
+					<motion.div
+						className="flex content"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						transition={{ duration: 1 }}
+					>
 						{/* {shouldRenderAside && <Aside user={undefined} />} */}
 						<div className="h-screen bg-white w-full">
 							<Component {...pageProps} />
 						</div>
-					</div>
+					</motion.div>
 				</AuthProvider>
 			</div>
 		</>
