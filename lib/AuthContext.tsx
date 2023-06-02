@@ -1,9 +1,11 @@
 import React, { useState, useEffect, createContext } from 'react';
 import { auth } from './firebase';
 import { AppUser } from './types';
+import { User } from 'next-auth/core/types';
 
-interface AuthContextProps {
-	currentUser: AppUser | null;
+export interface AuthContextProps {
+	currentUser: User | string;
+	// currentUser: AppUser | null;
 	setCurrentUser: React.Dispatch<React.SetStateAction<AppUser | null>>;
 }
 

@@ -4,14 +4,15 @@ import { auth } from '@/lib/firebase';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import { Suspense } from 'react';
+import { User } from 'firebase/auth';
 
 const DashboardPage = () => {
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState<User | null>(null);
 	const router = useRouter();
 
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-			setUser(currentUser);
+			return setUser(currentUser as User);
 		});
 
 		return () => unsubscribe();

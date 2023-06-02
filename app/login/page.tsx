@@ -30,6 +30,16 @@ const LoginPage = () => {
 	const [showConfetti, setShowConfetti] = useState(false);
 	const [name, setName] = useState('');
 
+	const signInWithGoogle = async () => {
+		try {
+			await signInWithPopup(auth, googleAuthProvider);
+			router.push('/');
+			setSuccess(true);
+		} catch (error) {
+			console.error('Error signing in with Google', error);
+		}
+	};
+
 	const items = [
 		{ name: 'Register', href: '/register' },
 		{ name: 'remcostoeten.com', href: 'https://remcostoeten.com' },
@@ -45,13 +55,12 @@ const LoginPage = () => {
 				password,
 			);
 			if (credentials.user) {
-				setCurrentUser(credentials.user);
+				setCurrentUser(credentials.user as any);
 				setSuccess(true);
 				router.push('/');
 			}
 		} catch (error) {
 			console.error('Error signing in with email and password', error);
-			// Display a suitable error message
 		}
 	};
 
@@ -100,7 +109,7 @@ const LoginPage = () => {
 
 	useEffect(() => {
 		const unsubscribe = auth.onAuthStateChanged((user) =>
-			setCurrentUser(user),
+			setCurrentUser(user as any),
 		);
 
 		return () => unsubscribe();
@@ -270,12 +279,7 @@ const LoginPage = () => {
 									<IconButton
 										color="text-slate-400"
 										svg={<Googlelogo />}
-										onClick={() =>
-											signInWithPopup(
-												auth,
-												googleAuthProvider,
-											)
-										} // <- Here
+										onClick={signInWithGoogle}
 										text="Sign in with Google"
 									/>
 									<IconButton

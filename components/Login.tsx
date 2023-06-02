@@ -2,14 +2,15 @@ import { useEffect, useState, ChangeEvent, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { auth, googleAuthProvider } from '../lib/firebase';
 import Image from 'next/image';
-import { AuthContext } from '@/lib/AuthContext';
+import { AuthContext, AuthContextProps } from '@/lib/AuthContext';
 import { signInWithPopup } from 'firebase/auth';
+import Message from './ui-elements/Messages';
 
 const LoginPage = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const router = useRouter();
-	const { currentUser, setCurrentUser } = useContext(AuthContext);
+	const { currentUser, setCurrentUser } = useContext(AuthContext) as AuthContextProps;
 	const [error, setError] = useState(false);
 	const [success, setSuccess] = useState(false);
 
@@ -20,14 +21,23 @@ const LoginPage = () => {
 	const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value);
 	};
-
+	
 	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) => {
-			setCurrentUser(user);
+		const unsubscribe = auth.onAuthStateChanged((user: any) => {
+			if (user) {
+				setCurrentUser({
+					uid: user.uid,
+					displayName: user.displayName || '',
+					email: user.email || '',
+					photoURL: user.photoURL || '',
+				});
+			} else {
+				setCurrentUser(null);
+			}
 		});
-
+	
 		return () => unsubscribe();
-	}, [setCurrentUser]);
+	}, []);
 
 	const signOut = async () => {
 		await auth.signOut();
@@ -132,6 +142,22 @@ const LoginPage = () => {
 				)}{' '}
 			</div>
 		</div>
+		{
+			success && (
+				<Message
+					toastMessage="Note successfully created!"
+					iconBackgroundColor="bg-gray-800"
+					textColor="text-gray-500" Icon={undefined}				/>
+			);
+		}
+		{
+			error && (
+				<Message
+					toastMessage="Note successfully created!"
+					iconBackgroundColor="bg-gray-800"
+					textColor="text-gray-500" Icon={undefined}							}				/>
+			);
+		}
 	);
 };
 

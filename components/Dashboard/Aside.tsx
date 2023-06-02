@@ -15,7 +15,7 @@ import {
 	ViewKanban,
 	Login,
 } from '@mui/icons-material';
-import { AuthContext } from '@/lib/AuthContext';
+import { AuthContext, AuthContextProps } from '@/lib/AuthContext';
 import { User } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
@@ -151,7 +151,7 @@ const UserProfile = ({ user }: UserProps) => {
 
 export default function Aside({ user }: UserProps): JSX.Element {
 	const router = useRouter();
-	const { currentUser } = useContext(AuthContext);
+	const { currentUser } = useContext(AuthContext) as AuthContextProps;
 
 	const handleLogout = () => {
 		auth.signOut();
@@ -159,7 +159,7 @@ export default function Aside({ user }: UserProps): JSX.Element {
 	};
 
 	return (
-		<aside className="ml-[-100%] z-10 pb-3 px-6 w-full flex flex-col justify-between h-full border-r bg-background transition duration-300 md:w-3/12 lg:ml-0 lg:w-[15%] h-screen bg-white">
+		<aside className="ml-[-100%] z-10 pb-3 px-6 w-full flex flex-col justify-between  border-r bg-background transition duration-300 md:w-3/12 lg:ml-0 lg:w-[15%] h-screen bg-white">
 			<div>
 				<div className="-mx-6 px-6 py-4">
 					<Link
@@ -170,7 +170,7 @@ export default function Aside({ user }: UserProps): JSX.Element {
 				</div>
 				{currentUser ? (
 					<>
-						<div className="mt-8 text-center">
+						{/* <div className="mt-8 text-center">
 							<Image
 								width={100}
 								height={100}
@@ -182,12 +182,13 @@ export default function Aside({ user }: UserProps): JSX.Element {
 								className="w-10 h-10 m-auto rounded-full object-cover lg:w-28 lg:h-28"
 							/>
 							<h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
-								{currentUser.displayName || 'Unknown User'}
+								{currentUser.displayName || 'Unknown User'} as
+								string
 							</h5>
 							<span className="hidden text-gray-400 lg:block">
 								Admin
 							</span>
-						</div>
+						</div> */}
 						<Navigation />
 					</>
 				) : (

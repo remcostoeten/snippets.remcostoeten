@@ -26,6 +26,7 @@ type Task = {
 	done: boolean;
 	date: any;
 	category: string;
+	currentUser: any;
 };
 
 const fetchTasks = async () => {
@@ -50,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 };
 
 export default function Todo({ tasks: initialTasks }) {
-	const { currentUser } = useContext(AuthContext);
+	const { currentUser } = useContext(AuthContext) as { currentUser: any };
 	const [tasks, setTasks] = useState<Task[]>(initialTasks);
 	const [newTask, setNewTask] = useState('');
 	const [selectedCategory, setSelectedCategory] = useState('');
@@ -64,6 +65,7 @@ export default function Todo({ tasks: initialTasks }) {
 				done: false,
 				date: firebase.firestore.Timestamp.now(),
 				category: selectedCategory,
+				currentUser: undefined,
 			};
 
 			await handleAddDocument(newTaskData);

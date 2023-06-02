@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import { NextPage } from 'next';
 import { motion, Variants } from 'framer-motion';
-import AddNote from '@/components/Diary/AddNote';
-import CalendarView from '@/components/Diary/CalendarView';
+// import AddNote from '@/components/Diary/AddNote';
+// import CalendarView from '@/components/Diary/CalendarView';
 
 interface Note {
 	id: number;
@@ -49,8 +49,8 @@ const Dashboard: NextPage<DashboardProps> = () => {
 			>
 				{isAddingNote ? 'Close' : 'Add Note'}
 			</button>
-			{isAddingNote && <AddNote setNotes={setNotes} />}
-			<CalendarView notes={notes} />
+			{/* {isAddingNote && <AddNote setNotes={setNotes} />} */}
+			{/* <CalendarView notes={notes as Note[]} /> */}
 		</motion.div>
 	);
 };

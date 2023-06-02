@@ -20,6 +20,13 @@ const Message: React.FC<MessageProps> = ({
 }) => {
 	const [showMessage, setShowMessage] = useState(true);
 
+	const handleClose = () => {
+		setShowMessage(false);
+		if (onClose) {
+			onClose();
+		}
+	};
+
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			handleClose();
@@ -28,14 +35,7 @@ const Message: React.FC<MessageProps> = ({
 		return () => {
 			clearTimeout(timer);
 		};
-	}, []);
-
-	const handleClose = () => {
-		setShowMessage(false);
-		if (onClose) {
-			onClose();
-		}
-	};
+	}, [handleClose]);
 
 	return (
 		<>
