@@ -1,9 +1,8 @@
+'use client';
 import Link from 'next/link';
 import { User, signInWithPopup } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { auth, googleAuthProvider } from '@/lib/firebase';
-import { useContext } from 'react';
-import { AuthContext } from '@/lib/AuthContext';
 import Message from '../ui-elements/Messages';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 export default function TopNotice() {

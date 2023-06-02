@@ -13,7 +13,6 @@ const firebaseConfig = {
   appId: "1:457325786920:web:782eb6f05bb419f900c21d"
 };
 
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
@@ -45,7 +44,7 @@ export async function getDocuments(): Promise<CustomDocumentData[]> {
   return documents;
 }
   
-export async function getNotes(userId) {
+export async function getNotes(userId: any) {
 	const notesCollection = collection(firestore, `users/${userId}/notes`);
 	const snapshot = await getDocs(notesCollection);
   
