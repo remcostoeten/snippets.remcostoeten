@@ -1,9 +1,7 @@
-'use client';
-import { useEffect, useState, ChangeEvent } from 'react';
+'use client';import { useEffect, useState, ChangeEvent } from 'react';
 import { useRouter } from 'next/router';
 import { auth, googleAuthProvider } from '../../lib/firebase';
 import Image from 'next/image';
-import { AuthContext } from '@/lib/AuthContext';
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
@@ -18,7 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import GithubLogo from '@/components/ui-elements/GithubLogo';
 import Googlelogo from '@/components/ui-elements/Googlelogo';
 
-const LoginPage = () => {
+const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const router = useRouter();
@@ -30,10 +28,11 @@ const LoginPage = () => {
 	const [showConfetti, setShowConfetti] = useState(false);
 	const [name, setName] = useState('');
 
+	if (!router.isReady) return null;
+	
 	const signInWithGoogle = async () => {
 		try {
 			await signInWithPopup(auth, googleAuthProvider);
-			router.push('/');
 			setSuccess(true);
 		} catch (error) {
 			console.error('Error signing in with Google', error);
@@ -57,7 +56,6 @@ const LoginPage = () => {
 			if (credentials.user) {
 				setCurrentUser(credentials.user as any);
 				setSuccess(true);
-				router.push('/');
 			}
 		} catch (error) {
 			console.error('Error signing in with email and password', error);
@@ -107,32 +105,22 @@ const LoginPage = () => {
 		}
 	};
 
-	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) =>
-			setCurrentUser(user as any),
-		);
-
-		return () => unsubscribe();
-	}, []);
-
-	const signOut = async () => {
-		await auth.signOut();
-		setCurrentUser(null);
-		setSuccess(true);
-		router.push('/');
-	};
-
+	// useEffect(() => {
+	// 	const unsubscribe = auth.onAuthStateChanged((user) =>
+	// 		setCurrentUser(user as any),
+	// 	);
+	
+	// 	return () => unsubscribe();
+	// }, []);
+	
 	const signIn = async () => {
-		await signInWithPopup(auth, googleAuthProvider);
-		router.push('/');
-		setSuccess(true);
-	};
-
-	useEffect(() => {
-		if (currentUser && success) {
-			router.push('/');
+		try {
+			await signInWithPopup(auth, googleAuthProvider);
+			setSuccess(true);
+		} catch (error) {
+			console.error('Error signing in with Google', error);
 		}
-	}, [currentUser, success, router]);
+	};
 
 	return (
 		<motion.main
@@ -181,7 +169,7 @@ const LoginPage = () => {
 					/>
 				</div>
 			</aside>
-			{/* Rest of the code... */}
+			
 			<article className="bg-white rounded-tl-3xl rounded-r-md borderbottom p-48 w-full grid content-center justify-start text-4xl">
 				<div className="custom-dropdown">
 					<Dropdown items={items} href={undefined} />
@@ -335,3 +323,4 @@ const LoginPage = () => {
 	);
 };
 
+export default Login;
