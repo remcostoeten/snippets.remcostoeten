@@ -5,8 +5,8 @@ export interface AppUser {
   displayName: string | null;
   email: string | null;
   photoURL: string | null;
-  emailVerified?: boolean;
 }
+
 
 export interface DocumentItem {
   id: string;
