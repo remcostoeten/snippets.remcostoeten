@@ -2,12 +2,11 @@ import { useEffect, useState, ChangeEvent, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { auth, googleAuthProvider } from '../lib/firebase';
 import Image from 'next/image';
-import { AuthContext, AuthContextProps } from '@/lib/AuthContext';
+import { AuthContext, AuthContextProps } from '../lib/AuthContext';
 import { signInWithPopup } from 'firebase/auth';
-import Message from './ui-elements/Messages';
 
-const LoginPage = () => {
-  const [email, setEmail] = useState('');
+const Login = () => {
+	const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
   const { currentUser, setCurrentUser } = useContext(AuthContext) as AuthContextProps;
@@ -39,18 +38,21 @@ const LoginPage = () => {
     return () => unsubscribe();
   }, []);
 
-  const signOut = async () => {
+  const signOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     await auth.signOut();
     setCurrentUser(null);
     setSuccess(true);
     router.push('/');
   };
 
-  const signIn = async () => {
+  const signIn = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     await signInWithPopup(auth, googleAuthProvider);
     setSuccess(true);
     router.push('/');
   };
+
 
   return (
     <div className="border-red-500 bg-gray-50  flex items-center justify-center w-full">
@@ -135,12 +137,11 @@ const LoginPage = () => {
             alt="page img"
           />
         </div>
-		{currentUser && typeof currentUser !== 'string' && (
+		{currentUser && (
           <span className="text-white">{currentUser.displayName}</span>
         )}
       </div>
     </div>
   );
 };
-
-export default LoginPage;
+export default Login;
