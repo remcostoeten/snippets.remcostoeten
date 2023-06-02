@@ -3,11 +3,18 @@ import { auth } from './firebase';
 import { AppUser } from './types';
 import { User } from 'next-auth/core/types';
 
-export interface AuthContextProps {
-	currentUser: User | string;
-	// currentUser: AppUser | null;
-	setCurrentUser: React.Dispatch<React.SetStateAction<AppUser | null>>;
-}
+export interface IUser {
+	uid: string;
+	displayName: string | null;
+	email: string | null;
+	photoURL: string | null;
+  }
+  
+	  
+	  export interface AuthContextProps {
+		currentUser: IUser | null;
+		setCurrentUser: (user: IUser | null) => void;
+	  }
 
 export const AuthContext = createContext<AuthContextProps | null>(null);
 
@@ -16,7 +23,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-	const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
+	const [currentUser, setCurrentUser] = useState<IUser | null>(null);
 	const [pending, setPending] = useState(true);
 
 	useEffect(() => {
