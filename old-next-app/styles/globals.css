@@ -1,0 +1,345 @@
+@import url("https://fonts.googleapis.com/css?family=Gabriel+Sans:bold");
+body {
+  position: relative;
+  overflow: hidden;
+}
+body.sidebar-expanded .main-content {
+  width: 85vw;
+}
+
+.sidebar {
+  display: flex;
+  width: 5vw;
+  height: 100vh;
+  overflow: hidden;
+  color: #cbd5e1;
+  transition: width 0.3s ease;
+}
+.sidebar.expanded {
+  width: 15vw;
+}
+.sidebar.expanded .menu-text {
+  opacity: 0;
+  animation: textDelay 0.35s 0.35s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+.sidebar.expanded .icon {
+  opacity: 0;
+  margin-right: 0.75rem;
+}
+.sidebar .text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+.sidebar .icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.5rem;
+  fill: currentColor;
+  transition: margin-right 0.3s ease;
+}
+.sidebar a {
+  display: flex;
+  transform: translateX(10%);
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.sidebar a:hover {
+  background-color: #374151;
+  color: #e5e7eb;
+}
+.sidebar a:hover .icon {
+  margin-right: 0.75rem;
+}
+.sidebar a:hover .text {
+  opacity: 1;
+}
+
+.sidebar a.active {
+  background-color: #6b7280;
+  color: #e5e7eb;
+}
+
+.sidebar a.active .icon {
+  fill: #e5e7eb;
+}
+
+@keyframes textDelay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.external-hovered::after {
+  transition: 1s ease-in-out;
+  height: 102vh;
+}
+
+@keyframes reveal {
+  0% {
+    width: 0px;
+    opacity: 0;
+  }
+  100% {
+    width: -moz-fit-content;
+    width: fit-content;
+    opacity: 1;
+  }
+}
+.logo {
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  background: #202328;
+  animation: load 1s cubic-bezier(0.86, -0.12, 0, 1) forwards;
+}
+@keyframes load {
+  0% {
+    height: 0vh;
+  }
+  100% {
+    height: 100vh;
+  }
+}
+.logo__right, .logo__left {
+  scale: 0;
+  position: absolute;
+  fill: #606cdb;
+  animation: scaleIn 1s 500ms cubic-bezier(0.86, -0.12, 0, 1) forwards, fadeIn 1s 500ms cubic-bezier(0.86, -0.12, 0, 1) forwards;
+}
+
+.animationPartTwo .r,
+.animationPartTwo .e,
+.animationPartTwo .m,
+.animationPartTwo .c,
+.animationPartTwo .o,
+.animationPartTwo .s,
+.animationPartTwo .t,
+.animationPartTwo .oo,
+.animationPartTwo .ee,
+.animationPartTwo .tt,
+.animationPartTwo .eee,
+.animationPartTwo .n {
+  opacity: 1 !important;
+  transition: 500ms cubic-bezier(0.86, -0.12, 0, 1);
+}
+.animationPartTwo .s {
+  transition-delay: 900ms;
+}
+.animationPartTwo .t {
+  transition-delay: 925ms;
+}
+.animationPartTwo .o {
+  transition-delay: 930ms;
+}
+.animationPartTwo .c {
+  transition-delay: 932ms;
+}
+.animationPartTwo .o {
+  transition-delay: 940ms;
+}
+.animationPartTwo .c {
+  transition-delay: 945ms;
+}
+.animationPartTwo .oo {
+  transition-delay: 935ms;
+}
+.animationPartTwo .m {
+  transition-delay: 960ms;
+}
+.animationPartTwo .e {
+  transition-delay: 975ms;
+}
+.animationPartTwo .ee {
+  transition-delay: 945ms;
+}
+.animationPartTwo .tt {
+  transition-delay: 975ms;
+}
+.animationPartTwo .eee {
+  transition-delay: 1000ms;
+}
+.animationPartTwo .r {
+  transition-delay: 1010ms;
+}
+.animationPartTwo .n {
+  transition-delay: 1025ms;
+}
+.animationPartTwo .logo__left, .animationPartTwo .logo__right {
+  scale: 0.1;
+}
+.animationPartTwo .logo__right {
+  animation: pathSlideRight 1500ms 500ms cubic-bezier(0.86, -0.12, 0, 1) forwards;
+}
+.animationPartTwo .logo__left {
+  animation: pathSlideLeft 1500ms 500ms cubic-bezier(0.86, -0.12, 0, 1) forwards;
+}
+.animationPartTwo .text {
+  color: #e4e7ec;
+  position: absolute;
+  font-size: 5rem;
+  transform: translate(-29px, -39px);
+}
+@media screen and (max-width: 1500px) {
+  .animationPartTwo .text {
+    font-size: 3.4rem;
+  }
+}
+@media screen and (max-width: 1205px) {
+  .animationPartTwo .text {
+    font-size: 2.4rem;
+  }
+}
+.animationPartTwo .text span {
+  opacity: 0;
+}
+.animationPartTwo .text span:nth-child(1) {
+  animation-delay: 100ms;
+}
+.animationPartTwo .text span:nth-child(2) {
+  animation-delay: 200ms;
+}
+.animationPartTwo .text span:nth-child(3) {
+  animation-delay: 300ms;
+}
+.animationPartTwo .text span:nth-child(4) {
+  animation-delay: 400ms;
+}
+.animationPartTwo .text span:nth-child(5) {
+  animation-delay: 500ms;
+}
+.animationPartTwo .text span:nth-child(6) {
+  animation-delay: 600ms;
+}
+.animationPartTwo .text span:nth-child(7) {
+  animation-delay: 700ms;
+}
+.animationPartTwo .text span:nth-child(8) {
+  animation-delay: 800ms;
+}
+.animationPartTwo .text span:nth-child(9) {
+  animation-delay: 900ms;
+}
+.animationPartTwo .text span:nth-child(10) {
+  animation-delay: 1000ms;
+}
+.animationPartTwo .text span:nth-child(11) {
+  animation-delay: 1100ms;
+}
+.animationPartTwo .text span:nth-child(12) {
+  animation-delay: 1200ms;
+}
+
+@keyframes letterShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes scaleIn {
+  from {
+    scale: 0;
+  }
+  to {
+    scale: 0.1;
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes pathSlideLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-145px);
+  }
+}
+@keyframes pathSlideRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translate(110px, -20px);
+  }
+}
+.link {
+  position: relative;
+  width: 100px;
+  max-width: 150px;
+  overflow: hidden;
+}
+.link--arrow span {
+  position: absolute;
+  right: 0px;
+}
+.link--arrow:hover span {
+  position: absolute;
+  animation: swipeLeftBlur 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes swipeLeftBlur {
+  0% {
+    transform: translateX(0);
+    filter: blur(0);
+  }
+  50% {
+    transform: translateX(60px);
+    filter: blur(2px);
+  }
+  60% {
+    transform: translateX(200px);
+  }
+  100% {
+    transform: translateX(0);
+    filter: blur(0);
+  }
+}
+@keyframes linkArrow {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}/*# sourceMappingURL=globals.css.map */

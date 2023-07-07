@@ -1,16 +1,6 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-	reactStrictMode: true,
-};
-nextConfig.images = {
-	domains: [
-		'images.prismic.io',
-		'img.freepik.com',
-		'images.unsplash.com',
-		'tailus.io',
-		' tailus.io/',
-		'lh3.googleusercontent.com',
-	],
-};
+const withNextra = require('nextra')({
+    theme: 'nextra-theme-docs',
+    themeConfig: './theme.tsx',
+});
 
-module.exports = nextConfig;
+module.exports = withNextra();

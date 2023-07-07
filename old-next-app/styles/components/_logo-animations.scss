@@ -1,0 +1,185 @@
+// $white: #fff;
+// $black: #191919;
+// $color-primary: #606cdb;
+
+// @import url('https://fonts.googleapis.com/css?family=Gabriel+Sans:bold');
+
+// $animationDuration: 1s;
+// $animationDelay: 250ms;
+// $bezierOne: cubic-bezier(0.86, -0.12, 0, 1);
+// $animationFill: forwards;
+// // $animationFill: infinite;
+
+// $logoSize: 250px;
+
+// @keyframes reveal {
+// 	0% {
+// 		width: 0px;
+// 		// transform: translateX(180px);
+// 		opacity: 0;
+// 	}
+// 	100% {
+// 		width: fit-content;
+// 		// transform: translateX(220px);
+// 		opacity: 1;
+// 	}
+// }
+
+// .logo {
+// 	display: grid;
+// 	place-items: center;
+// 	width: 100vw;
+// 	height: 100vh;
+// 	background: $black;
+
+// 	&__right,
+// 	&__left {
+// 		// width: $logoSize;
+// 		// opacity: 0;
+// 		scale: 0.1;
+// 		position: absolute;
+// 		fill: $color-primary;
+// 		animation: scaleIn 2s $bezierOne $animationFill,
+// 			fadeIn 1500ms $bezierOne $animationFill;
+// 	}
+// }
+
+// .animationPartTwo {
+// 	.r,
+// 	.e,
+// 	.m,
+// 	.c,
+// 	.o,
+// 	.s,
+// 	.t,
+// 	.oo,
+// 	.ee,
+// 	.tt,
+// 	.eee,
+// 	.n {
+// 		opacity: 1 !important;
+// 		transition: 500ms $bezierOne;
+// 	}
+
+// 	$baseDelay: 900ms;
+// 	.s {
+// 		transition-delay: $baseDelay;
+// 	}
+// 	.t {
+// 		transition-delay: $baseDelay + 25ms;
+// 	}
+// 	.o {
+// 		transition-delay: $baseDelay + 30ms;
+// 	}
+// 	.c {
+// 		transition-delay: $baseDelay + 32ms;
+// 	}
+// 	.o {
+// 		transition-delay: $baseDelay + 40ms;
+// 	}
+// 	.c {
+// 		transition-delay: $baseDelay + 45ms;
+// 	}
+// 	.oo {
+// 		transition-delay: $baseDelay + 35ms;
+// 	}
+// 	.m {
+// 		transition-delay: $baseDelay + 60ms;
+// 	}
+// 	.e {
+// 		transition-delay: $baseDelay + 75ms;
+// 	}
+// 	.ee {
+// 		transition-delay: $baseDelay + 45ms;
+// 	}
+// 	.tt {
+// 		transition-delay: $baseDelay + 75ms;
+// 	}
+// 	.eee {
+// 		transition-delay: $baseDelay + 100ms;
+// 	}
+// 	.r {
+// 		transition-delay: $baseDelay + 110ms;
+// 	}
+// 	.n {
+// 		transition-delay: $baseDelay + 125ms;
+// 	}
+
+// 	.logo {
+// 		&__left,
+// 		&__right {
+// 		}
+
+// 		&__right {
+// 			animation: pathSlideRight 1500ms 500ms $bezierOne infinite;
+// 		}
+
+// 		&__left {
+// 			animation: pathSlideLeft 1500ms 500ms $bezierOne infinite;
+// 		}
+// 	}
+
+// 	.text {
+// 		color: $white;
+// 		font-size: 120px;
+// 		position: absolute;
+// 		transform: translate(-29px, 11px);
+// 		span {
+// 			opacity: 0;
+// 			$total-spans: 12; // Total number of spans within .logo__text
+
+// 			// Loop through each span and set the animation delay
+// 			@for $i from 1 through $total-spans {
+// 				&:nth-child(#{$i}) {
+// 					animation-delay: 100ms * $i;
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+
+// @keyframes letterShow {
+// 	from {
+// 		opacity: 0;
+// 	}
+
+// 	to {
+// 		opacity: 1;
+// 	}
+// }
+
+// @keyframes scaleIn {
+// 	from {
+// 		scale: 0;
+// 	}
+// 	to {
+// 		scale: 0.1;
+// 	}
+// }
+
+// @keyframes fadeIn {
+// 	from {
+// 		opacity: 0;
+// 	}
+// 	to {
+// 		opacity: 1;
+// 	}
+// }
+
+// @keyframes pathSlideLeft {
+// 	0% {
+// 		transform: translateX(0);
+// 	}
+// 	100% {
+// 		transform: translateX(-145px);
+// 	}
+// }
+
+// @keyframes pathSlideRight {
+// 	0% {
+// 		transform: translateX(0);
+// 	}
+// 	100% {
+// 		transform: translate(130px, -20px);
+// 	}
+// }

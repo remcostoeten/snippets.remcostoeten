@@ -6,36 +6,24 @@
       "dom.iterable",
       "esnext"
     ],
-    "module": "commonjs",
-    "jsx": "preserve",
-    "esModuleInterop": true,
+    "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    },
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "strictNullChecks": true,
-    "allowJs": true,
-    "incremental": true
+    "jsx": "preserve"
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "lib/firebase.js",
-    ".next/types/**/*.ts"
+    "pages/custom.js"
   ],
   "exclude": [
     "node_modules"

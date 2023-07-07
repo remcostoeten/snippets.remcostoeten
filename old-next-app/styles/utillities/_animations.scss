@@ -1,0 +1,144 @@
+.register {
+	.animate-input {
+		animation: scale-in-ver-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+			both forwards; // transition: 250ms ease-in-out all;
+	}
+}
+.signin {
+	.animate-input {
+		animation: scale-in-ver-bottom-fade 0.5s
+			cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; // transition: 250ms ease-in-out all;
+	}
+}
+
+.toggled {
+	// animation: fadeIn 500ms ease-in-out forwards, jello-horizontal 0.9s both;
+}
+
+.jello-horizontal {
+	-webkit-animation: jello-horizontal 0.9s both;
+	animation: jello-horizontal 0.9s both;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes scale-in-ver-bottom {
+	0% {
+		-webkit-transform: scaleY(0);
+		transform: scaleY(0);
+		-webkit-transform-origin: 0% 100%;
+		transform-origin: 0% 100%;
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: scaleY(1);
+		transform: scaleY(1);
+		-webkit-transform-origin: 0% 100%;
+		transform-origin: 0% 100%;
+		opacity: 1;
+	}
+}
+@keyframes scale-in-ver-bottom-fade {
+	0% {
+		transform: scaleY(0);
+		-webkit-transform-origin: 0% 100%;
+		transform-origin: 0% 100%;
+		opacity: 1;
+	}
+	100% {
+		transform: scaleY(1);
+		transform-origin: 0% 100%;
+		opacity: 0;
+	}
+}
+@keyframes scale-in-ver-bottom-out {
+	0% {
+		-webkit-transform: scaleY(0);
+		transform: scaleY(0);
+		-webkit-transform-origin: 0% 100%;
+		transform-origin: 0% 100%;
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: scaleY(1);
+		transform: scaleY(1);
+		-webkit-transform-origin: 0% 100%;
+		transform-origin: 0% 100%;
+		opacity: 0;
+	}
+}
+
+.link {
+	position: relative;
+	width: 100px;
+	max-width: 150px;
+	overflow: hidden;
+
+	&--arrow {
+		span {
+			position: absolute;
+			right: 0px;
+		}
+
+		&:hover {
+			span {
+				position: absolute;
+				animation: swipeLeftBlur 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+			}
+		}
+	}
+}
+
+@keyframes infiniteRotate {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate3d(1, 1, 1, 45deg);
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes swipeLeftBlur {
+	0% {
+		transform: translateX(0);
+		filter: blur(0);
+	}
+	50% {
+		transform: translateX(60px);
+		filter: blur(2px);
+	}
+	60% {
+		transform: translateX(200px);
+	}
+
+	100% {
+		transform: translateX(0);
+		filter: blur(0);
+	}
+}
+@keyframes linkArrow {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

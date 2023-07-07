@@ -1,0 +1,13 @@
+{
+	"plugins": [
+	  "stylelint-scss"
+	],
+	"rules": {
+	  "block-no-empty": true,
+	  "color-no-invalid-hex": true,
+	
+	  "scss/dollar-variable-pattern": "^foo",
+	  "scss/percent-placeholder-pattern": "^foo"
+	}
+  }
+  

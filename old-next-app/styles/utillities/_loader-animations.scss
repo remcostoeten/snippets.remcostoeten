@@ -1,0 +1,88 @@
+@keyframes slideleft {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(-128px);
+	}
+}
+@keyframes slideRight {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translate(125px, -19px);
+	}
+}
+@keyframes left {
+	0% {
+		filter: drop-shadow(10px 9px 4px rgba(0, 0, 0, 0.1));
+	}
+
+	80% {
+		filter: drop-shadow(10px 9px 4px rgba(0, 0, 0, 0.1));
+	}
+	100% {
+		transform: translateX(-128px);
+	}
+}
+
+@keyframes pageScaleOut {
+	0% {
+		scale: 1;
+	}
+	100% {
+		scale: 0;
+		opacity: 0;
+	}
+}
+@keyframes right {
+	0% {
+		filter: drop-shadow(10px 9px 4px rgba(0, 0, 0, 0.1));
+	}
+
+	80% {
+		filter: drop-shadow(10px 9px 4px rgba(93, 91, 91, 0.1));
+	}
+	100% {
+		transform: translate(125px, -15px);
+	}
+}
+@keyframes logoScaleIn {
+	from {
+		scale: 0;
+	}
+	to {
+		scale: 0.1;
+	}
+}
+@keyframes fullHide {
+	0% {
+		opacity: 0;
+		font-size: calc(inherit / 100 * 90);
+	}
+	75% {
+		opacity: 0;
+	}
+	100% {
+		scale: 1;
+		font-size: calc(inherit * 1);
+		opacity: 1;
+	}
+}
+@keyframes initialFade {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@keyframes initialScale {
+	0% {
+		transform: scale(0);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
