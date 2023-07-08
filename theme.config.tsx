@@ -37,9 +37,6 @@ const config: DocsThemeConfig = {
     project: {
         link: 'https://github.com/remcostoeten',
     },
-    chat: {
-        link: 'https://discord.com',
-    },
 };
 
 export default config;

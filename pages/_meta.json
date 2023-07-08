@@ -1,13 +1,9 @@
 {
-  "index": "Introduction",
-  "about": {
-    "title": "About",
-    "type": "page"
-  },
+  "index": "Work Snippets",
   "contact": {
-    "title": "Contact ↗",
+    "title": "Back to main site ↗",
     "type": "page",
-    "href": "https://twitter.com/shuding_",
+    "href": "https://remcostoeten.com",
     "newWindow": true
   }
 }
