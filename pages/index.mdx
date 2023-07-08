@@ -2,28 +2,28 @@
 
 Snippets I use on a day to day basis at my current job.Nothing usefull to see here, just a place for me to store my snippets and not lose them.
 
-```shell filename="init container"
+```shell filename="init container" copy
 docker-compose up
 ```
 
-```shell filename="Run containers if they're already build"
+```shell filename="Run containers if they're already build" copy
 docker-compose -f docker-compose.fsv.yml up
 ```
 
-```shell filename="Build all containers if they do not exist yet"
+```shell filename="Build all containers if they do not exist yet"  copy
 SITE=fsv; docker-compose -f docker-compose.${SITE}.yml -p ${SITE} up --build
 ```
 
-```shell filename="Build on windows"
+```shell filename="Build on windows" copy
 $env:SITE = "fsv"; docker-compose -f "docker-compose.$env:SITE.yml" -p $env:SITE up
 ```
 
-```shell filename="Reload template changes"
+```shell filename="Reload template changes" copy
 docker-compose -f docker-compose.fsv.yml restart web -t 1
 ```
 
 <small>web = container name</small>
 
-```shell filename="reindex"
+```shell filename="reindex" copy
 docker exec <web-container-name> /app/src/manage.py update_index
 ```
