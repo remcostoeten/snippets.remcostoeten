@@ -2,13 +2,13 @@
 
 Snippets I use on a day to day basis at my current job.Nothing usefull to see here, just a place for me to store my snippets and not lose them.
 
-````shell filename="init container"
-docker-compose up```
-````
+```shell filename="init container"
+docker-compose up
+```
 
-````shell filename="Run containers if they're already build"
-docker-compose -f docker-compose.fsv.yml up```
-````
+```shell filename="Run containers if they're already build"
+docker-compose -f docker-compose.fsv.yml up
+```
 
 ```shell filename="Build all containers if they do not exist yet"
 SITE=fsv; docker-compose -f docker-compose.${SITE}.yml -p ${SITE} up --build
