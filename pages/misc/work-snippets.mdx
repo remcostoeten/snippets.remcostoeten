@@ -1,0 +1,31 @@
+# Work snippets
+Snippets I use on a day to day basis at my current job.Nothing usefull to see here, just a place for me to store my snippets and not lose them.
+
+#docker FSV
+init container
+```
+docker-compose up```
+
+Run containers if they're already build
+```
+docker-compose -f docker-compose.fsv.yml up```
+
+Build all containers if they do not exist yet
+```
+SITE=fsv; docker-compose -f docker-compose.${SITE}.yml -p ${SITE} up --build```
+
+Build on Windows
+```
+$env:SITE = "fsv"; docker-compose -f "docker-compose.$env:SITE.yml" -p $env:SITE up```
+Reload template changes
+
+``` 
+docker-compose -f docker-compose.fsv.yml restart web -t 1
+
+```
+web = container name
+
+
+Reindex search
+```
+docker exec <web-container-name> /app/src/manage.py update_index
