@@ -5,5 +5,17 @@
     "type": "page",
     "href": "https://remcostoeten.com",
     "newWindow": true
+  },
+  "kanban": {
+    "title": "Go to kanban ↗",
+    "type": "page",
+    "href": "https://kanban.remcostoeten.com",
+    "newWindow": true
+  },
+  "previous": {
+    "title": "Go to old site ↗",
+    "type": "page",
+    "href": "https://previous.remcostoeten.com",
+    "newWindow": true
   }
 }
