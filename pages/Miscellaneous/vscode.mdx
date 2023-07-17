@@ -1,0 +1,12 @@
+# Vscode scripts
+
+Search in dir: negative lookahead. In this case exclude sass folder which contains `static` but not `src/static`.
+
+```shell filename="exclude in search"
+(?!.\*\\static\\sass\\).
+```
+
+<small>
+    This regular expression pattern uses a negative lookahead `(?!.*\\static\\sass\\)` to exclude any paths that contain `"\static\sass"`. It will only match paths that do not contain this specific
+    directory structure. The . at the end of the pattern ensures that it matches all files and folders within the selected folder or workspace.
+</small>
