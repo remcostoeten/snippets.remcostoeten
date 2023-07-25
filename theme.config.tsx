@@ -1,7 +1,8 @@
 import React from 'react';
 import { DocsThemeConfig } from 'nextra-theme-docs';
 
-const config: DocsThemeConfig = {
+const config: DocsThemeConfig = { 
+    favicon: '/favicon.ico',
     logo: (
         <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" id="Laag_1" width={209.8} height={46} x={0} y={0} className="active">
             <style>{'.st0{fill:#fff}'}</style>

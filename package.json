@@ -1,7 +1,7 @@
 {
-  "name": "docs-remcostoeten",
+  "name": "snippets-remcostoeten",
   "version": "1.0",
-  "description": "Remcostoeten personal documentation",
+  "description": "Remcostoeten personal snippets",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
