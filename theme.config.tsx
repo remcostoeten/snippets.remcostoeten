@@ -12,6 +12,7 @@ const config: DocsThemeConfig = {
 			<meta property='og:description' content='snippets from remco' />
 		</>
 	),
+	primaryHue: { dark: 200, light: 200 },
 	logo: (
 		<svg
 			xmlns='http://www.w3.org/2000/svg'
