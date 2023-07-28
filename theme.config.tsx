@@ -69,7 +69,7 @@ const config: DocsThemeConfig = {
 	},
 	footer: {
     text: (
-      <span>
+ <span>
         MIT {new Date().getFullYear()} ©{' '}
         <a href="https://nextra.site" target="_blank">
           snippets.remcostoeten.com 🚀
