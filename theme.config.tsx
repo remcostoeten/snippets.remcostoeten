@@ -69,13 +69,10 @@ const config: DocsThemeConfig = {
 	},
 	footer: {
     text: (
- <span>
         MIT {new Date().getFullYear()} ©{' '}
         <a href="https://snippets.remcostoeten.com" target="_blank">
           snippets.remcostoeten.com 🚀
         </a>
-        .
-      </span>
     )
 };
 
