@@ -67,6 +67,16 @@ const config: DocsThemeConfig = {
 	chat: {
 		link: 'https://discord.com',
 	},
+	footer: {
+    text: (
+      <span>
+        MIT {new Date().getFullYear()} ©{' '}
+        <a href="https://nextra.site" target="_blank">
+          snippets.remcostoeten.com 🚀
+        </a>
+        .
+      </span>
+    )
 };
 
 export default config;
