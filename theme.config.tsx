@@ -68,12 +68,8 @@ const config: DocsThemeConfig = {
 		link: 'https://discord.com',
 	},
 	footer: {
-    text: (
-        MIT {new Date().getFullYear()} ©{' '}
-        <a href="https://snippets.remcostoeten.com" target="_blank">
-          snippets.remcostoeten.com 🚀
-        </a>
-    )
+	text: 'snippets.remcostoeten.com'
 };
 
 export default config;
+	
