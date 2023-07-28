@@ -71,7 +71,7 @@ const config: DocsThemeConfig = {
     text: (
  <span>
         MIT {new Date().getFullYear()} ©{' '}
-        <a href="https://nextra.site" target="_blank">
+        <a href="https://snippets.remcostoeten.com" target="_blank">
           snippets.remcostoeten.com 🚀
         </a>
         .
