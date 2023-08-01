@@ -5,12 +5,37 @@
 ```bash filename=".zshrc"
  alias cc="clear"
  │ alias xx="exit"
- │ alias dev="npm | pnpm run dev"
+ │ alias dev="npm | pnpm run dev"bat
  │ alias catcopy='cat "$1" | xclip -selection clipboard'
  │ alias batcopy='bat "$1" | xclip -selection clipboard'
  │ alias rmrf="rm -rf"
  │ alias cat="bat"
 
+```
+
+cd fsv ; init docker; run fsv containers.
+
+```bash filename=".zshrc"
+function fsv() {
+    cd ~/sites/fsv
+        sleep 1
+    docker-compose up &
+│       sleep 2
+    gnome-terminal --tab -- bash -c "docker-compose -f docker-compose.fsv.yml up; exec zsh"
+}
+```
+
+copy content of cat / bat
+
+```bash filename =".zshrc"
+
+ function catcopy {
+  if [ -z "$1" ]; then
+    echo "Usage: catcopy <filename>"
+  else
+     echo "File content copied to clipboard."
+   fi
+  }
 ```
 
 `source ~/.zshrc`
@@ -22,3 +47,7 @@ Setup Neovim LSP enviorment.
 #Packages
 https://github.com/sharkdp/bat
 nvm
+
+```
+
+```
