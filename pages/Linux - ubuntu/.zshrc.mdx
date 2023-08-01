@@ -1,0 +1,24 @@
+#.zshrc
+
+`vim ~/.zshrc`
+
+```bash filename=".zshrc"
+ alias cc="clear"
+ │ alias xx="exit"
+ │ alias dev="npm | pnpm run dev"
+ │ alias catcopy='cat "$1" | xclip -selection clipboard'
+ │ alias batcopy='bat "$1" | xclip -selection clipboard'
+ │ alias rmrf="rm -rf"
+ │ alias cat="bat"
+
+```
+
+`source ~/.zshrc`
+
+#todo:
+-Make catcopy | batcopy work.
+Setup Neovim LSP enviorment.
+
+#Packages
+https://github.com/sharkdp/bat
+nvm
