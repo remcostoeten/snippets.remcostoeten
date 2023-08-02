@@ -1,0 +1,16 @@
+#handy cli tools
+
+#gitlab cli
+
+```bash filename="gitlab cli"
+latest_version=v1.24.1
+tar_file="glab_${latest_version//v}_Linux_x86_64.tar.gz"
+tar_url="https://gitlab.com/$project/-/releases/$latest_version/downloads/$tar_file"
+wget $tar_url -O /tmp/$tar_file
+
+tar xvfz /tmp/$tar_file bin/glab --strip=1
+sudo chown root:root glab
+sudo mv glab /usr/local/bin/.
+
+glab --version
+```
