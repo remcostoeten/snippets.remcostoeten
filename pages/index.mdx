@@ -10,13 +10,7 @@ docker-compose up
 docker-compose -f docker-compose.fsv.yml up
 ```
 
-```shell filename="Build all containers if they do not exist yet"  copy
-SITE=fsv; docker-compose -f docker-compose.${SITE}.yml -p ${SITE} up --build
-```
-
-```shell filename="Build on windows" copy
-$env:SITE = "fsv"; docker-compose -f "docker-compose.$env:SITE.yml" -p $env:SITE up
-```
+---
 
 ```shell filename="Reload template changes" copy
 docker-compose -f docker-compose.fsv.yml restart web -t 1
@@ -26,4 +20,28 @@ docker-compose -f docker-compose.fsv.yml restart web -t 1
 
 ```shell filename="reindex" copy
 docker exec <web-container-name> /app/src/manage.py update_index
+```
+
+---
+
+Stop all running containers
+
+```shell filename="stop all"
+docker stop $(docker ps -aq)
+```
+
+Remove all stopped containers
+
+````shell filename="remove all"
+docker rm $(docker ps -aq)
+```
+
+---
+
+```shell filename="Build all containers if they do not exist yet"  copy
+SITE=fsv; docker-compose -f docker-compose.${SITE}.yml -p ${SITE} up --build
+````
+
+```shell filename="Build on windows" copy
+$env:SITE = "fsv"; docker-compose -f "docker-compose.$env:SITE.yml" -p $env:SITE up
 ```
