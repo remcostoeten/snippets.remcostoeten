@@ -26,13 +26,13 @@ docker exec <web-container-name> /app/src/manage.py update_index
 
 Stop all running containers
 
-```shell filename="stop all"
+```shell filename="stop all" copy
 docker stop $(docker ps -aq)
 ```
 
 Remove all stopped containers
 
-````shell filename="remove all"
+````shell filename="remove all" copy
 docker rm $(docker ps -aq)
 ```
 
