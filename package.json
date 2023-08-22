@@ -28,6 +28,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@netlify/plugin-lighthouse": "^5.0.0",
     "@types/node": "18.11.10",
     "typescript": "^4.9.3"
   }
