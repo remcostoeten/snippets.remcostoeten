@@ -1,6 +1,10 @@
 {
-  "index": "Work Snippets",
-  "contact": {
+  {
+    "index": "My",
+    "contact": "Contact Us",
+    "about": "About Us"
+  }
+  ,  "contact": {
     "title": "Back to main site ↗",
     "type": "page",
     "href": "https://remcostoeten.com",

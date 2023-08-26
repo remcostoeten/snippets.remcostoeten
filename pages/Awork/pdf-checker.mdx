@@ -1,0 +1,47 @@
+
+# PDFChecker.nl
+
+## i18n setup
+
+```js filename="i18n translation setup." copy
+<p>{{ $t('main.hello') }}</p>
+```
+
+## init in main.js
+```js filename="main.js {24} copy
+import App from './App.vue'
+import Vue from 'vue'
+import VueI18n from 'vue-i18n'
+import de from '../locales/de.json'
+import en from '../locales/en.json'
+import nl from '../locales/nl.json'
+
+Vue.use(VueI18n)
+
+const messages = {
+nl: nl,
+en: en,
+de: de,
+}
+
+const i18n = new VueI18n({
+locale: 'nl',
+fallbackLocale: 'en',
+messages,
+})
+
+new Vue({
+router,
+i18n,
+render: h => h(App),
+}).$mount('#app')
+```
+<small>Json format</small>
+```json filename="locales/nl.json" copy
+{
+    "homepage": {
+        "PDFchecker": "PDFchecker",
+        "intro": "Controleer hoe toegankelijk je PDF-bestand is en hoe je de toegankelijkheid kunt verbeteren."
+    }
+}
+```

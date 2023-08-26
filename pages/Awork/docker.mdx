@@ -1,0 +1,10 @@
+## stop all_
+
+```shell filename="stop all running container" copy
+docker stop $(docker ps -aq)
+```
+## rm containers
+
+```shell filename="remove all stopped containers" copy
+docker rm $(docker ps -aq)
+```
