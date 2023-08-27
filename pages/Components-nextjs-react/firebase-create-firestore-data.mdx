@@ -1,21 +1,4 @@
-# Creating a Component in TypeScript with Next.js
-
-In this guide, we will create a component using TypeScript and Next.js that allows us to create data on the frontend, post it to Firestore, and then fetch that data to display it.
-
-## Prerequisites
-
-- Basic understanding of React, Next.js, and TypeScript.
-- Firebase project and Firestore database set up.
-
-## Set up the Next.js project with TypeScript
-
-```shell filename="Create Next.js App" copy
-npx create-next-app my-app
-cd my-app
-touch tsconfig.json
-npm install --save-dev typescript @types/react @types/node
-npm run dev
-```
+# Setup firebase with firestore data in NextJS
 
 ## Install Required Packages
 
@@ -51,6 +34,7 @@ export { db }
 Create a new component called `NewItem.tsx` in the `components` folder:
 
 ```tsx filename="components/NewItem.tsx" copy
+'use client'
 import React, { useState } from "react"
 import { addDoc, collection, serverTimestamp } from "firebase/firestore"
 import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover"
@@ -161,11 +145,3 @@ useEffect(() => {
   return (): void => unsubscribe()
 }, [])
 ```
-
-## Conclusion
-
-In this guide, we have created a component in TypeScript using Next.js that allows us to create data on the frontend, post it to Firestore, and then fetch that data to display it. You can customize this component according to your needs and use it in your Next.js application.
-
----
-
-Note: In this document, I replaced "thoughts" with "items", and "Thought" with "Item" to make it more generic. Adjust as necessary for your use case.
