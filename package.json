@@ -1,6 +1,6 @@
 {
   "name": "snippets-remcostoeten",
-  "version": "1.0",
+  "version": "0.0.1",
   "description": "Remcostoeten personal snippets",
   "scripts": {
     "dev": "next dev",
