@@ -3,39 +3,206 @@
 `vim ~/.zshrc`
 
 ```bash filename=".zshrc"
- alias cc="clear"
- │ alias xx="exit"
- │ alias dev="npm | pnpm run dev"bat
- │ alias catcopy='cat "$1" | xclip -selection clipboard'
- │ alias batcopy='bat "$1" | xclip -selection clipboard'
- │ alias rmrf="rm -rf"
- │ alias cat="bat"
+ ########################
+#                      #
+#   custom functions   # 
+#                      #        
+########################
 
-```
-
-cd fsv ; init docker; run fsv containers.
-
-```bash filename=".zshrc"
-function fsv() {
-    cd ~/sites/fsv
-        sleep 1
-    docker-compose up &
-│       sleep 2
-    gnome-terminal --tab -- bash -c "docker-compose -f docker-compose.fsv.yml up; exec zsh"
+#Alarm clock
+alarm() {
+    sleep $1 ; cvlc ~/Music/alarm_7notification.mp3
 }
-```
 
-copy content of cat / bat
+addcommit() {
+    git add .
+    local commit_message=""
+    
+    for arg in "$@"; do
+        commit_message="$commit_message $arg"
+    done
+    
+    shift "$(( $# > 0 ? 1 : 0 ))" 
+    
+    git commit -m "$commit_message"
+}
 
-```bash filename =".zshrc"
+addcommitpush() {
+    git add .
+    local commit_message=""
+    
+    for arg in "$@"; do
+        commit_message="$commit_message $arg"
+    done
+    
+    shift "$(( $# > 0 ? 1 : 0 ))" 
+    
+    git commit -m "$commit_message"
 
- function catcopy {
-  if [ -z "$1" ]; then
-    echo "Usage: catcopy <filename>"
-  else
-     echo "File content copied to clipboard."
-   fi
-  }
+    git push
+}
+
+createfile() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: createfile <content> <filename>"
+        return 1
+    fi
+
+    local content="$1"
+    local filename="$2"
+
+    echo "$content" > "$filename"
+}
+
+########################
+#                      #
+#   custom aliasses    # 
+#                      #        
+########################
+
+#######terminal########
+alias cc="clear"
+alias xx="exit"
+alias rmrf="rm -rf"
+alias file='createfile'
+
+######Docker###########
+alias stopdocker='docker stop $(docker ps -aq)'
+alias rmcontainers='docker rm $(docker ps -aq)'
+alias runfsv="cd ~/sites/dossier && git pull && code .  &&  docker-compose up"
+
+######Run site#########
+alias rundocs="cd ~/sites/snippets.remcostoeten &&  code .  &&  git pull  &&  pnpm run dev"
+alias runsite="cd ~/sites && cd remco-tools && code . &&  git pull &&  pnpm run dev"
+alias gor="cd ~/sites/remco-tools"
+alias run="code .  &&  git pull &&  pnpm run dev"
+alias restart="rm -rf node_modules/&& rm -rf .next/ &&  pnpm install &&  code .  &&  pnpm run dev"
+alias rebuild="rm -rf node_modules/ &&  rm -rf .next/ &&  pnpm i  && pnpm run build"
+
+####Git################
+alias c='addcommit'
+alias cp='addcommitpush'
+
+####Copy content#######
+alias catcopy='cat $1 | xclip -selection clipboard'
+alias cat="bat" #requires 
+
+####Misc################
+alias vim="nvim"
+alias alarm='alarm'
+alias dev="npm | pnpm run dev"
+alias npm='bun'
+alias ognpm='npm'
+alias pnpm='bun'
+alias ogpnpm='pnpm'
+alias yarn='bun'
+alias ogyarn='yarn'
+alias allow='sudo chmod +x $1'
+alias gor="cd ~/sites/remco-tools"
+# Function for adding and committing with message and multiple files
+# Function for adding and committing with message and multiple files
+
+
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+  export ZSH=~/.oh-my-zsh
+
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="pixegami-agnoster"
+
+# Set list of themes to load
+# Setting this variable when ZSH_THEME=random
+# cause zsh load theme from this variable instead of
+# looking in ~/.oh-my-zsh/themes/
+# An empty array have no effect
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+ DISABLE_AUTO_TITLE="false"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+ COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+  git
+  zsh-syntax-highlighting
+  zsh-autosuggestions
+  nvm
+  aliases
+   colorize
+gh
+sudo
+	
+
+)
+
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+
+
 ```
 
 `source ~/.zshrc`
