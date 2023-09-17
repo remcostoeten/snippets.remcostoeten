@@ -1,16 +1,23 @@
 # Scroll-Into-View Animation Guide
 
-This guide walks through the process of creating a scroll-into-view triggered animation using Next.js (in TypeScript), TailwindCSS, and optionally, Framer Motion.
+This guide walks through the process of creating a scroll-into-view triggered animation using Next.js (in TypeScript), TailwindCSS. The animation is a gradient text animation that is triggered when the text is scrolled into view which can be seen here.
+
+<Image src="/scroll-into-view.gif" alt="Scroll into view gif react hook" width={500} height={500} />
+Live Demo: <a href='https://remcostoeten.com/scroll-in-view/' target='_blank'>https://remcostoeten.com/scroll-in-view/</a>
+
+
+Source code <a href='https://github.com/remcostoeten/remco-tools/tree/master/hooks/UseInView.tsx' target='_blank'>https://github.com/remcostoeten/remco-tools/tree/master/hooks/UseInView.tsx</a>
 
 ## Steps
 
-### 1. Create the Intersection Observer Hook
-
+### 1. Create 
 In the `hooks` folder, create a file named `useInView.tsx`:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 
 ```tsx filename="useInView.tsx"
 'use client';
-
+go
 import { useState, useEffect, Ref } from 'react';
 
 interface Options extends IntersectionObserverInit {
