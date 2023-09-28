@@ -11,13 +11,13 @@ The `useHandleMouseMove` is a custom React hook that handles mouse movement even
 1. Import the hook:
 
 ```javascript
-import useHandleMouseMove from './path-to-your-hook';
+import useHandleMouseMove from '@hooks/useHandleMouseMove';
 ```                  
 
 2. Use the hook in your component, passing the class name of the elements you want to handle mouse movement for:
 
 ```javascript
-useHandleMouseMove('your-class-name');
+useHandleMouseMove('your-class-name'); 
 ```
 
 ## Example
@@ -26,14 +26,14 @@ Below is an example of how to use the `useHandleMouseMove` hook in a component:
 
 ```typescript
 import React from 'react';
-import useHandleMouseMove from './path-to-your-hook';
+import useHandleMouseMove from '@/hooks/useHandleMouseMove';
 
 const YourComponent: React.FC = () => {
-  useHandleMouseMove('your-class-name');
+  useHandleMouseMove('mouse-element');
 
   return (
-    <div className="your-class-name">
-      {/* ... */}
+    <div className="intro mouse-element">
+      <p>This is some random text</p>
     </div>
   );
 };
@@ -41,7 +41,7 @@ const YourComponent: React.FC = () => {
 export default YourComponent;
 ```
 
-In this example, the `useHandleMouseMove` hook is used to handle mouse movement for all elements with the class name `your-class-name`.
+In this example, the `useHandleMouseMove` hook is used to handle mouse movement for all elements with the class name `mouse-element`.
 
 ## Parameters
 
@@ -58,4 +58,3 @@ This hook does not return any value.
 ```bash
 npm install react
 ```
-
