@@ -1,0 +1,27 @@
+# Alphabetically Sorting a File Using `sort`
+
+
+## Command Overview
+
+\```shell
+sort rs.csv > rs_sorted.csv
+\```
+
+## Breakdown
+
+- `sort`: This is the Unix command for sorting lines in text files.
+  
+- `rs.csv`: The input file you wish to sort.
+
+- `> rs_sorted.csv`: Redirects the output of the `sort` command into a new file named `rs_sorted.csv`.
+
+## Overwriting the Original File
+
+Overwrite the original file with the sorted content:
+
+\```shell
+sort rs.csv -o rs.csv
+\```
+
+Where `-o rs.csv` instructs `sort` to save the sorted output back into the original file.
+
