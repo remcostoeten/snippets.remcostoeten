@@ -12,8 +12,6 @@ Source code <a href='https://github.com/remcostoeten/remco-tools/tree/master/hoo
 
 ### 1. Create 
 In the `hooks` folder, create a file named `useInView.tsx`:
-<iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 
 ```tsx filename="useInView.tsx"
 'use client';
