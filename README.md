@@ -1,2 +1,1 @@
-This repository is a collection of code snippets and examples, showcasing various personal scrpts I use for productivity or work. The site is build and maintained via markdown powered by NextJS.
-
+## Just some random markdown filles of various snippets I use on a day to day basis. Or some knowledge I want to share with the world, or just some docs for my own reference.
