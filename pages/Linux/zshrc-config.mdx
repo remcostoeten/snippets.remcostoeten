@@ -1,4 +1,259 @@
+## My zsh config.
+
+To edit `vim ~/.zshrc`
+
+to add something at the last line from commandline
+```bash filename=$= copy
+cat <<EOL>> ~?.zshrc
+alias x=y
+EOL
+```
+where eol stands for end of file.
+
+reload config with `source ~/.zshrc` or restart terminal.
+
 ```bash filename=".zshrc" copy
+alias devstack='cd ~/sites/pleio-dev-stack/frontend && nohup yarn && yarn start & cd .. && nohup docker-compose up &'
+# Define environment variables
+export REMCO=REMCOSTOETEN_DIR
+export PORTFOLIO=Portfolio-Grid-UI
+# Variables for personal website, Pleio dev stack, and snippets
+export PERSONAL_WEBSITE=~/sites/$REMCO/$PORTFOLIO
+export PLEIO_DIR=~/sites/pleio-dev-stack
+export SNIPPETS=~/snippets.remcostoeten
+export CURRENTSITE=~/sites/$REMCO$PORTFOLIO
+export ALARM=/home/remcostoeten/Music/alarm.mp3
+
+########################
+#                      #
+#   custom functions   #
+#                      #
+########################
+alias alarm=countdown_timer
+
+# Function to create a countdown timer
+# Function to create a countdown timer
+countdown_timer() {
+    local ALARMFILE=~/Music/alarm.mp3
+
+    # Function to parse a time unit and convert it to seconds
+    parse_unit_to_seconds() {
+        unit=$1
+        value=${unit%[a-z]*}
+        unit_type=${unit##*[0-9]}
+        case $unit_type in
+        s) echo $value ;;
+        m) echo $((value * 60)) ;;
+        h) echo $((value * 3600)) ;;
+        *) echo 0 ;;
+        esac
+    }
+
+    # Calculate the total time in seconds from the input arguments
+    local total_seconds=0
+    for arg in "$@"; do
+        seconds=$(parse_unit_to_seconds $arg)
+        if [ $seconds -eq 0 ]; then
+            echo "Invalid input. Please use 'X hours' or 'X minutes' or 'X seconds.'"
+            return 1
+        fi
+        total_seconds=$((total_seconds + seconds))
+    done
+
+    # Countdown loop
+    while [ $total_seconds -gt 0 ]; do
+        if [ $total_seconds -eq 2 ]; then
+            echo "Hi"
+        fi
+
+        echo "Time remaining: $total_seconds seconds"
+        sleep 1
+        total_seconds=$((total_seconds - 1))
+    done
+
+    # Open the default audio player to play the alarm MP3 file when the countdown reaches 0 seconds
+    if [ $total_seconds -eq 0 ]; then
+        xdg-open $ALARMFILE
+    fi
+
+    # Display a notification message when the countdown reaches 0 using zenity
+    zenity --info --text="Countdown Timer: Time's up!"
+}
+
+
+
+# Git add and commit function with a custom commit message
+addcommit() {
+    git add .
+    local commit_message=""
+
+    for arg in "$@"; do
+        commit_message="$commit_message $arg"
+    done
+
+    shift "$(($# > 0 ? 1 : 0))"
+
+    git commit -m "$commit_message"
+}
+
+# Git add, commit, and push function with a custom commit message
+addcommitpush() {
+    git add .
+    local commit_message=""
+
+    for arg in "$@"; do
+        commit_message="$commit_message $arg"
+    done
+
+    shift "$(($# > 0 ? 1 : 0))"
+
+    git commit -m "$commit_message"
+
+    git push
+}
+# Function to create a file with specified content and filename
+createfile() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: createfile <content> <filename>"
+        return 1
+    fi
+
+    local content="$1"
+    local filename="$2"
+
+    echo "$content" >"$filename"
+}
+
+########################
+#                      #
+#   custom aliases     #
+#                      #
+########################
+
+#######terminal########
+
+# Clear the terminal
+alias cc="clear"
+# Exit the terminal
+alias xx="exit"
+# Remove a file or directory recursively and forcefully
+alias rmrf="rm -rf"
+# Create a file with specified content and filename
+alias file='createfile'
+# Display system processes in real-time
+alias top='htop'
+# Run a command with sudo privileges
+alias s="sudo /home/remcostoeten/sites/shell-script/sudo.sh"' >> ~/.bashrc'
+#######Docker###########
+
+# Stop all running Docker containers
+alias stopdocker='docker-compose down && docker stop $(docker ps -aq)'
+# Remove all Docker containers
+alias rmcontainers='docker rm $(docker ps -aq)'
+# Run a Docker container with a specific configuration
+alias runfsv="cd ~/sites/dossier && git pull && code .  &&  docker-compose up"
+# Start a Docker container
+alias dstart="docker-compose up"
+#run api pleio only
+alias pbstart="cd ~/sites/pleio/ && docker-compose up api"
+#start zshrc
+alias zsh="vim ~/.zshrc"
+#run frontend pleio
+alias pfstart="cd ~/sites/pleio/frontend && yarn && yarn start"
+# Stop a Docker container
+alias dstop="docker-compose down"
+# Show running Docker containers
+alias dshow="docker ps"
+# Show logs of a Docker container
+alias dlog="docker-compose losg -f --tail=4"
+
+######Run site#########
+
+# Run a development server for a website
+
+alias rundocs="cd ~/sites/$REMCO/$SNIPPETS && code . && bun run dev;"
+# Run a development server for Pleio
+alias runp="cd $PLEIO_DIR; cd frontend; code . ; docker-compose up"
+# Run a development server for personal website
+alias runsite="cd $PERSONAL_WEBSITE && rmrf .next node_modules; bun i ;  code . && bun run dev"
+# Go to Pleio directory
+alias gop="cd $PLEIO_DIR"
+alias gopf="cd $PLEIO_DIR/frontend"
+# Go to personal website directory
+alias gor="cd $PERSONAL_WEBSITE"
+# Run a development server
+alias run="code . &&  bun run dev"
+# Restart a development server
+alias restart="rm -rf node_modules/&& rm -rf .next/ &&  pnpm install &&  code .  &&  pnpm run dev"
+# Rebuild a development server
+alias rebuild="rm -rf node_modules/ &&  rm -rf .next/ &&  pnpm i  && pnpm run build"
+# Run a development server with a custom command
+alias br="bun run dev"
+# Run a build command with a custom command
+alias bb="bun run build"
+
+####Git################
+
+# Add and commit changes with a custom commit message
+alias c='addcommit'
+# Add, commit, and push changes with a custom commit message
+alias cpp='addcommitpush'
+
+####Copy content#######
+
+# Copy the contents of a file to the clipboard
+alias catcopy='cat $1 | xclip -selection clipboard'
+# Display the contents of a file with syntax highlighting
+alias cat="bat" #requires
+
+####Misc################
+
+# Run a development server with npm or pnpm
+alias dev="npm | pnpm run dev"
+# Allow execution of a file with sudo privileges
+alias allow='sudo chmod +x $1'
+# Connect to a VPN using Tailscale
+alias vpn="tailscale"
+# Go to Desktop directory
+alias d="cd ~/Desktop"
+# Translate JSON files using a translation service
+alias translate="yarn json-autotranslate --input src/js/i18n/messages/ --type key-based --matcher i18next --directory-structure ngx-translate --service deepl-free --config fb9ed0cc-2782-eaa0-d75b-76d5f8f92f87:fx,less --delete-unused-strings"
+# Open a custom cursor application
+alias cursor="cd ~/Programs && ./cursor.AppImage"
+
+# Set ZSH configuration
+export ZSH=~/.oh-my-zsh
+# Set a random theme for the terminal
+ZSH_THEME="steeef"
+
+# Set list of themes to load
+plugins=(
+    git
+    nvm
+    aliases
+    colorize
+    zsh-autosuggestions
+    gh
+    sudo
+)
+
+# Set completion options
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+source ~/.oh-my-zsh/oh-my-zsh.sh
+
+# bun completions
+[ -s "/home/remcostoeten/.bun/_bun" ] && source "/home/remcostoeten/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+```
+
+
+old
+```bash
 # Define environment variables
 export REMCO=remcostoeten
 # Variables for personal website, Pleio dev stack, and snippets
@@ -8,8 +263,8 @@ export SNIPPETS=~/sites/snippets.remcostoeten
 
 ########################
 #                      #
-#   custom functions   # 
-#                      #        
+#   custom functions   #
+#                      #
 ########################
 
 # Alarm clock function that plays a notification sound after a specified time
@@ -21,13 +276,13 @@ aalarm() {
 addcommit() {
    git add .
    local commit_message=""
-   
+
    for arg in "$@"; do
        commit_message="$commit_message $arg"
    done
-   
-   shift "$(( $# > 0 ? 1 : 0 ))" 
-   
+
+   shift "$(( $# > 0 ? 1 : 0 ))"
+
    git commit -m "$commit_message"
 }
 
@@ -35,13 +290,13 @@ addcommit() {
 addcommitpush() {
     git add .
     local commit_message=""
-    
+
     for arg in "$@"; do
         commit_message="$commit_message $arg"
     done
-    
-    shift "$(( $# > 0 ? 1 : 0 ))" 
-    
+
+    shift "$(( $# > 0 ? 1 : 0 ))"
+
     git commit -m "$commit_message"
 
     git push
@@ -62,8 +317,8 @@ createfile() {
 
 ########################
 #                      #
-#   custom aliases     # 
-#                      #        
+#   custom aliases     #
+#                      #
 ########################
 
 #######terminal########
@@ -120,7 +375,7 @@ alias rebuild="rm -rf node_modules/ &&  rm -rf .next/ &&  pnpm i  && pnpm run bu
 alias br="bun run dev"
 # Run a build command with a custom command
 alias bb="bun run build"
- 
+
 ####Git################
 
 # Add and commit changes with a custom commit message
@@ -133,7 +388,7 @@ alias cpp='addcommitpush'
 # Copy the contents of a file to the clipboard
 alias catcopy='cat $1 | xclip -selection clipboard'
 # Display the contents of a file with syntax highlighting
-alias cat="bat" #requires 
+alias cat="bat" #requires
 
 ####Misc################
 
@@ -173,9 +428,10 @@ plugins=(
 
 # Set completion options
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 source ~/.oh-my-zsh/oh-my-zsh.sh
 
 # Set completion options
 DISABLE_AUTO_TITLE="false"
-COMPLETION_WAITING_DOTS="true"```
+COMPLETION_WAITING_DOTS="true"
+```
