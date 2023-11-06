@@ -12,6 +12,7 @@ const config: DocsThemeConfig = {
 			<meta property='og:description' content='snippets from remco' />
 		</>
 	),
+	defaultMenuCollapseLevel: 1,
 	primaryHue: { dark: 200, light: 200 },
 	logo: (
 		<svg

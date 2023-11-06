@@ -2,6 +2,10 @@ import React from 'react';
 import { DocsThemeConfig } from 'nextra-theme-docs';
 
 const config: DocsThemeConfig = {
+    sidebar: {
+        autoCollapse: false,
+        defaultMenuCollapseLevel: 1,
+    },
     logo: (
         <svg xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" id="Laag_1" width={209.8} height={46} x={0} y={0} className="active">
             <style>{'.st0{fill:#fff}'}</style>
@@ -36,4 +40,4 @@ const config: DocsThemeConfig = {
     ),
 };
 
-export default config;
+export default config
