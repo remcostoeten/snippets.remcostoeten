@@ -1,6 +1,4 @@
-#handy cli tools
-
-#gitlab cli
+# handy cli tools
 
 ```bash filename="gitlab cli"
 latest_version=v1.24.1
@@ -14,12 +12,25 @@ sudo mv glab /usr/local/bin/.
 
 glab --version
 ```
+## GitHub CLI
 
+```bash
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+sudo apt-add-repository https://cli.github.com/packages
+sudo apt update
+sudo apt install gh
+gh --version
+## Vercel
+```shell filename="cli"
+npm i -g vercel
+vercel --version
+```
+## Netlify
 ```bash filename="Netlify CLI"
 npm install netlify-cli -g
 ```
 
-Planetscale (serverless MYSQL provider)
+## Planetscale (serverless MYSQL provider)
 
 ```bash filename="planetscale CLI"
 sudo apt-get install mysql-client
