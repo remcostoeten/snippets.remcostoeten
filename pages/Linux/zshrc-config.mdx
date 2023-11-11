@@ -4,7 +4,7 @@ To edit `vim ~/.zshrc`
 
 to add something at the last line from commandline
 ```bash filename=$= copy
-cat <<EOL>> ~?.zshrc
+cat <<EOL>> ~/.zshrc
 alias x=y
 EOL
 ```
@@ -96,6 +96,11 @@ addcommit() {
     git commit -m "$commit_message"
 }
 
+checkout() {
+    local branch=""
+    git checkout $branch
+}
+
 # Git add, commit, and push function with a custom commit message
 addcommitpush() {
     git add .
@@ -176,6 +181,8 @@ alias rundocs="cd ~/sites/$REMCO/$SNIPPETS && code . && bun run dev;"
 alias runp="cd $PLEIO_DIR; cd frontend; code . ; docker-compose up"
 # Run a development server for personal website
 alias runsite="cd $PERSONAL_WEBSITE && rmrf .next node_modules; bun i ;  code . && bun run dev"
+#go to shell scripts
+alias shell="cd ~/sites/$REMCO/shell-scripts"
 # Go to Pleio directory
 alias gop="cd $PLEIO_DIR"
 alias gopf="cd $PLEIO_DIR/frontend"
@@ -198,7 +205,9 @@ alias bb="bun run build"
 alias c='addcommit'
 # Add, commit, and push changes with a custom commit message
 alias cpp='addcommitpush'
-
+# Git reset --hard shortcut
+alias reset-='git reset --hard'
+alias gcc='checkout'
 ####Copy content#######
 
 # Copy the contents of a file to the clipboard
@@ -249,6 +258,8 @@ source ~/.oh-my-zsh/oh-my-zsh.sh
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+[[ -s /usr/share/autojump/autojump.zsh ]] && source /usr/share/autojump/autojump.zsh
+
 ```
 
 
@@ -434,4 +445,5 @@ source ~/.oh-my-zsh/oh-my-zsh.sh
 # Set completion options
 DISABLE_AUTO_TITLE="false"
 COMPLETION_WAITING_DOTS="true"
+```
 ```
