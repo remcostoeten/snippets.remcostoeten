@@ -80,8 +80,6 @@ countdown_timer() {
     zenity --info --text="Countdown Timer: Time's up!"
 }
 
-
-
 # Git add and commit function with a custom commit message
 addcommit() {
     git add .
@@ -216,7 +214,11 @@ alias catcopy='cat $1 | xclip -selection clipboard'
 alias cat="bat" #requires
 
 ####Misc################
-
+alias copyremote="git remote -v | awk '{print $2}' | uniq | xclip -selection clipboard"
+alias install="sudo apt-get install"
+alias lintfix="bun lint --fix"
+alias lint="bun lint"
+alias click="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh"
 # Run a development server with npm or pnpm
 alias dev="npm | pnpm run dev"
 # Allow execution of a file with sudo privileges
@@ -233,7 +235,12 @@ alias cursor="cd ~/Programs && ./cursor.AppImage"
 # Set ZSH configuration
 export ZSH=~/.oh-my-zsh
 # Set a random theme for the terminal
-ZSH_THEME="steeef"
+PS1='%B%{$fg[yellow]%}%~/ %{$fg_bold[cyan]%}$(git_prompt_info)%{$fg_bold[blue]%}
+%{$reset_color%}%B'
+RPROMPT='%T'
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$fg[green]%}"
 
 # Set list of themes to load
 plugins=(
@@ -244,6 +251,7 @@ plugins=(
     zsh-autosuggestions
     gh
     sudo
+    zsh-syntax-highlighting
 )
 
 # Set completion options
@@ -260,190 +268,5 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 [[ -s /usr/share/autojump/autojump.zsh ]] && source /usr/share/autojump/autojump.zsh
 
-```
-
-
-old
-```bash
-# Define environment variables
-export REMCO=remcostoeten
-# Variables for personal website, Pleio dev stack, and snippets
-export PERSONAL_WEBSITE=~/sites/$REMCO
-export PLEIO_DIR=~/sites/pleio-dev-stack
-export SNIPPETS=~/sites/snippets.remcostoeten
-
-########################
-#                      #
-#   custom functions   #
-#                      #
-########################
-
-# Alarm clock function that plays a notification sound after a specified time
-aalarm() {
-    sleep $1 && cvlc ~/Music/alarm_7notification.mp3
-}
-
-# Git add and commit function with a custom commit message
-addcommit() {
-   git add .
-   local commit_message=""
-
-   for arg in "$@"; do
-       commit_message="$commit_message $arg"
-   done
-
-   shift "$(( $# > 0 ? 1 : 0 ))"
-
-   git commit -m "$commit_message"
-}
-
-# Git add, commit, and push function with a custom commit message
-addcommitpush() {
-    git add .
-    local commit_message=""
-
-    for arg in "$@"; do
-        commit_message="$commit_message $arg"
-    done
-
-    shift "$(( $# > 0 ? 1 : 0 ))"
-
-    git commit -m "$commit_message"
-
-    git push
-}
-
-# Function to create a file with specified content and filename
-createfile() {
-    if [ $# -lt 2 ]; then
-        echo "Usage: createfile <content> <filename>"
-        return 1
-    fi
-
-    local content="$1"
-    local filename="$2"
-
-    echo "$content" > "$filename"
-}
-
-########################
-#                      #
-#   custom aliases     #
-#                      #
-########################
-
-#######terminal########
-
-# Clear the terminal
-alias cc="clear"
-# Exit the terminal
-alias xx="exit"
-# Remove a file or directory recursively and forcefully
-alias rmrf="rm -rf"
-# Create a file with specified content and filename
-alias file='createfile'
-# Display system processes in real-time
-alias top='htop'
-# Run a command with sudo privileges
-alias s="sudo /home/remcostoeten/sites/shell-script/sudo.sh"' >> ~/.bashrc'
-
-#######Docker###########
-
-# Stop all running Docker containers
-alias stopdocker='docker stop $(docker ps -aq)'
-# Remove all Docker containers
-alias rmcontainers='docker rm $(docker ps -aq)'
-# Run a Docker container with a specific configuration
-alias runfsv="cd ~/sites/dossier && git pull && code .  &&  docker-compose up"
-# Start a Docker container
-alias dstart="docker-compose up"
-# Stop a Docker container
-alias dstop="docker-compose down"
-# Show running Docker containers
-alias dshow="docker ps"
-# Show logs of a Docker container
-alias dlog="docker-compose losg -f --tail=4"
-
-######Run site#########
-
-# Run a development server for a website
-alias rundocs="cd ~/sites/$SNIPPETS &&  code .  &&  git pull  &&  pnpm run dev"
-# Run a development server for Pleio
-alias runp="cd $PLEIO_DIR; cd frontend; code . ; docker-compose up"
-# Run a development server for personal website
-alias runsite="cd $PERSONAL_WEBSITE && cd dashboard && code . && bun run dev"
-# Go to Pleio directory
-alias gop="cd $PLEIO_DIR"
-# Go to personal website directory
-alias gor="cd $PERSONAL_WEBSITE"
-# Run a development server
-alias run="code . &&  bun run dev"
-# Restart a development server
-alias restart="rm -rf node_modules/&& rm -rf .next/ &&  pnpm install &&  code .  &&  pnpm run dev"
-# Rebuild a development server
-alias rebuild="rm -rf node_modules/ &&  rm -rf .next/ &&  pnpm i  && pnpm run build"
-# Run a development server with a custom command
-alias br="bun run dev"
-# Run a build command with a custom command
-alias bb="bun run build"
-
-####Git################
-
-# Add and commit changes with a custom commit message
-alias c='addcommit'
-# Add, commit, and push changes with a custom commit message
-alias cpp='addcommitpush'
-
-####Copy content#######
-
-# Copy the contents of a file to the clipboard
-alias catcopy='cat $1 | xclip -selection clipboard'
-# Display the contents of a file with syntax highlighting
-alias cat="bat" #requires
-
-####Misc################
-
-# Set an alarm with a custom notification sound
-alias alarm='aalarm'
-# Run a development server with npm or pnpm
-alias dev="npm | pnpm run dev"
-# Allow execution of a file with sudo privileges
-alias allow='sudo chmod +x $1'
-# Go to personal website dashboard directory
-alias gor="cd ~/sites/dashboard"
-# Connect to a VPN using Tailscale
-alias vpn="tailscale"
-# Go to Desktop directory
-alias d="cd ~/Desktop"
-# Translate JSON files using a translation service
-alias translate="yarn json-autotranslate --input src/js/i18n/messages/ --type key-based --matcher i18next --directory-structure ngx-translate --service deepl-free --config b1024c9d-927f-14fa-4599-104affb73166:fx,less --delete-unused-strings"
-# Open a custom cursor application
-alias cursor="cd ~/Programs && ./cursor.AppImage"
-
-# Set ZSH configuration
-export ZSH=~/.oh-my-zsh
-# Set a random theme for the terminal
-ZSH_THEME="random"
-
-# Set list of themes to load
-plugins=(
-  git
-  zsh-syntax-highlighting
-  zsh-autosuggestions
-  nvm
-  aliases
-  colorize
-  gh
-  sudo
-)
-
-# Set completion options
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-source ~/.oh-my-zsh/oh-my-zsh.sh
-
-# Set completion options
-DISABLE_AUTO_TITLE="false"
-COMPLETION_WAITING_DOTS="true"
 ```
 ```
