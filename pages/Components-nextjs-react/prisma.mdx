@@ -1,24 +1,21 @@
-────────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-       │ File: prisma-database-setup.mdx
-─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
  # Prisma Database Setup in Next.js
- 
+
  In this guide, we'll set up a database using Prisma in a Next.js app.
- 
+
  ## Define Prisma Model
- 
+
  In your `schema.prisma` file, define the Prisma model for the database table you want to create:
- 
+
  ```prisma
  generator client {
    provider = "prisma-client-js"
  }
- 
+
  datasource db {
    provider = "postgresql"
    url = env("POSTGRES_PRISMA_URL") // Use your database URL
  }
- 
+
  model CustomTable {
    id       Int     @id @default(autoincrement())
    name     String
@@ -28,22 +25,22 @@
    // Add more fields as needed
  }
  ```
- 
+
  ## Create a Page for Data Entry
- 
+
  Create a new page for data entry, for example, `pages/new-data/page.tsx`:
- 
+
  ```jsx
  import React, { useState } from 'react'
  import { useRouter } from 'next/router'
- 
+
  export default function NewData() {
    const router = useRouter()
    const [name, setName] = useState('')
    const [field1, setField1] = useState('')
    const [field2, setField2] = useState('')
    const [field3, setField3] = useState(false)
- 
+
    const submitData = async (e: React.SyntheticEvent) => {
      e.preventDefault()
      try {
@@ -59,7 +56,7 @@
        console.error(error)
      }
    }
- 
+
    return (
      <div>
        <form onSubmit={submitData}>
@@ -95,15 +92,15 @@
    )
  }
  ```
- 
+
  ## Create API Route
- 
+
  Create an API route to handle data creation, for example, `pages/api/customtable.ts`:
- 
+
   ```typescript
   import type { NextApiRequest, NextApiResponse } from 'next'
   import prisma from '../../lib/prisma'
-  
+
   // POST /api/customtable
   // Required fields in body: name, field1, field2, field3
   export default async function handle(
@@ -118,18 +115,18 @@
     return res.status(201).json(result)
   }
   ```
-  
+
   ## Prisma Client Setup
-  
+
   Set up Prisma Client in your project. Create a file, for example, `lib/prisma.ts`:
-  
+
   ```typescript filename="lib/prisma.ts"
   import { PrismaClient } from '@prisma/client'
-  
+
   const globalForPrisma = global as unknown as { prisma: PrismaClient }
-  
+
   export const prisma = globalForPrisma.prisma || new PrismaClient()
-  
+
   if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
   ```
-  
+
