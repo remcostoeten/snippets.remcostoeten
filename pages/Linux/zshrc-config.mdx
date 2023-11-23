@@ -13,8 +13,7 @@ where eol stands for end of file.
 
 reload config with `source ~/.zshrc` or restart terminal.
 
-```bash filename=".zshrc" copy
-pr_create() {
+```pr_create() {
     local target_branch="$1"
     shift # Move to the next argument
     local input="$*"
@@ -44,7 +43,6 @@ pr_create() {
 }
 
 alias pr="pr_create"
-
 
 alias devstack='cd ~/sites/pleio-dev-stack/frontend && nohup yarn && yarn start & cd .. && nohup docker-compose up &'
 # Define environment variables
@@ -249,8 +247,13 @@ alias cat="bat" #requires
 ####Misc################
 alias copyremote="git remote -v | awk '{print $2}' | uniq | xclip -selection clipboard"
 alias install="sudo apt-get install"
+alias prismapush="npx prisma db push"
+alias prismapull="npx prisma db pull"
+alias prismagen="npx prisma generate"
+alias migratedev="npx prisma migrate dev"
 alias lintfix="bun lint --fix"
 alias lint="bun lint"
+alias fastclick="j shell; ./fastclick.sh"
 alias click="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh"
 # Run a development server with npm or pnpm
 alias dev="npm | pnpm run dev"
@@ -300,6 +303,4 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 [[ -s /usr/share/autojump/autojump.zsh ]] && source /usr/share/autojump/autojump.zsh
-
-```
 ```
