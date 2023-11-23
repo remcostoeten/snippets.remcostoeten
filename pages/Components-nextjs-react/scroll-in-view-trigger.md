@@ -3,14 +3,14 @@
 This guide walks through the process of creating a scroll-into-view triggered animation using Next.js (in TypeScript), TailwindCSS. The animation is a gradient text animation that is triggered when the text is scrolled into view which can be seen here.
 
 <Image src="/scroll-into-view.gif" alt="Scroll into view gif react hook" width={500} height={500} />
-Live Demo: <a href='https://remcostoeten.com/scroll-in-view/' target='_blank'>https://remcostoeten.com/scroll-in-view/</a>
+Live Demo: <a href='https://github.com/remcostoeten/remcostoeten/blob/dev/hooks/useInView.tsx' target='_blank'>Here/</a>
 
 
 Source code <a href='https://github.com/remcostoeten/remco-tools/tree/master/hooks/UseInView.tsx' target='_blank'>https://github.com/remcostoeten/remco-tools/tree/master/hooks/UseInView.tsx</a>
 
 ## Steps
 
-### 1. Create 
+### 1. Create
 In the `hooks` folder, create a file named `useInView.tsx`:
 
 ```tsx filename="useInView.tsx"
@@ -122,7 +122,7 @@ import AnimatedText from '@/components/AnimatedText';
 function SomeComponent() {
   return (
     <div className="my-page-content p-4 screen-h border ">
-      Scroll down to see the animation: 
+      Scroll down to see the animation:
     </div>
     <div className='screen-h p-4 border'>
         <AnimatedText text="Passion" />
