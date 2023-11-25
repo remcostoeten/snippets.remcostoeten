@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     "pages/custom.js"
-  ],
+, "pages/Miscellaneous/Copilot.mdx"  ],
   "exclude": [
     "node_modules"
   ]
