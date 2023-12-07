@@ -3,7 +3,7 @@
 
 Just a quick snippets because I tend to forget how to call enviorment variables on the frontend in NextJS.
 
-#Create a .env in the root <small>Make sure it's ignored by the `gitignore`</small>.
+# Create a .env in the root <small>Make sure it's ignored by the `gitignore`</small>.
 ```shell filename="root" copy
 touch .env
 ```
@@ -11,7 +11,7 @@ When deploying to Netlify you can also use a `.env.local` or `.env.production` w
 
 For this demo i'll be using a Google Firebase example. 
 
-#Assign variables to secret values like so
+# Assign variables to secret values like so
 
 ```env filename=".env" copy
   KEY=AIzaSyCR3sqaL1zGtKPMMo9_r6d7WxLH9u3m2bY
