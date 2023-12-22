@@ -1,1 +1,3 @@
-## Just some random markdown filles of various snippets I use on a day to day basis. Or some knowledge I want to share with the world, or just some docs for my own reference.
+## SSG site build on NextJS with TypeScript maintained via markdown files.
+
+This app containing various snippets, guides, and productivity scripts I use personally or for my job.
