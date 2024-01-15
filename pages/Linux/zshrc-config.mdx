@@ -3,19 +3,15 @@
 To edit `vim ~/.zshrc`
 
 to add something at the last line from commandline
-```bash filename=$= copy
 
-cat <<EOL>> ~/.zshrc
-alias x=y
-EOL
-```
-where eol stands for end of file.
 
-reload config with `source ~/.zshrc` or restart terminal.
+```vim 
 
-```bash
 alias mvbuild="mv postgress-auth-starter ..; build; mv ../postgress-auth-starter ."
 alias buildfull='bun run build-full'
+alias pnpmbuildfull='rmrf node_modules .next ; pnpm i ; prismagen; pnpm contentlayer build; pnpm run build'
+alias p='pnpm'
+alias b='build'
 source ~/sites/REMCOSTOETEN_DIR/shell-scripts/zsh-autocomplete
 
 pleio-dev-stack() {
@@ -26,7 +22,6 @@ pleio-dev-stack() {
     osascript -e 'tell application "iTerm" to activate' -e 'tell application "System Events" to tell process "iTerm" to keystroke "t" using command down' -e "tell application \"iTerm\" to tell current session of first window to write text \"cd ~/sites/pleio-dev-stack; docker-compose up\""
 }
 
-#alias for commit_message
 function gitall() {
     # If a second argument is provided, add only that file
     if [ "$2" != "" ]; then
@@ -41,16 +36,38 @@ function gitall() {
         git commit -m "$1"
     else
         # If no first argument is provided, use 'update' as the commit message
-        git commit -m update
+        git commit -m "update"
     fi
 
     git push origin HEAD
-
 }
+
+alias ga="gitall"
+
 #usage gitall "commit message" "file path"
 
 alias runp="pleio-dev-stack"
 autoload -U compinit && compinit
+
+alias master='git checkout master'
+alias develop='git checkout develop'
+alias main='git checkout main'
+
+rm_duplicates() {
+  local path="$1"
+  
+  # Check if the provided path is a directory
+  if [[ -d "$path" ]]; then
+    # Remove duplicates using fdupes
+    fdupes -rdN "$path"
+  else
+    echo "Error: $path is not a directory."
+  fi
+}
+
+# Optionally, you can create an alias for convenience
+alias rmcommand='fdupes -rdN'
+
 
 pr_create() {
     local target_branch="$1"
@@ -80,12 +97,12 @@ pr_create() {
     # Run the gh command
     gh pr create --base "$target_branch" --head "$current_branch" --title "$title" --body "$description"
 }
-
+alias airplay='uxplay'
 alias pr="pr_create"
 alias i="bun run install"
 alias r="rmrf node_modules .next"
-#alias node ="NODE_PATH=$(pwd)/node_modules"
-alias devstack='cd ~/sites/pleio-dev-stack/frontend && nohup yarn && yarn start & cd .. && nohup docker-compose up &'
+alias dup='docker-compose up'
+alias devstack='cd ~/sites/pleio-dev-stack/frontend && nohup yarn && yarn start & cd .. && nohupdocker-compose up &'
 # Define environment variables
 export REMCO=REMCOSTOETEN_DIR
 export PORTFOLIO=portfolio
@@ -95,6 +112,7 @@ export PLEIO_DIR=~/sites/pleio-dev-stack
 export SNIPPETS=~/snippets.remcostoeten
 export CURRENTSITE=~/sites/$REMCO$PORTFOLIO
 export ALARM=/home/remcostoeten/Music/alarm.mp3
+export BLOG=/home/remcostoeten/sites/blog_examples
 
 ########################
 #                      #
@@ -265,7 +283,7 @@ alias shell="cd ~/sites/$REMCO/shell-scripts"
 alias gop="cd $PLEIO_DIR"
 alias gopf="cd $PLEIO_DIR/frontend"
 # Go to personal website directory
-alias gor='j dir'
+alias gor='cd $BLOG'
 # Run a development server
 alias run="code . &&  bun run dev"
 # Restart a development server
@@ -356,7 +374,6 @@ source ~/.oh-my-zsh/oh-my-zsh.sh
 
 alias g='git'
 alias catcopy='cat "$1" | xclip -selection clipboard'
-
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
