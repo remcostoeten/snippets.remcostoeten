@@ -5,7 +5,8 @@ To edit `vim ~/.zshrc`
 to add something at the last line from commandline
 
 
-```vim 
+```shell filename='~/.zshrc' copy
+
 
 alias mvbuild="mv postgress-auth-starter ..; build; mv ../postgress-auth-starter ."
 alias buildfull='bun run build-full'
@@ -13,6 +14,8 @@ alias pnpmbuildfull='rmrf node_modules .next ; pnpm i ; prismagen; pnpm contentl
 alias p='pnpm'
 alias b='build'
 source ~/sites/REMCOSTOETEN_DIR/shell-scripts/zsh-autocomplete
+
+alias yarnstart='yarn && yarn start'
 
 pleio-dev-stack() {
     # Navigate to frontend directory, run yarn and start
@@ -55,7 +58,7 @@ alias main='git checkout main'
 
 rm_duplicates() {
   local path="$1"
-  
+
   # Check if the provided path is a directory
   if [[ -d "$path" ]]; then
     # Remove duplicates using fdupes
@@ -120,6 +123,23 @@ export BLOG=/home/remcostoeten/sites/blog_examples
 #                      #
 ########################
 alias alarm=countdown_timer
+gc() {
+  local message="$1"
+  shift
+
+  if [ -z "$message" ]; then
+    echo "Please provide a commit message."
+    return 1
+  fi
+
+  if [ $# -eq 0 ]; then
+    git commit -m "$message"
+  else
+    git add "$@"
+    git commit -m "$message"
+  fi
+}
+
 
 # Function to create a countdown timer
 # Function to create a countdown timer
@@ -184,130 +204,17 @@ addcommit() {
     git commit -m "$commit_message"
 }
 
-checkout() {
-    local branch=""
-    git checkout $branch
+# function to checkout branch with shoirtcut of only typing checkout
+
+checkoutbranch() {
+    git checkout "$1"
 }
+
+alias checkout=checkoutbranch
+
+
 alias p='python3'
 # Git add, commit, and push function with a custom commit message
-addcommitpush() {
-    git add .
-    local commit_message=""
-
-    for arg in "$@"; do
-        commit_message="$commit_message $arg"
-    done
-
-    shift "$(($# > 0 ? 1 : 0))"
-
-    git commit -m "$commit_message"
-
-    git push
-}
-# Function to create a file with specified content and filename
-createfile() {
-    if [ $# -lt 2 ]; then
-        echo "Usage: createfile <content> <filename>"
-        return 1
-    fi
-
-    local content="$1"
-    local filename="$2"
-
-    echo "$content" >"$filename"
-}
-
-########################
-#                      #
-#   custom aliases     #
-#                      #
-########################
-
-#######terminal########
-
-# Clear the terminal
-alias cc="clear"
-# Exit the terminal
-alias xx="exit"
-# Remove a file or directory recursively and forcefully
-alias rmrf="rm -rf"
-# Create a file with specified content and filename
-alias file='createfile'
-# Display system processes in real-time
-alias top='htop'
-# Run a command with sudo privileges
-alias s="sudo /home/remcostoeten/sites/shell-script/sudo.sh"' >> ~/.bashrc'
-#######Docker###########
-
-# Stop all running Docker containers
-alias stopdocker='docker-compose down && docker stop $(docker ps -aq)'
-# Remove all Docker containers
-alias rmcontainers='docker rm $(docker ps -aq)'
-# Run a Docker container with a specific configuration
-alias runfsv="cd ~/sites/dossier && git pull && code .  &&  docker-compose up"
-# Start a Docker container
-alias dstart="docker-compose up"
-#run api pleio only
-alias pbstart="cd ~/sites/pleio/ && docker-compose up api"
-#run nvim with vim alias
-alias vim='nvim'
-#source zsh
-alias szsh='source ~/.zshrc'
-#start zshrc
-alias zsh="vim ~/.zshrc"
-#run frontend pleio
-alias pfstart="cd ~/sites/pleio/frontend && yarn && yarn start"
-# Stop a Docker container
-alias dstop="docker-compose down"
-# Show running Docker containers
-alias dshow="docker ps"
-# Show logs of a Docker container
-alias dlog="docker-compose losg -f --tail=4"
-
-# Run .sh files more efficient
-alias runsh='sudo chmod +x *.sh && ./'
-
-# refresh zsh config
-alias rezsh='source ~/.zshrc'
-
-######Run site#########
-
-# Run a development server for a website
-
-alias rundocs="cd ~/sites/$REMCO/$SNIPPETS && code . && bun run dev;"
-# Run a development server for personal website
-alias runsite="cd $PERSONAL_WEBSITE && rmrf .next node_modules; bun i ;  code . && bun run dev"
-#go to shell scripts
-alias shell="cd ~/sites/$REMCO/shell-scripts"
-# Go to Pleio directory
-alias gop="cd $PLEIO_DIR"
-alias gopf="cd $PLEIO_DIR/frontend"
-# Go to personal website directory
-alias gor='cd $BLOG'
-# Run a development server
-alias run="code . &&  bun run dev"
-# Restart a development server
-alias restart="rm -rf node_modules/&& rm -rf .next/ &&  pnpm install &&  code .  &&  pnpm run dev"
-# Build
-alias build="bun run build"
-#build contentlayer
-alias content='bun contentlayer build'
-# Rebuild a development server
-alias rebuild="rm -rf node_modules/ &&  rm -rf .next/ && bun i  && bun run build"
-# Run a development server with a custom command
-alias br="bun run dev"
-alias npmrebuild="rmrf node_modules .next; npm i ;  npx prisma generate ; npm run build"
-####Git################
-
-# Git add all  expect node_modules, and .next
-alias ga='git add *'
-# Add and commit changes with a custom commit message
-alias c='addcommit'
-# Add, commit, and push changes with a custom commit message
-alias cpp='addcommitpush'
-# Git reset --hard shortcut
-alias reset-='git reset --hard'
-alias gcc='checkout'
 ####Copy content#######
 #copy pwd
 alias copypwd='pwd | xclip -selection clipboard'
@@ -337,7 +244,7 @@ alias d="cd ~/Desktop"
 
 # Translate JSON files using a translation service
 alias translate="yarn json-autotranslate --input src/js/i18n/messages/ --type key-based --matcher i18next --directory-structure ngx-translate --service deepl-free --config fb9ed0cc-2782-eaa0-d75b-76d5f8f92f87:fx,less --delete-unused-strings"
-
+alias pull='git pull'
 # Set ZSH configuration
 export ZSH=~/.oh-my-zsh
 # Set a random theme for the terminal
@@ -393,5 +300,6 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
+
 
 ```
