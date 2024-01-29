@@ -3,73 +3,19 @@
 To edit `vim ~/.zshrc`
 
 to add something at the last line from commandline
+```bash filename=$= copy
 
+cat <<EOL>> ~/.zshrc
+alias x=y
+EOL
+```
+where eol stands for end of file.
 
-```shell filename='~/.zshrc' copy
+reload config with `source ~/.zshrc` or restart terminal.
 
+``` vim  filename='~/.zshrc'
 
-alias mvbuild="mv postgress-auth-starter ..; build; mv ../postgress-auth-starter ."
-alias buildfull='bun run build-full'
-alias pnpmbuildfull='rmrf node_modules .next ; pnpm i ; prismagen; pnpm contentlayer build; pnpm run build'
-alias p='pnpm'
-alias b='build'
-source ~/sites/REMCOSTOETEN_DIR/shell-scripts/zsh-autocomplete
-
-alias yarnstart='yarn && yarn start'
-
-pleio-dev-stack() {
-    # Navigate to frontend directory, run yarn and start
-    cd ~/sites/pleio-dev-stack/frontend && yarn && yarn start
-
-    # Open a new terminal tab and navigate to the main directory, run docker-compose up
-    osascript -e 'tell application "iTerm" to activate' -e 'tell application "System Events" to tell process "iTerm" to keystroke "t" using command down' -e "tell application \"iTerm\" to tell current session of first window to write text \"cd ~/sites/pleio-dev-stack; docker-compose up\""
-}
-
-function gitall() {
-    # If a second argument is provided, add only that file
-    if [ "$2" != "" ]; then
-        git add "$2"
-    else
-        # If no second argument is provided, add all changes
-        git add .
-    fi
-
-    # If a first argument is provided, use it as the commit message
-    if [ "$1" != "" ]; then
-        git commit -m "$1"
-    else
-        # If no first argument is provided, use 'update' as the commit message
-        git commit -m "update"
-    fi
-
-    git push origin HEAD
-}
-
-alias ga="gitall"
-
-#usage gitall "commit message" "file path"
-
-alias runp="pleio-dev-stack"
-autoload -U compinit && compinit
-
-alias master='git checkout master'
-alias develop='git checkout develop'
-alias main='git checkout main'
-
-rm_duplicates() {
-  local path="$1"
-
-  # Check if the provided path is a directory
-  if [[ -d "$path" ]]; then
-    # Remove duplicates using fdupes
-    fdupes -rdN "$path"
-  else
-    echo "Error: $path is not a directory."
-  fi
-}
-
-# Optionally, you can create an alias for convenience
-alias rmcommand='fdupes -rdN'
+alias mvbuild="mv postgress-auth-starter ..; build; mv ../postgress-auth-starter ." alias buildfull='bun run build-full' alias pnpmbuildfull='rmrf node_modules .next ; pnpm i ; prismagen; pnpm contentlayer build; pnpm run build' alias p='pnpm' alias b='build' source ~/sites/REMCOSTOETEN_DIR/shell-scripts/zsh-autocomplete
 
 
 pr_create() {
@@ -100,22 +46,19 @@ pr_create() {
     # Run the gh command
     gh pr create --base "$target_branch" --head "$current_branch" --title "$title" --body "$description"
 }
-alias airplay='uxplay'
+
 alias pr="pr_create"
-alias i="bun run install"
-alias r="rmrf node_modules .next"
-alias dup='docker-compose up'
-alias devstack='cd ~/sites/pleio-dev-stack/frontend && nohup yarn && yarn start & cd .. && nohupdocker-compose up &'
+
+alias devstack='cd ~/sites/pleio-dev-stack/frontend && nohup yarn && yarn start & cd .. && nohup docker-compose up &'
 # Define environment variables
 export REMCO=REMCOSTOETEN_DIR
-export PORTFOLIO=portfolio
+export PORTFOLIO=Portfolio-Grid-UI
 # Variables for personal website, Pleio dev stack, and snippets
 export PERSONAL_WEBSITE=~/sites/$REMCO/$PORTFOLIO
 export PLEIO_DIR=~/sites/pleio-dev-stack
 export SNIPPETS=~/snippets.remcostoeten
 export CURRENTSITE=~/sites/$REMCO$PORTFOLIO
 export ALARM=/home/remcostoeten/Music/alarm.mp3
-export BLOG=/home/remcostoeten/sites/blog_examples
 
 ########################
 #                      #
@@ -123,23 +66,6 @@ export BLOG=/home/remcostoeten/sites/blog_examples
 #                      #
 ########################
 alias alarm=countdown_timer
-gc() {
-  local message="$1"
-  shift
-
-  if [ -z "$message" ]; then
-    echo "Please provide a commit message."
-    return 1
-  fi
-
-  if [ $# -eq 0 ]; then
-    git commit -m "$message"
-  else
-    git add "$@"
-    git commit -m "$message"
-  fi
-}
-
 
 # Function to create a countdown timer
 # Function to create a countdown timer
@@ -204,22 +130,122 @@ addcommit() {
     git commit -m "$commit_message"
 }
 
-# function to checkout branch with shoirtcut of only typing checkout
-
-checkoutbranch() {
-    git checkout "$1"
+checkout() {
+    local branch=""
+    git checkout $branch
 }
 
-alias checkout=checkoutbranch
-
-
-alias p='python3'
 # Git add, commit, and push function with a custom commit message
+addcommitpush() {
+    git add .
+    local commit_message=""
+
+    for arg in "$@"; do
+        commit_message="$commit_message $arg"
+    done
+
+    shift "$(($# > 0 ? 1 : 0))"
+
+    git commit -m "$commit_message"
+
+    git push
+}
+# Function to create a file with specified content and filename
+createfile() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: createfile <content> <filename>"
+        return 1
+    fi
+
+    local content="$1"
+    local filename="$2"
+
+    echo "$content" >"$filename"
+}
+
+########################
+#                      #
+#   custom aliases     #
+#                      #
+########################
+
+#######terminal########
+
+# Clear the terminal
+alias cc="clear"
+# Exit the terminal
+alias xx="exit"
+# Remove a file or directory recursively and forcefully
+alias rmrf="rm -rf"
+# Create a file with specified content and filename
+alias file='createfile'
+# Display system processes in real-time
+alias top='htop'
+# Run a command with sudo privileges
+alias s="sudo /home/remcostoeten/sites/shell-script/sudo.sh"' >> ~/.bashrc'
+#######Docker###########
+
+# Stop all running Docker containers
+alias stopdocker='docker-compose down && docker stop $(docker ps -aq)'
+# Remove all Docker containers
+alias rmcontainers='docker rm $(docker ps -aq)'
+# Run a Docker container with a specific configuration
+alias runfsv="cd ~/sites/dossier && git pull && code .  &&  docker-compose up"
+# Start a Docker container
+alias dstart="docker-compose up"
+#run api pleio only
+alias pbstart="cd ~/sites/pleio/ && docker-compose up api"
+#start zshrc
+alias zsh="vim ~/.zshrc"
+#run frontend pleio
+alias pfstart="cd ~/sites/pleio/frontend && yarn && yarn start"
+# Stop a Docker container
+alias dstop="docker-compose down"
+# Show running Docker containers
+alias dshow="docker ps"
+# Show logs of a Docker container
+alias dlog="docker-compose losg -f --tail=4"
+
+######Run site#########
+
+# Run a development server for a website
+
+alias rundocs="cd ~/sites/$REMCO/$SNIPPETS && code . && bun run dev;"
+# Run a development server for Pleio
+alias runp="cd $PLEIO_DIR; cd frontend; code . ; docker-compose up"
+# Run a development server for personal website
+alias runsite="cd $PERSONAL_WEBSITE && rmrf .next node_modules; bun i ;  code . && bun run dev"
+#go to shell scripts
+alias shell="cd ~/sites/$REMCO/shell-scripts"
+# Go to Pleio directory
+alias gop="cd $PLEIO_DIR"
+alias gopf="cd $PLEIO_DIR/frontend"
+# Go to personal website directory
+alias gor="cd $PERSONAL_WEBSITE"
+# Run a development server
+alias run="code . &&  bun run dev"
+# Restart a development server
+alias restart="rm -rf node_modules/&& rm -rf .next/ &&  pnpm install &&  code .  &&  pnpm run dev"
+# Rebuild a development server
+alias rebuild="rm -rf node_modules/ &&  rm -rf .next/ &&  pnpm i  && pnpm run build"
+# Run a development server with a custom command
+alias br="bun run dev"
+# Run a build command with a custom command
+alias bb="bun run build"
+
+####Git################
+
+# Add and commit changes with a custom commit message
+alias c='addcommit'
+# Add, commit, and push changes with a custom commit message
+alias cpp='addcommitpush'
+# Git reset --hard shortcut
+alias reset-='git reset --hard'
+alias gcc='checkout'
 ####Copy content#######
-#copy pwd
-alias copypwd='pwd | xclip -selection clipboard'
+
 # Copy the contents of a file to the clipboard
-alias cattcopy='cat $1 | xclip -selection clipboard'
+alias catcopy='cat $1 | xclip -selection clipboard'
 # Display the contents of a file with syntax highlighting
 alias cat="bat" #requires
 
@@ -234,26 +260,28 @@ alias lintfix="bun lint --fix"
 alias lint="bun lint"
 alias fastclick="j shell; ./fastclick.sh"
 alias click="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh"
-
 # Run a development server with npm or pnpm
+alias dev="npm | pnpm run dev"
+# Allow execution of a file with sudo privileges
 alias allow='sudo chmod +x $1'
 # Connect to a VPN using Tailscale
 alias vpn="tailscale"
 # Go to Desktop directory
 alias d="cd ~/Desktop"
-
 # Translate JSON files using a translation service
 alias translate="yarn json-autotranslate --input src/js/i18n/messages/ --type key-based --matcher i18next --directory-structure ngx-translate --service deepl-free --config fb9ed0cc-2782-eaa0-d75b-76d5f8f92f87:fx,less --delete-unused-strings"
-alias pull='git pull'
+# Open a custom cursor application
+alias cursor="cd ~/Programs && ./cursor.AppImage"
+
 # Set ZSH configuration
 export ZSH=~/.oh-my-zsh
 # Set a random theme for the terminal
 PS1='%B%{$fg[yellow]%}%~/ %{$fg_bold[cyan]%}$(git_prompt_info)%{$fg_bold[blue]%}
 %{$reset_color%}%B'
 RPROMPT='%T'
-#ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
-#ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
-#ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$fg[green]%}"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$fg[green]%}"
 
 # Set list of themes to load
 plugins=(
@@ -263,14 +291,10 @@ plugins=(
     colorize
     zsh-autosuggestions
     gh
-    exa
-    powerlevel9k
-    navi
     sudo
     zsh-syntax-highlighting
-) plugins=(zsh_codex)
+)
 
-bindkey '^X' create_completion
 # Set completion options
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -279,27 +303,9 @@ source ~/.oh-my-zsh/oh-my-zsh.sh
 # bun completions
 [ -s "/home/remcostoeten/.bun/_bun" ] && source "/home/remcostoeten/.bun/_bun"
 
-alias g='git'
-alias catcopy='cat "$1" | xclip -selection clipboard'
-
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 [[ -s /usr/share/autojump/autojump.zsh ]] && source /usr/share/autojump/autojump.zsh
-# pnpm
-export PNPM_HOME="/home/remcostoeten/.local/share/pnpm"
-case ":$PATH:" in
-*":$PNPM_HOME:"*) ;;
-*) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-    eval "$(pyenv init -)"
-fi
-
-
 ```
