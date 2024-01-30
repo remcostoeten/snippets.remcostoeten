@@ -2,20 +2,10 @@
 
 To edit `vim ~/.zshrc`
 
-to add something at the last line from commandline
-```bash filename=$= copy
+```bash filename='~/.zshrc
 
-cat <<EOL>> ~/.zshrc
-alias x=y
-EOL
-```
-where eol stands for end of file.
-
-reload config with `source ~/.zshrc` or restart terminal.
-
-``` vim  filename='~/.zshrc'
-
-alias mvbuild="mv postgress-auth-starter ..; build; mv ../postgress-auth-starter ." alias buildfull='bun run build-full' alias pnpmbuildfull='rmrf node_modules .next ; pnpm i ; prismagen; pnpm contentlayer build; pnpm run build' alias p='pnpm' alias b='build' source ~/sites/REMCOSTOETEN_DIR/shell-scripts/zsh-autocomplete
+alias vim='nvim'
+alias szsh='source ~/.zshrc'
 
 
 pr_create() {
@@ -44,6 +34,7 @@ pr_create() {
     read -r title description <<<"$input"
 
     # Run the gh command
+    
     gh pr create --base "$target_branch" --head "$current_branch" --title "$title" --body "$description"
 }
 
@@ -130,11 +121,7 @@ addcommit() {
     git commit -m "$commit_message"
 }
 
-checkout() {
-    local branch=""
-    git checkout $branch
-}
-
+alias build='rm -rf ./next ; rm -rf node_modules; bun i ;  bun run build'
 # Git add, commit, and push function with a custom commit message
 addcommitpush() {
     git add .
@@ -218,6 +205,10 @@ alias runsite="cd $PERSONAL_WEBSITE && rmrf .next node_modules; bun i ;  code . 
 #go to shell scripts
 alias shell="cd ~/sites/$REMCO/shell-scripts"
 # Go to Pleio directory
+alias pull='git pull'
+alias push='git push'
+alias reset='git reset --hard' 
+alias checkout='git checkout'
 alias gop="cd $PLEIO_DIR"
 alias gopf="cd $PLEIO_DIR/frontend"
 # Go to personal website directory
@@ -251,15 +242,23 @@ alias cat="bat" #requires
 
 ####Misc################
 alias copyremote="git remote -v | awk '{print $2}' | uniq | xclip -selection clipboard"
+
+# Sudo apt-get install alias
 alias install="sudo apt-get install"
+
+# Prisma shorthand aliasses
 alias prismapush="npx prisma db push"
 alias prismapull="npx prisma db pull"
 alias prismagen="npx prisma generate"
 alias migratedev="npx prisma migrate dev"
-alias lintfix="bun lint --fix"
-alias lint="bun lint"
-alias fastclick="j shell; ./fastclick.sh"
+
+# Autoclicker 
 alias click="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh"
+# Autoclick very fast
+alias clickfast="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh -t 500 -s 0.5"  
+# Autoclick slow
+alias clickslow="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh -t 500 -s 2.5"
+
 # Run a development server with npm or pnpm
 alias dev="npm | pnpm run dev"
 # Allow execution of a file with sudo privileges
@@ -308,4 +307,5 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 [[ -s /usr/share/autojump/autojump.zsh ]] && source /usr/share/autojump/autojump.zsh
+'
 ```
