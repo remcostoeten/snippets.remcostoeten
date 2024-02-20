@@ -1,0 +1,58 @@
+## Clean checkout branch with migrations
+
+### Use if postgress errors and I need a clean slate.
+
+```shell filename='checkout.sh' copy
+#!/usr/bin/env bash
+
+docker-compose down -v
+docker-compose pull
+docker-compose build
+docker-compose up -d --remove-orphans
+
+while [[ $(docker-compose ps | grep 8888 | grep running | grep admin) == "" ]]; do
+	echo "Admin not running yet"
+	sleep 3
+done
+
+while [[ $(docker-compose ps | grep starting) != "" ]]; do
+	echo "Some containers are still starting"
+	sleep 3
+done
+
+while [[ $(docker-compose exec admin python manage.py showmigrations | grep '\[ \]') != "" ]]; do
+	echo "Migrations not ready jet. Waiting..."
+	sleep 3
+done
+
+echo "Create 'public' tenant..."
+docker-compose exec admin /app/manage.py create_tenant --noinput --schema_name=public --name=public --domain-domain=localhost
+
+# test staat voor schema naam. Astrix omdat je meerdere tests kan hebben
+rm -rf backend/media/test*
+
+docker-compose exec admin /app/manage.py restore_tenant --backup-folder 20240206_test1 --schema test1 --domain test1.pleio.local
+
+#docker-compose exec admin /app/manage.py create_tenant --noinput --schema_name=test1 --name=test1 --domain-domain=test1.pleio.local
+
+# De plaats waar de backup opgeslagen wordt die je terug kan zetten eventueel. backend/media/backups/[<datum>_test1].
+# Die kan je aanmaken door de volgende instructie:
+#docker-compose exec api python manage.py backup_tenant --schema test1
+
+# Deze regel vervangt de create_tenant van test1 van hierboven, als je wilt werken vanuit een backup
+# docker-compose exec admin /app/manage.py restore_tenant --backup-folder [<datum>_test1] --schema test1 --domain test1.pleio.local
+
+docker-compose exec admin /app/manage.py all_tenants_command deploy --all
+
+# Elasticsearch initialiseren
+docker-compose exec background celery -A backend2.celery call core.tasks.elasticsearch_tasks.elasticsearch_recreate_indices
+docker-compose exec background celery -A backend2.celery call core.tasks.elasticsearch_tasks.elasticsearch_rebuild_all
+
+# Alleen als je in de localhost:8888 moet zijn
+# echo "Create superuser..."
+docker-compose exec admin /app/manage.py createsuperuser --email=remco@admin.nl --name=Remco
+
+# Leg uit wat we allemaal kunnen at this point in time:
+echo "Visit http://localhost:8888/admin/login/"
+echo "Visit http://test1.pleio.local:8000/"
+```
