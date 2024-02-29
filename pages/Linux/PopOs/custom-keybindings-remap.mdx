@@ -1,0 +1,29 @@
+
+## Remap any character without additional libraries. 
+
+## Should also be possible with rebindkey through zsh but couldn;t get it to work so came up with this
+
+
+### Create a shell script with echo 
+```bash filename='rename-pipe-operator.sh'
+echo "|"
+``
+
+### Then in zsh config
+```bash filename='~/.zshrc
+
+# Define a function that executes the shell script
+echo_pipe_operator() {
+  bash ~/sites/REMCOSTOETEN_DIR/custom-shell-scripts/echo-pipe-operator.sh
+}
+
+# Use zle to create a new widget that calls the function
+zle -N echo_pipe_operator
+
+# Bind the key sequence to the widget
+bindkey '^A' echo_pipe_operator
+# Replace 'KEYSEQUENCE' with the actual key sequence for Ctrl + Shift + A in your terml
+
+```
+
+Source zsh or restart terminal and et voila

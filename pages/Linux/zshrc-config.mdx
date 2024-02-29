@@ -11,7 +11,7 @@ alias szsh='source ~/.zshrc'
 pr_create() {
     local target_branch="$1"
     shift # Move to the next argument
-    local input="$*"
+    local i add  nput="$*"
 
     # Check if the target branch is provided
     if [[ -z "$target_branch" ]]; then
@@ -34,7 +34,7 @@ pr_create() {
     read -r title description <<<"$input"
 
     # Run the gh command
-    
+
     gh pr create --base "$target_branch" --head "$current_branch" --title "$title" --body "$description"
 }
 
@@ -207,7 +207,7 @@ alias shell="cd ~/sites/$REMCO/shell-scripts"
 # Go to Pleio directory
 alias pull='git pull'
 alias push='git push'
-alias reset='git reset --hard' 
+alias reset='git reset --hard'
 alias checkout='git checkout'
 alias gop="cd $PLEIO_DIR"
 alias gopf="cd $PLEIO_DIR/frontend"
@@ -252,10 +252,10 @@ alias prismapull="npx prisma db pull"
 alias prismagen="npx prisma generate"
 alias migratedev="npx prisma migrate dev"
 
-# Autoclicker 
+# Autoclicker
 alias click="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh"
 # Autoclick very fast
-alias clickfast="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh -t 500 -s 0.5"  
+alias clickfast="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh -t 500 -s 0.5"
 # Autoclick slow
 alias clickslow="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh -t 500 -s 2.5"
 
