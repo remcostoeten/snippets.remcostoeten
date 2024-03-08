@@ -68,7 +68,7 @@ const config: DocsThemeConfig = {
 		link: 'https://discord.com',
 	},
 	footer: {
-		text: 'snippets.remcostoeten.com 🚀',
+		text: 'snippets.remcostoeten.nl 🚀',
 	},
 };
 
