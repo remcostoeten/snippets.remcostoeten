@@ -6,6 +6,12 @@
     "href": "https://remcostoeten.nl",
     "newWindow": true
   },
+  "blog": {
+    "title": "Blog /new portfolio site (WiP) ↗",
+    "type": "page",
+    "href": "https://blog.remcostoeten.nl",
+    "newWindow": true
+  },
   "kanban": {
     "title": "Go to kanban ↗",
     "type": "page",
