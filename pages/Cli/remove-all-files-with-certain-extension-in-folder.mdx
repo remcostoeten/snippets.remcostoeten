@@ -1,0 +1,35 @@
+# How to remove all files in a directory with a certain extension
+
+### In this case we want to remove all files with the extension .jpg
+
+In our current folder I have these files
+
+```
+├── a.jpg
+├── b.jpg
+├── c.jpg
+├── d.png
+├── somemovie.mp4
+└── someothermovie.mp5
+```
+
+And after running
+
+```bash
+find . -type f -name '*.jpg' -exec rm -f {} +
+```
+
+I am left with
+
+```bash
+.
+├── d.png
+├── somemovie.mp4
+└── someothermovie.mp5
+```
+
+If you wanted to exclude certain files you could use client;
+
+```bash
+find . -type f \( -name '*.jpg' ! -name 'exclude.jpg' ! -name 'another_exclude.jpg' \) -exec rm -f {} +
+```
