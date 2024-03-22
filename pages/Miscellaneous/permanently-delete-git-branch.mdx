@@ -1,0 +1,10 @@
+# Permanently delete a git feature branch locally and remotely
+
+```bash filename="delete locally" copy
+git checkout $BRANCH_NAME$
+git branch -D $BRANCH_NAME$
+```
+
+```bash filename="delete remotely" copy
+git push origin --delete $BRANCH_NAME$
+```
