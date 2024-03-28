@@ -1,13 +1,13 @@
 
-## Remap any character without additional libraries. 
+## Remap any character without additional libraries.
 
 ## Should also be possible with rebindkey through zsh but couldn;t get it to work so came up with this
 
 
-### Create a shell script with echo 
+### Create a shell script with echo
 ```bash filename='rename-pipe-operator.sh'
 echo "|"
-``
+```
 
 ### Then in zsh config
 ```bash filename='~/.zshrc
@@ -27,3 +27,5 @@ bindkey '^A' echo_pipe_operator
 ```
 
 Source zsh or restart terminal and et voila
+
+> check `xev` for key actions
