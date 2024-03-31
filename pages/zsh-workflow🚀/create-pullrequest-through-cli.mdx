@@ -1,0 +1,59 @@
+---
+title: Create github PR with ease
+date: 2024-03-31
+author: Remco Stoeten
+tags: [code, programming, technology]
+---
+
+# Create pullrequest through cli
+
+> Github cli is needed
+`npm i gh`
+
+Then add the following to your `zshrc` config
+
+Add this to your zsh config
+
+```bash
+    echo "<scipt-from-below>" >> ~/.zshrc
+```bash
+
+or `vim ~/.zshrc` and paste the following
+
+```bash
+ echo "pr_create() {
+    local target_branch="$1"
+    shift # Move to the next argument
+    local input="$*"
+
+    # Check if the target branch is provided
+    if [[ -z "$target_branch" ]]; then
+        echo "Error: Please provide a target branch."
+        return 1
+    fi
+
+    # Get the current branch
+    local current_branch
+    current_branch=$(git symbolic-ref --short HEAD)
+
+    # Check if there are at least two arguments separated by '/'
+    if [[ -z "$input" || ! "$input" == */* ]]; then
+        echo "Error: Please provide a title and description separated by '/'."
+        return 1
+    fi
+
+    # Extract title and description from the input
+    local IFS='/'
+    read -r title description <<<"$input"
+
+    # Run the gh command
+
+    gh pr create --base "$target_branch" --head "$current_branch" --title "$title" --body "$description"
+}
+
+alias pr=pr_create" >> ~/.zshrc
+```
+
+Then run `source ~/.zshrc` to apply the changes
+
+Now you can create a pull request by running `pr <target_branch> <title>/<description>` so for example `pr main "Add new feature"/"This is a new feature"`
