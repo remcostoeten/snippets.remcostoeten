@@ -1,7 +1,4 @@
-    
-
-
-# copy the entire file coontent to clipboard.
+# copy the entire file content to clipboard.
 
 Open zsh via `vim ~/.zshrc` and add the following function:
 
@@ -35,10 +32,5 @@ Hello World
 If feeling mentally sick you could also do `function_copy_file_to_clipboard note.txt` and the result will be the same.
 
 
+xoxo,
 
-
-
-
-
-alias copy=function_copy_file_contents
-alias copy=copy_file_content
