@@ -12,11 +12,7 @@
     "url": "https://github.com/remcostoeten/docs-remcostoeten"
   },
   "author": "Remco Stoeten",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/remcostoeten/docs-remcostoeten"
-  },
-  "homepage": "https://github.com/remcostoeten/docs-remcostoeten",
+  "homepage": "https://snippets.remcostoeten.com",
   "dependencies": {
     "fs": "^0.0.1-security",
     "next": "^13.0.6",
