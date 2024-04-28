@@ -31,6 +31,5 @@ Hello World
 
 If feeling mentally sick you could also do `function_copy_file_to_clipboard note.txt` and the result will be the same.
 
-
 xoxo,
 
