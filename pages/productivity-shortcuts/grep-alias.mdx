@@ -1,0 +1,50 @@
+# Custom Zsh Function for Recursive Search
+
+Create a custom Zsh function to search for a string recursively in the current directory, excluding `node_modules` and `.next` directories.
+
+## Steps
+
+### Open Your `.zshrc` File
+
+```sh
+vim ~/.zshrc
+```
+
+Or create aliases to quickly edit and reload your `.zshrc` file:
+
+```sh
+alias zsh='vim ~/.zshrc'
+alias szsh='source ~/.zshrc'
+```
+
+### Add the Custom `find` Function
+
+```
+find() {
+    if [[ $# -eq 1 ]]; then
+        grep -r --exclude-dir=node_modules --exclude-dir=.next "$1" .
+    else
+        command find "$@"
+    fi
+}
+```
+
+### Reload Your `.zshrc` File
+
+```sh
+szsh
+```
+
+## Usage
+
+### Searching for a String
+
+```sh
+find "search_string"
+```
+
+### Using the Standard `find` Command
+
+```sh
+find . -name "*.txt"
+```
