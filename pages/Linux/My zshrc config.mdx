@@ -1,53 +1,710 @@
-#zshrc
+# My Zshrc Configuration
+
+This document outlines the current configuration of my Zsh shell. It's written in MDX format, which allows for the use of JSX in markdown documents, making it a powerful tool for creating rich text experiences.
 
 `vim ~/.zshrc`
 
-```bash filename=".zshrc"
- alias cc="clear"
- │ alias xx="exit"
- │ alias dev="npm | pnpm run dev"bat
- │ alias catcopy='cat "$1" | xclip -selection clipboard'
- │ alias batcopy='bat "$1" | xclip -selection clipboard'
- │ alias rmrf="rm -rf"
- │ alias cat="bat"
+```bash filename='~/.zshrc' copy
+export PERSONAL_PANEL='/home/remcostoeten/projects/personal-panel'
+alias runpanel='cd $PERSONAL_PANEL && code . && pnpm next dev --turbo'
 
-```
+# Set the default editor
+export EDITOR="nvim"
 
-cd fsv ; init docker; run fsv containers.
+# Create a global copy Variable
+export COPY='| xclip -selection clipboard'
 
-```bash filename=".zshrc"
-function fsv() {
-    cd ~/sites/fsv
-        sleep 1
-    docker-compose up &
-│       sleep 2
-    gnome-terminal --tab -- bash -c "docker-compose -f docker-compose.fsv.yml up; exec zsh"
+fnc_convert_webm_to_mp4() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: convert_webm_to_mp4 <input_file.webm> [output_file.mp4]"
+        return 1
+    fi
+
+    local input_file="$1"
+    local output_file="${2:-${input_file%.webm}.mp4}"
+
+    if [[ ! -f "$input_file" ]]; then
+        echo "Input file '$input_file' does not exist."
+        return 1
+    fi
+
+    ffmpeg -i "$input_file" -codec:v libx264 -crf 23 -preset medium -codec:a aac -b:a 128k "$output_file"
+
+    if [[ $? -eq 0 ]]; then
+        echo "Conversion successful: '$output_file'"
+    else
+        echo "Conversion failed."
+    fi
 }
-```
 
-copy content of cat / bat
+alias convert-mp4="fnc_convert_webm_to_mp4"  #
 
-```bash filename =".zshrc"
 
- function catcopy {
-  if [ -z "$1" ]; then
-    echo "Usage: catcopy <filename>"
-  else
-     echo "File content copied to clipboard."
-   fi
-  }
-```
+toggle_audio_output() {
+    # Get the current default sink
+    current_sink=$(pactl info | grep "Default Sink" | cut -d ' ' -f3)
 
-`source ~/.zshrc`
+    # Define the sinks
+    line_out_sink="369" # Replace with the actual sink index for Line Out if different
+    steelseries_sink="59" # This is the index for the SteelSeries Arctis 7 stereo-game profile
 
-#todo:
--Make catcopy | batcopy work.
-Setup Neovim LSP enviorment.
+    # Toggle between the sinks
+    if [ "$current_sink" = "$line_out_sink" ]; then
+        pactl set-default-sink $steelseries_sink
+    else
+        pactl set-default-sink $line_out_sink
+    fi
+}
 
-#Packages
-https://github.com/sharkdp/bat
-nvm
+fnc_commit_file_to_master_with_message() {
+  # Get the current branch name
+  local current_branch=$(git rev-parse --abbrev-ref HEAD)
 
-```
+  # Stash all changes
+  git stash --all
+
+  # Checkout to the master branch
+  git checkout master
+
+  # Apply the changes of the specific file from the stash
+  git checkout stash@{0} -- $1
+
+  # Add the specific file to the staging area
+  git add $1
+
+  # Commit the changes
+  git commit -m "$2"
+
+  # Push the changes to the master branch
+  git push origin master
+
+  # Checkout back to the original branch
+  git checkout $current_branch
+
+  # Apply the stashed changes
+  git stash pop
+}
+
+# Global run pretteir with a custom (global) .prettierignore. This runs prettier on ALL the files recursive from the current dir  with exclusion of what's in the global .prettierignore which sits at the root (~/.prettierignore).
+alias format='prettier --write "**/*" --ignore-path /home/remcostoeten/.prettierignore'
+
+alias singlecommit="fnc_commit_file_to_master_with_message"
+
+# Create an alias for the function
+alias toggleaudio="toggle_audio_output"
+
+alias ls="ll"
+alias Bd="code . ;bun dev"
+alias b="bun"
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+
+export DEVSTACK='/home/remcostoeten/development/pleio-dev-stack'
+
+
+#drizzle shortcuts
+alias drizpush='npx drizzle-kit push'
+alias migrate='npx drizzle-kit migrate'
+alias generate='npx drizzle-kit generate'
+alias studio='npx drizzle-kit studio'
+
+alias show='docker ps'
+alias build='pnpm i; pnpm build'
+# ToDO wowrk on new aliases and functions
+alias resethead="git reset HEAD~"
+alias master='git checkout master'
+# #VARIABLES
+
+# #FUNCTIONS
+
+# #ALIASSES
+
+# #PATHS
+# source "${HOME}/.zgen/zgen.zsh"
+# zgen load marzocchi/zsh-notify
+# zgen save
+
+# alias p='python3'
+# alias b='bun'
+
+# ## git
+# alias g='git'
+# alias checkout='git checkout'
+# alias status='git status'
+ alias newbranch='git checkout -b'
+# alias pull='git pull'
+# alias push='git push'
+# alias fetch='git fetch'
+# alias reset='git reset --hard'
+# alias master='git checkout master'
+
+
+#super to mouse left
+# simulate_super() {
+    # xdotool key Super_L
+# }
+
+# bindkey 'A' echo_pipe_operator
+# Replace 'KEYSEQUENCE' with the actual key sequence for Ctrl + Shift + A in your terml
+
+# bindkey -s '\e[1;3;32~' 'simulate_super\n'
+
+# Use zle to create a new widget that calls the function
+# zle -N echo_pipe_operator
+
+# Bind the key sequence to the widget
+# bindkey '^A' echo_pipe_operator
+# Replace 'KEYSEQUENCE' with the actual key sequence for Ctrl + Shift + A in your terml
+
+# #EXPORTS
+
+
+#### old
+alias addshad='./add-components.sh'
+alias vim='nvim'
+alias szsh='source ~/.zshrc'
+
+## run scraper
+export PYTHONSCRAPER='~/sites/whatsapp-flask-scraper/'
+
+alias scraper='cd ~/sites/PYTHONSCRAPER '
+alias dev='cd /home/remcostoeten/development'
+
+pr_create() {
+    local target_branch="$1"
+    shift # Move to the next argument
+    local input="$*"
+
+    # Check if the target branch is provided
+    if [[ -z "$target_branch" ]]; then
+        echo "Error: Please provide a target branch."
+        return 1
+    fi
+
+    # Get the current branch
+    local current_branch
+    current_branch=$(git symbolic-ref --short HEAD)
+
+    # Check if there are at least two arguments separated by '/'
+    if [[ -z "$input" || ! "$input" == */* ]]; then
+        echo "Error: Please provide a title and description separated by '/'."
+        return 1
+    fi
+
+    # Extract title and description from the input
+    local IFS='/'
+    read -r title description <<<"$input"
+
+    # Run the gh command
+
+    gh pr create --base "$target_branch" --head "$current_branch" --title "$title" --body "$description"
+}
+
+alias generateauth='openssl rand -base64 32'
+
+delete_branch() {
+    local branch_name="$1"
+
+    # Get the current branch
+    local current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+    # Check if the current branch is the one to be deleted
+    if [ "$current_branch" = "$branch_name" ]; then
+        # Fallback branch in case the current branch is to be deleted
+        local fallback_branch="master"  # You can change this to 'dev' or any other fallback branch you prefer
+
+        # Check if the fallback branch exists
+        if git rev-parse --verify "$fallback_branch" >/dev/null 2>&1; then
+            git checkout "$fallback_branch"
+        else
+            echo "Fallback branch '$fallback_branch' not found. Unable to switch branches."
+            return 1
+        fi
+    fi
+
+    # Confirming before creating a merge request
+    read -r "?Do you want to create a merge request before deleting branch '$branch_name'? [y/N] " create_mr
+
+    if [[ "$create_mr" =~ ^[Yy]$ ]]; then
+        # Check if gh cli is installed
+       if ! command -v gh &>/dev/null; then
+            echo "GitHub CLI (gh) is reqasrunuired to create a merge request."
+            return 1
+        fi
+
+        # Create a merge request using gh cli
+        gh pr create --base "$fallback_branch" --head "$branch_name" --title "Merge $branch_name into $fallback_branch" --body "Please review and merge this branch before deletion."
+        echo "Merge request created successfully."
+    fi
+
+    # Confirming before deletion
+    read -r "?Are you sure you want to delete branch '$branch_name' locally and remotely? [y/N] " response
+
+    # Check if the response is affirmative
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+        # Deleting locally
+        git branch -d "$branch_name"
+
+        # Deleting remotely
+        git push origin --delete "$branch_name"
+
+        echo "Branch '$branch_name' deleted locally and remotely."
+    else
+        echo "Operation aborted."
+    fi
+}
+
+# Function to create a commit with multiple files
+create_commit_two() {
+    local dir="$1"
+    local commit_message="${*:2}"
+    local amend="$3"
+
+    # Check if a directory and commit message are provided
+    if [[ -z "$dir" ]] || [[ -z "$commit_message" ]]; then
+        echo "Error: Please provide a directory and a commit message."
+        return 1
+    fi
+
+    # Add all files in the specified directory
+    git add "$dir"/*
+
+    # If the amend flag is set, amend the commit
+    if [[ "$amend" == "amend" ]]; then
+        git commit --amend -m "$commit_message"
+    else
+        # Commit the changes
+        git commit -m "$commit_message"
+    fi
+
+    echo "Changes committed successfully."
+}
+
+# Create a commit with multiple files
+# Usage: commit <directory> <commit_message> [amend]
+# Example: commit src "Add new feature" amend
+
+alias commit="create_commit_two"
+
+
+create_commit() {
+    local filename="$1"
+    local commit_message="${*:2}"
+    local amend="$3"
+
+    # Check if a filename and commit message are provided
+    if [[ -z "$filename" ]] || [[ -z "$commit_message" ]]; then
+        echo "Error: Please provide a filename and a commit message."
+        return 1
+    fi
+
+    # Add the specified file only
+    git add "$filename" -f
+
+    # If the amend flag is set, amend the commit
+    if [[ "$amend" == "amend" ]]; then
+        gmiscellaneousit commit --amend -m "$commit_message"
+    else
+        # Commit the changes
+        git commit -m "$commit_message"
+    fi
+
+    echo "Changes committed successfully."
+}
+
+alias newbranch='git checkout -b'
+
+# Define environment variables
+export REMCO=REMCOSTOETEN_DIR
+export  PROJECTS=~/projects
+export PORTFOLIO=Portfolio-Grid-UI
+# Variables for personal website, Pleio dev stack, and snippets
+export PERSONAL_WEBSITE=~/sites/$REMCO/$PORTFOLIO
+export PLEIO_DIR=~/sites/pleio-dev-stack
+export SNIPPETS=~/snippets.remcostoeten
+export CURRENTSITE=~/sites/$REMCO$PORTFOLIO
+export ALARM=/home/remcostoeten/Music/chillalarmlowvolume.mp3
+alias panel='cd $PROJECTS/personal-panel'
+alias pro='cd $PROJECTS'
+alias gp='git push'
+alias pro='cd $PROJECTS'
+alias shutdown='shuwdown 1s'
+alias codezsh='code ~/.zshrc'
+alias delbranch=delete_branch
+alias c=create_commit
+alias pr="pr_create"
+alias cpp='f() { git add *; git commit -m "$1"; git push; unset -f f; }; f'
+alias devstack='cd ~/sites/pleio-dev-stack/frontend && nohup yarn && yarn start & cd .. && nohup docker-compose up &'
+
+alias click='./home/remcostoeten/projects/utillity-scripts/productivity-tools/click.sh'
+
+findd() {
+    if [[ $# -eq 1 ]]; then
+        grep -r --exclude-dir=node_modules .next "$1" .
+    else
+        command findd "$@"
+    fi
+}
+
+# Enhanced rendering of the directory tree in the CLI
+list_dirs() {
+    # Default exclusion pattern
+    local exclude_pattern=(".pnpm" "node_modules" ".next")
+
+    # Check the input parameter and append the corresponding exclusions
+    case $1 in
+        "images") exclude_pattern+="|\.jpg|\.jpeg|\.webp|\.png|\.svg" ;;
+        "audio") exclude_pattern+="|\.mp3" ;;
+        "video") exclude_pattern+="|\.mp4" ;;
+        "misc") exclude_pattern+="|\*lock\*|.*\.lock\.json\*" ;;
+        *)
+            echo "Unknown category: $1"
+            return 1
+        ;;
+    esac
+
+    # Define the file types arrays
+    local main_language_filetypes=("tsx" "ts" "jsx" "js" "css" "scss" "gif" "bmp" "css" "scss" "html" "js" "py" "java" "c" "cpp")
+    local data_language_filetypes=("csv" "txt" "md" "mdx" "yml" "json" "yaml")
+
+    # Check the second input parameter and append the corresponding file types
+    local filetypes=()
+    case $2 in
+        "main") filetypes=("${main_language_filetypes[@]}") ;;
+        "data") filetypes=("${data_language_filetypes[@]}") ;;
+        *)
+            echo "Unknown file type category: $2"
+            return 1
+        ;;
+    esac
+
+    # Construct the file types pattern
+    local filetypes_pattern=$(IFS="|" ; echo "${filetypes[*]}")
+
+    # Append the file types to the exclusion pattern
+    exclude_pattern+="|$filetypes_pattern"
+
+    # Trim leading '|'
+    exclude_pattern=${exclude_pattern#|}
+
+    # Execute the tree command with the constructed exclusion pattern
+    tree -I "$exclude_pattern" .
+}
+
+# Create aliases for the function. You render a file tree hence the name list-dirs
+alias list-dirs="tree"
+
+# function to type copy followed by any command to copy the output to the clipboard, return a error if no command is givven past the copy command
+
+function copy() {
+    eval "$@" | xclip -selection clipboard
+    if [ $? -eq 0 ]; then
+        echo "Copied to clipboard: $@"
+    else
+        echo "Failed to copy to clipboard: $@"
+    fi
+}
+
+# A function to press mouse 1 button with alt + shift + n is pressed
+
+function press_mouse() {
+    xdotool click 1
+}
+
+alias testtest=press_mouse
+
+function_copy_file_contents() {
+    if [ "$1" = "pwd" ]; then
+        pwd | xclip -selection clipboard
+    else
+        cat "$1" | xclip -selection clipboard
+    fi
+}
+
+alias copy=function_copy_file_contents
+
+gi() {
+  git add -A && git commit -m "$*" ; git push
+}
+
+
+#######################/#
+#                      #
+#   custom functions   #
+#                      #
+########################
+
+
+alias alarm=countdown_timer
+
+
+alias python=python3
+alias p=pnpm
+alias pb='pnpm build'
+alias pleio='cd /home/remcostoeten/development/pleio-dev-stack'
+alias code='code .'
+alias codex='code .; xx'
+alias branch='git branch'
+alias checkout='git checkout'
+alias pull='git pull'
+alias status='git status'
+alias reset='git reset --hard'
+
+# Function to create a countdown timer
+countdown_timer() {
+    local ALARMFILE=~/Music/chillalarmlowvolume.mp3
+
+    # Function to parse a time unit and convert it to seconds
+    parse_unit_to_seconds() {
+        unit=$1
+        value=${unit%[a-z]*}
+        unit_type=${unit##*[0-9]}
+        case $unit_type in
+        s) echo $value ;;
+        m) echo $((value * 60)) ;;
+        h) echo $((value * 3600)) ;;
+        *) echo 0 ;;
+        esac
+    }
+
+    # Calculate the total time in seconds from the input arguments
+    local total_seconds=0
+    for arg in "$@"; do
+        seconds=$(parse_unit_to_seconds $arg)
+        if [ $seconds -eq 0 ]; then
+            echo "Invalid input. Please use 'X hours' or 'X minutes' or 'X seconds.'"
+            return 1
+        fi
+        total_seconds=$((total_seconds + seconds))
+    done
+
+    # Countdown loop
+    while [ $total_seconds -gt 0 ]; do
+        if [ $total_seconds -eq 2 ]; then
+            echo "Hi"
+        fi
+
+        echo "Time remaining: $total_seconds seconds"
+        sleep 1
+        total_seconds=$((total_seconds - 1))
+    done
+
+    # Open the default audio player to play the alarm MP3 file when the countdown reaches 0 seconds
+    if [ $total_seconds -eq 0 ]; then
+        xdg-open $ALARMFILE
+    fi
+
+    # Display a notification message when the countdown reaches 0 using zenity
+    zenity --info --text="Countdown Timer: Time's up!"
+}
+
+# Git add and commit function with a custom commit message
+addcommit() {
+    git add .
+    local commit_message=""
+
+    for arg in "$@"; do
+        commit_message="$commit_message $arg"
+    done
+
+    shift "$(($# > 0 ? 1 : 0))"
+
+    git commit -m "$commit_message"
+}
+
+alias cz='git add . && cz && echo "You are about to push $(git diff --cached --numstat | wc -l) files." && echo "Are you sure you want to push these changes? (y/n/c) [Yes/No - commit only/No - abort all]" && read ans && if [[ $ans = "y" ]]; then git push; elif [[ $ans = "n" ]]; then echo "Changes committed, but not pushed."; else echo "Operation aborted."; git reset HEAD~; fi'
+
+
+alias ff='pnpm run format:write'
+alias f='format'
+alias open='xdg-open'
+alias lint='pnpm run lint'
+alias typecheck='pnpm run typecheck'
+alias eslintfix='pnpm run lint:fix'
+alias checkeslint='eslint .'
+alias cleannext='rm -rf node_modules .next'
+# Git add, commit, and push function with a custom commit message
+addcommitpush() {
+    git add .
+    local commit_message=""
+
+    for arg in "$@"; do
+        commit_message="$commit_message $arg"
+    done
+
+    shift "$(($# > 0 ? 1 : 0))"
+
+    git commit -m "$commit_message"
+
+    git push
+}
+# Function to create a file with specified content and filename
+createfile() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: createfile <content> <filename>"
+        return 1
+    fi
+
+    local content="$1"
+    local filename="$2"
+
+    echo "$content" >"$filename"
+}
+
+########################
+#                      #
+#   custom aliases     #
+#                      #
+########################
+
+#######terminal########
+
+## remove apt-get package
+alias uninstall='sudo apt-get remove'
+
+# reboot and shutdown
+alias reboot='shttps://gitlab.com/pleio/frontend/-/merge_requests/2425/diffs#2f63260996fee122abb87b3a324c022e25e636d3udo reboot --force'
+
+# Clear the terminal
+alias cc="clear"
+
+# quit
+alias q='./home/remcostoeten/projects/utillity-scripts/keyboard-shortcuts/quit-w-shortcut.sh'
+
+# Exit the terminal
+alias xx="exit"
+# Remove a file or directory recursively and forcefully
+alias rmrf="sudo rm -rf"
+alias r='rm -rf'
+# Create a file with specified content and filename
+alias file='createfile'
+# Display system processes in real-time
+alias top='htop'
+# Run a command with sudo privileges
+
+alias s="sudo /home/remcostoeten/sites/shell-script/sudo.sh"' >> ~/.bashrc'
+
+#######Docker###########
+
+alias cat='bat --plain'
+
+# Stop all running Docker containers
+alias stopdocker='docker-compose down && docker stop $(docker ps -aq)'
+# Remove all Docker containers
+alias rmcontainers='docker rm $(docker ps -aq)'
+# Run a Docker container with a specific configuration
+alias runfsv="cd ~/sites/dossier && git pull && code .  &&  docker-compose up"
+# Start a Docker container
+alias dstart="docker-compose up"
+#run api pleio only
+alias pbstart="cd ~/sites/pleio/ && docker-compose up api"
+#start zshrc
+alias zsh="vim ~/.zshrc"
+#run frontend pleio
+alias pfstart="cd ~/sites/pleio/frontend && yarn && yarn start"
+# Stop a Docker containe
+alias dstop='docker stop $(docker ps -a -q) &'
+# Show running Docker containers
+alias dshow="docker ps"
+# Show logs of a Docker container
+alias dlog="docker-compose losg -f --tail=4"
+
+ alias cat='bat --plain'
+# Run a development server for a website
+
+alias rundocs="cd ~/sites/$REMCO/$SNIPPETS && code . && pnpm run dev;"
+# Run a development server for Pleio
+alias runp="cd $PLEIO_DIR; cd frontend; code . ; docker-compose up"
+# Run a development server for personal website
+alias runsite="cd $PERSONAL_WEBSITE && rmrf .next node_modules; pnpm i ;  code . && pnpm run dev"
+#go to shell scripts
+alias shell="cd ~/sites/$REMCO/shell-scripts"
+# Go to Pleio directory
+alias pull='git pull'
+alias reset='git reset --hard'
+alias checkout='git checkout'
+alias gop="cd $PLEIO_DIR"
+alias gopf="cd $PLEIO_DIR/frontend"
+# Go to personal website directory
+alias gor="cd $PERSONAL_WEBSITE"
+# Run a development server
+alias run="code . &&  pnpm dev"
+# Restart a development server
+alias restart="rmrf .next node_modules; pnpm i ; code . ;p  next dev --turbo"
+# Rebuild a development server
+alias rebuild="rm -rf node_modules/ && rm -rf .next/ &&  pnpm install && format &&  pnpm run build"
+
+# Autoclick very fast
+alias clickfast="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh -t 500 -s 0.5"
+# Autoclick slow
+alias clickslow="cd /home/remcostoeten/sites/REMCOSTOETEN_DIR/shell-scripts; ./click.sh -t 500 -s 2.5"
+
+# Allow execution of a file with sudo privileges
+alias allow='sudo chmod +x $1'
+# Connect to a VPN using Tailscale
+alias vpn="tailscale"
+# Go to Desktop directory
+alias d="cd ~/Desktop"
+# Translate JSON files using a translation service
+alias translate="yarn json-autotranslate --input src/js/i18n/messages/ --type key-based --matcher i18next --directory-structure ngx-translate --service deepl-free --config fb9ed0cc-2782-eaa0-d75b-76d5f8f92f87:fx,less --delete-unused-strings"
+
+# Set ZSH configuration
+export ZSH=~/.oh-my-zsh
+# Set a random theme for the terminal
+# PS1='%B%{$fg[yellow]%}%~/ %{$fg_bold[cyan]%}$(git_prompt_info)%{$fg_bold[blue]%}
+# %{$reset_color%}%B'
+# RPROMPT='%T'
+# ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
+# ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"
+# ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$fg[green]%}"
+# ZSH_THEME="dstufft"
+ZSH_THEME="duellj"
+
+# Set list of themes to load
+plugins=(
+    git
+    nvm
+    aliases
+    colorize
+    zsh-autosuggestions
+    gh
+    sudo
+    zsh-syntax-highlighting
+    extract
+    web-search
+    history-substring-search
+)
+
+
+# Set completion options
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+source ~/.oh-my-zsh/oh-my-zsh.sh
+
+# bun completions
+[ -s "/home/remcostoeten/.bun/_bun" ] && source "/home/remcostoeten/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+[[ -s /usr/share/autojump/autojump.zsh ]] && source /usr/share/autojump/autojump.zsh
+
+# pnpm
+export PNPM_HOME="/home/remcostoeten/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+
+eval "$(~/.rbenv/bin/rbenv init - bash)"
+eval "$(~/.rbenv/bin/rbenv init - bash)"
+eval "$(~/.rbenv/bin/rbenv init - bash)"
+
+# Turso
+export PATH="/home/remcostoeten/.turso:$PATH"
+if [ -f "/home/remcostoeten/.config/fabric/fabric-bootstrap.inc" ]; then . "/home/remcostoeten/.config/fabric/fabric-bootstrap.inc"; fi
+
 
 ```
