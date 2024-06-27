@@ -7,9 +7,7 @@ description: Sometimes you want to push a single file to the master branch or an
 
 It's a sequence of commands which first stash the current changes, then checkout to the master branch, apply the changes of the specific file from the stash, add the specific file to the staging area, commit the changes, push the changes to the master branch, checkout back to the original branch, and finally apply the stashed changes.
 
-
 > **Note:** This snippet pushes directly to master. Please change according to your needs.
-
 
 ```shell filename='in yo terminal' copy
 git stash
@@ -63,11 +61,11 @@ alias singlecommit="fnc_commit_file_to_master_with_message"
 
 Usage:
 
-```shell filename='in yo terminal' copy
+````shell filename='in yo terminal' copy
 # First argument is the file name, second is the commit message
 singlecommit "a-file-name.tsx" "Your commit message"```
 # or whatever alias you chose  #
-```
+````
 
 I can understand such sequence of commands can be terrifying,especially when pushing to master so if you want to dry run it, you can do so by adding `echo` before each command. (dry-run = showing results without executing.)
 
