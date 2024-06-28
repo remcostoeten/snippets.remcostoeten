@@ -13,21 +13,75 @@ Or create one with vim, like a real man.
 
 Then just paste (press `p` followed by `:wq`).
 
-```bash filename='~/.zshrc' copy
+```zsh filename='~/.zshrc' copy
 alias addshad='./add-components.sh'
-alias vim='nvim'
-alias szsh='source ~/.zshrc'
 
 alias p='pnpm'
+alias vim='nvim'
 
-alias f='[ -f ~/.prettierignore ] && pnpm prettier --write "**/*.{ts,tsx,mdx}" --cache --ignore-path ~/.prettierignore || [ -f ~/.gitignore ] && pnpm prettier --write "**/*.{ts,tsx,mdx}" --cache --ignore-path ~/.gitignore || pnpm prettier --write "**/*.{ts,tsx,mdx}" --cache'
-alias ff='[ -f ~/.prettierignore ] && cat ~/.prettierignore | prettier "**/*.{json,yaml}" --write --ignore-path /dev/stdin || [ -f ~/.gitignore ] && cat ~/.gitignore | prettier "**/*.{json,yaml}" --write --ignore-path /dev/stdin || prettier "**/*.{json,yaml}" --write'
-alias fff='[ -f ~/.prettierignore ] && pnpm prettier --write "**/*.{ts,tsx,mdx,json,yaml,css,scss}" --cache --ignore-path ~/.prettierignore || [ -f ~/.gitignore ] && pnpm prettier --write "**/*.{ts,tsx,mdx,json,yaml,css,scss}" --cache --ignore-path ~/.gitignore || pnpm prettier --write "**/*.{ts,tsx,mdx,json,yaml,css,scss}" --cache'
-export PYTHONSCRAPER='~/sites/whatsapp-flask-scraper/'
+alias zsh="vim ~/.zshrc"
+alias codezsh='code ~/.zshrc'
+alias szsh='source ~/.zshrc'
 
 
-# Function to rename a file while keeping its extension (with confirmation)
+alias f='[ -f ~/.prettierignore ] && pnpm prettier --write '"'"'**/*.{ts,tsx,mdx}'"'"' --cache --ignore-path ~/.prettierignore || [ -f ~/.gitignore ] && pnpm prettier --write '"'"'**/*.{ts,tsx,mdx}'"'"' --cache --ignore-path ~/.gitignore || pnpm prettier --write '"'"'**/*.{ts,tsx,mdx}'"'"' --cache'
+alias ff='[ -f ~/.prettierignore ] && cat ~/.prettierignore | prettier '"'"'**/*.{json,yaml}'"'"' --write --ignore-path /dev/stdin || [ -f ~/.gitignore ] && cat ~/.gitignore | prettier '"'"'**/*.{json,yaml}'"'"' --write --ignore-path /dev/stdin || prettier '"'"'**/*.{json,yaml}'"'"' --write'
+alias fff='[ -f ~/.prettierignore ] && pnpm prettier --write '"'"'**/*.{ts,tsx,mdx,json,yaml,css,scss}'"'"' --cache --ignore-path ~/.prettierignore || [ -f ~/.gitignore ] && pnpm prettier --write '"'"'**/*.{ts,tsx,mdx,json,yaml,css,scss}'"'"' --cache --ignore-path ~/.gitignore || pnpm prettier --write '"'"'**/*.{ts,tsx,mdx,json,yaml,css,scss}'"'"' --cache'
 
+tree_exclude() {
+  local exclude_patterns=()
+  local tree_args=()
+
+  # Default exclusions
+  exclude_patterns=(
+    "node_modules"
+    "migrations"
+    ".next"
+    "out"
+    "dist"
+    "chromeprofile"
+    ".vercel"
+    ".git"
+    ".vscode"
+    ".DS_Store"
+    "generated"
+  )
+
+  # Parse arguments
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      -e|--exclude)
+        exclude_patterns+=("$2")
+        shift 2
+        ;;
+      *)
+        tree_args+=("$1")
+        shift
+        ;;
+    esac
+  done
+
+  # Build the exclude pattern string
+  local exclude_string=$(printf "|%s" "${exclude_patterns[@]}")
+  exclude_string=${exclude_string:1}  # Remove leading '|'
+
+  # Run tree command with exclusions
+  tree -I "$exclude_string" "${tree_args[@]}"
+}
+
+alias tree='tree_exclude'
+alias ogtree='\tree'
+alias copytree='fnc_copy_tree'
+alias copyfulltree='fnc_full_copy_tree'
+
+
+fnc_copy_tree() {
+tree &&    tree "$@" | xclip -selection clipboard
+}
+
+fnc_full_copy_tree() {
+ \tree &&    \tree "$@" | xclip -selection clipboard
+}
 
 # Function to rename a file while keeping its extension (without confirmation)
 function mvv!() {
@@ -160,24 +214,23 @@ echo_escape_remap() {
 }
 
 
-alias codezsh='code ~/.zshrc'
 
-bindkey 'A' echo_pipe_operator
-# Replace 'KEYSEQUENCE' with the actual key sequence for Ctrl + Shift + A in your terml
+fnc_copy_shorthand() {
+   xclip -selection clipboard
+}
 
-
-alias catcopy="cat ~/filex | pbcopy"
+catcopy() {
+    cat "$1" | fnc_copy_shorthand
+}
+alias catcopy='catcopy'
 alias copypwd='pwd | xclip -selection clipboard'
 alias copyfilename='echo $PWD | xclip -selection clipboard'
 
-bindkey -s '\e[1;3;32~' 'simulate_super\n'
-
-
 # Use zle to create a new widget that calls the function
-zle -N echo_pipe_operator
+# zle -N echo_pipe_operator
 
 # Bind the key sequence to the widget
-bindkey '^A' echo_pipe_operator
+# bindkey '^A' echo_pipe_operator
 # Replace 'KEYSEQUENCE' with the actual key sequence for Ctrl + Shift + A in your terml
 
 
@@ -340,7 +393,6 @@ alias runfsv="cd ~/sites/dossier && git pull && code .  &&  docker-compose up"
 alias dstart="docker-compose up"
 #run api pleio only
 #start zshrc
-alias zsh="vim ~/.zshrc"
 
 alias stodocker="docker-compose down"
 # Show running Docker containers
@@ -573,6 +625,7 @@ createfile() {
     echo "$content" >"$filename"
 }
 
+
 ########################
 #                      #
 #   custom aliases     #
@@ -650,8 +703,6 @@ alias gcc='checkout'
 
 
 
-# Copy the contents of a file to the clipboard
-alias catcopy='cat $1 | xclip -selection clipboard'
 # Display the contents of a file with syntax highlighting
 alias cat=" bat $1 --plain"
 
