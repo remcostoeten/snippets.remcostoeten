@@ -1,0 +1,68 @@
+```bash {3,5,10}
+└─[$] delbranch chore/remove-unused-actions
+
+Do you want to create a merge request before deleting branch 'chore/remove-unused-actions'? [y/N]
+└─[$] n
+Are you sure you want to delete branch 'chore/remove-unused-actions' locally and remotely? [y/N]
+└─[$] y
+To https://github.com/remcostoeten/remcostoeten-all-in-one-dashboard.git
+ - [deleted]           chore/remove-unused-actions
+Branch 'chore/remove-unused-actions' deleted locally and remotely.
+```
+
+```bash filename='~./zshrc' copy
+delete_branch() {
+
+    local branch_name="$1"
+
+    # Get the current branch
+    local current_branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+    # Check if the current branch is the one to be deleted
+    if [ "$current_branch" = "$branch_name" ]; then
+        # Fallback branch in case the current branch is to be deleted
+        local fallback_branch="master"  # You can change this to 'dev' or any other fallback branch you prefer
+
+        # Check if the fallback branch exists
+        if git rev-parse --verify "$fallback_branch" >/dev/null 2>&1; then
+            git checkout "$fallback_branch"
+        else
+            echo "Fallback branch '$fallback_branch' not found. Unable to switch branches."
+            return 1
+        fi
+    fi
+
+    # Confirming before creating a merge request
+    read -r "?Do you want to create a merge request before deleting branch '$branch_name'? [y/N] " create_mr
+
+    if [[ "$create_mr" =~ ^[Yy]$ ]]; then
+        # Check if gh cli is installed
+        if ! command -v gh &>/dev/null; then
+            echo "GitHub CLI (gh) is required to create a merge request."
+            return 1
+        fi
+
+        # Create a merge request using gh cli
+        gh pr create --base "$fallback_branch" --head "$branch_name" --title "Merge $branch_name into $fallback_branch" --body "Please review and merge this branch before deletion."
+        echo "Merge request created successfully."
+    fi
+
+    # Confirming before deletion
+    read -r "?Are you sure you want to delete branch '$branch_name' locally and remotely? [y/N] " response
+
+    # Check if the response is affirmative
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+        # Deleting locally
+        git branch -d "$branch_name"
+
+        # Deleting remotely
+        git push origin --delete "$branch_name"
+
+        echo "Branch '$branch_name' deleted locally and remotely."
+    else
+        echo "Operation aborted."
+    fi
+}
+```
+
+`alias delbranch=delete_branch`
