@@ -1,20 +1,32 @@
 ## Find and replace all in Neovim
 
-```shell title='neovim'
-:%s@search@replace@gc
+```vim title='neovim'
+:%s@string_to_replace@new_string@gc
 ```
 
 So if your file contains:
-```shell
+
+```vim
 [Desktop Entry]
 Name=Cursor
 Exec=/home/yourusername/Applications/cursor.AppImage
 Icon=/home/yourusername/Applications/cursor-icon.png
 Type=Application
 Categories=Utility;
-```:%s@search@replace@gc
+```
+
 And you want to replace yourusername with bob_marley you type `:%s@yourusername@bob_marleyy@gc` prompting you if you're sure `y` and `y`
 
+## The explenation
+
+`%s`: Indicates a substitution command for the entire file. % means apply to the whole file.
+
+`@search@`: The text to search for.
+
+`replace@`: The text to replace the search term with.
+
+`g`: Global flag, meaning replace all occurrences in each line.
+
+`c`: Confirm each replacement. You will be prompted to confirm each substitution.
+
 And et voila
-
-
