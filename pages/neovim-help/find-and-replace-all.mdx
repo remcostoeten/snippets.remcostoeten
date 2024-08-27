@@ -1,0 +1,20 @@
+## Find and replace all in Neovim
+
+```shell title='neovim'
+:%s@search@replace@gc
+```
+
+So if your file contains:
+```shell
+[Desktop Entry]
+Name=Cursor
+Exec=/home/yourusername/Applications/cursor.AppImage
+Icon=/home/yourusername/Applications/cursor-icon.png
+Type=Application
+Categories=Utility;
+```:%s@search@replace@gc
+And you want to replace yourusername with bob_marley you type `:%s@yourusername@bob_marleyy@gc` prompting you if you're sure `y` and `y`
+
+And et voila
+
+
