@@ -31,8 +31,9 @@ Leaving you with a video that is 14 seconds long.
 To create a blank mp4 file to test this with you can run
 
     ```bash
+
 ffmpeg -f lavfi -i color=c=black:s=1280x720:r=30:d=22 -c:v libx264 -preset ultrafast -tune stillimage -pix_fmt yuv420p twentytwo.mp4
-    ```
+```
 
 where `d=22` is the duration of the video in seconds.
 twntytwo.mp4 is the filename

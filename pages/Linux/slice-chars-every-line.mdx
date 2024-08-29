@@ -1,6 +1,6 @@
 # Trimming Lines in a CSV File Using `awk`
 
-In many instances, you might want to trim or extract only a specific number of characters from every line in a file. The `awk` command provides a flexible way to achieve this. 
+In many instances, you might want to trim or extract only a specific number of characters from every line in a file. The `awk` command provides a flexible way to achieve this.
 
 ## Command Overview
 
@@ -10,9 +10,9 @@ awk '{ print substr($0, 1, 14) }' rs.csv > rs_modified.csv
 
 ## Breakdown
 
-- `'{ print substr($0, 1, 14) }'`: 
+- `'{ print substr($0, 1, 14) }'`:
+
   - `print`: This tells `awk` to output something.
   - `substr($0, 1, 14)`: This function extracts a substring from the entire line (`$0`). It starts at the first character and captures up to the 14th character.
 
 - `> filename_modified.csv`: This redirects the output of the `awk` command into a file named ` filename_modified.csv`.
-

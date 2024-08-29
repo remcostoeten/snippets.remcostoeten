@@ -1,23 +1,23 @@
 ---
-title: 'useHandleMouseMove Hook'
+title: "useHandleMouseMove Hook"
 ---
 
 # useHandleMouseMove Hook
 
-The `useHandleMouseMove` is a custom React hook that handles mouse movement events for elements with a specified class name. Result can we seen <a href="https://remcostoeten.com/showcase/use-mouse" target="_blank">here</a>.   
+The `useHandleMouseMove` is a custom React hook that handles mouse movement events for elements with a specified class name. Result can we seen <a href="https://remcostoeten.com/showcase/use-mouse" target="_blank">here</a>.
 
 ## Usage
 
 1. Import the hook:
 
 ```javascript
-import useHandleMouseMove from '@hooks/useHandleMouseMove';
-```                  
+import useHandleMouseMove from "@hooks/useHandleMouseMove";
+```
 
 2. Use the hook in your component, passing the class name of the elements you want to handle mouse movement for:
 
 ```javascript
-useHandleMouseMove('your-class-name'); 
+useHandleMouseMove("your-class-name");
 ```
 
 ## Example

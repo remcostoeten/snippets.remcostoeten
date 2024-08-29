@@ -21,7 +21,7 @@ that you want to exclude from the search.
 You can use a glob pattern in the VS Code search box to target just the folder you want:
 
 \`\`\`
-**/src/store/js/components/groups/**/*.jsx
+**/src/store/js/components/groups/**/\*.jsx
 \`\`\`
 
 This will search for "tippytap" in all .jsx files recursively under src/store/js/components/groups.
@@ -48,7 +48,7 @@ that contain similar files you want to exclude.
 You can use a negative lookahead in the glob pattern to exclude those folders:
 
 \`\`\`
-**/src/store/js/components/subgroups/**/*.jsx
+**/src/store/js/components/subgroups/**/\*.jsx
 \`\`\`
 
 This will search in src/store/js/components/subgroups while excluding any paths that contain /groups/subgroups after that.

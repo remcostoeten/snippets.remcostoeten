@@ -1,0 +1,123 @@
+```bash copyy filename="~/.bashrc or ~/.zshrc"
+alias record='function _record() {
+    local display=$(echo $DISPLAY)
+    local screen="0"
+    local fps=60
+    local output_dir="$HOME/Recordings"
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local extra_opts=""
+    local audio_opts=""
+    local custom_output=""
+
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --s1) screen="0" ;;
+            --s2) screen="1" ;;
+            --fps)
+                fps="$2"
+                shift
+                ;;
+            --nvenc)
+                extra_opts="-c:v h264_nvenc -preset llhq -rc vbr_hq -cq 19 -b:v 30M -maxrate:v 60M"
+                ;;
+            --audio)
+                audio_opts="-f pulse -ac 2 -i default"
+                ;;
+            --output)
+                custom_output="$2"
+                shift
+                ;;
+            *)
+                echo "Unknown option: $1"
+                return 1
+                ;;
+        esac
+        shift
+    done
+
+    if [ -z "$custom_output" ]; then
+        custom_output="$output_dir/screen_${screen}_${timestamp}.mp4"
+    fi
+
+    local video_opts="-f x11grab -s 2560x1440 -r $fps -i $display.$screen"
+    local encode_opts="${extra_opts:--c:v libx264 -preset ultrafast -crf 18 -pix_fmt yuv420p} -c:a aac"
+
+    local command="ffmpeg $video_opts $audio_opts $encode_opts $custom_output"
+
+    echo "Executing: $command"
+    eval "$command"
+}; _record'
+```
+
+# Screen Recording Alias Usage Guide
+
+This guide explains how to use the `record` alias for screen recording on Pop!\_OS using FFmpeg.
+
+## Basic Usage
+
+To start recording your primary screen with default settings:
+
+```bash
+ record
+```
+
+This will record Screen 1 (0) at 60 fps using x264 encoding.
+
+## Options
+
+### Selecting Screen
+
+- `--s1`: Record Screen 1 (default)
+- `--s2`: Record Screen 2
+
+Example:
+
+```bash
+ record --s2
+```
+
+### Setting Frame Rate
+
+Use `--fps` followed by the desired frame rate:
+
+```bash
+ record --fps 30
+```
+
+### Using NVIDIA Hardware Encoding
+
+To use NVIDIA's NVENC encoder (if supported):
+
+```bash
+ record --nvenc
+```
+
+## Combining Options
+
+You can combine multiple options:
+
+```bash
+ record --s2 --fps 75 --nvenc
+```
+
+This will record Screen 2 at 75 fps using NVIDIA hardware encoding.
+
+## Output
+
+Recordings are saved in the `~/Recordings` directory with filenames in the format:
+
+```
+ screen_[screen number]_[timestamp].mp4
+```
+
+Example: `screen_0_20240829_143000.mp4`
+
+## Notes
+
+- The default resolution is set to 2560x1440. To change this, you'll need to modify the alias.
+- If you encounter performance issues, try lowering the frame rate or using the `--nvenc` option if you have an NVIDIA GPU.
+- To stop the recording, press `Ctrl+C` in the terminal.
+
+Remember to source your `.bashrc` file or restart your terminal after adding the alias.
+
+This format should work well for MDX files, with the code blocks properly escaped as you requested. Is there anything else you'd like me to adjust in the guide?

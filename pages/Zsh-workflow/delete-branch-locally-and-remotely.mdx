@@ -8,11 +8,11 @@ tags: [code, programming, git]
 # Delete all local and remote git branches
 
 > Github cli is needed
-`npm i gh`
+> `npm i gh`
 
 Then add the following to your `zshrc` config
 
-```bash
+````bash
     echo "<scipt-from-below>" >> ~/.zshrc
 ```bash
 
@@ -76,3 +76,4 @@ alias delbranch=delete_branch
 Then run `source ~/.zshrc` to apply the changes
 
 Now you can delete a branch by running `delbranch branch-name` in your terminal which will delete the branch locally and remotely but first asks you if you want to create a merge request before deleting the branch.
+````

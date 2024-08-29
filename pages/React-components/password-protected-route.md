@@ -1,4 +1,4 @@
-# My usePasswordProtection Hook 
+# My usePasswordProtection Hook
 
 The `usePasswordProtection` is a custom React hook that helps you protect content with a password. This component is particularly useful when you want to restrict access to certain parts of your application. Data won't be loaded in the DOM untill passphrase is entered but i'm unsure how secure this is. For data that needs to be secure opt for a database solution e.g. my firebase post.
 
@@ -49,10 +49,10 @@ const SomeComponent: React.FC = () => {
         </>
       ) : (
         <form onSubmit={handlePasswordSubmit}>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password"
           />
           <button type="submit">Submit</button>
@@ -89,10 +89,10 @@ const ProtectedRoute: React.FC = () => {
           </>
         ) : (
           <form onSubmit={handlePasswordSubmit}>
-            <input 
-              type="password" 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)} 
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
             />
             <button type="submit">Submit</button>
@@ -124,10 +124,10 @@ const ProtectedModal: React.FC = () => {
   return (
     <Modal isOpen={!isAuthenticated}>
       <form onSubmit={handlePasswordSubmit}>
-        <input 
-          type="password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter password"
         />
         <button type="submit">Submit</button>

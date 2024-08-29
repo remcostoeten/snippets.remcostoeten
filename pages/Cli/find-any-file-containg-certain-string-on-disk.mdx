@@ -1,6 +1,6 @@
 ### Find any file containing a certain word on the entire disk.
-<hr/>
 
+<hr />
 
 In this case I lost my minesweeper project which had a git directory with the remote remcostoeten/minesweeper so this command will do:
 
@@ -9,7 +9,8 @@ find / -name "config" -exec grep -l "minesweeper" {} + 2>/dev/null
 ```
 
 ### Explanation:
-<hr/>
+
+<hr />
 
 - `find / -name "config"`: Searches for all config files starting from the root directory `/`.
 - `-exec grep -l "minesweeper" {} +`: For each config file found, `grep` searches for the string "minesweeper" in the file content and prints the filename (`-l` option) if it finds a match.

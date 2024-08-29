@@ -11,8 +11,8 @@ npm install firebase @radix-ui/react-popover react-quill lucide-react date-fns f
 Create a file called `firebase.js` in a folder called `lib` in the root of your project and add your Firebase configuration:
 
 ```javascript filename="lib/firebase.js" copy
-import { initializeApp } from "firebase/app"
-import { getFirestore } from "firebase/firestore"
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "your-api-key",
@@ -21,12 +21,12 @@ const firebaseConfig = {
   storageBucket: "your-storage-bucket",
   messagingSenderId: "your-messaging-sender-id",
   appId: "your-app-id",
-}
+};
 
-const app = initializeApp(firebaseConfig)
-const db = getFirestore(app)
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-export { db }
+export { db };
 ```
 
 ## Create the Component
@@ -34,40 +34,44 @@ export { db }
 Create a new component called `NewItem.tsx` in the `components` folder:
 
 ```tsx filename="components/NewItem.tsx" copy
-'use client'
-import React, { useState } from "react"
-import { addDoc, collection, serverTimestamp } from "firebase/firestore"
-import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover"
-import { format } from "date-fns"
-import { motion } from "framer-motion"
-import { db } from "@/lib/firebase"
+"use client";
+import React, { useState } from "react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover";
+import { format } from "date-fns";
+import { motion } from "framer-motion";
+import { db } from "@/lib/firebase";
 
 interface NewItemProps {
-  content?: string
+  content?: string;
 }
 
 export function NewItem({ content }: NewItemProps) {
-  const [open, setOpen] = useState(false)
-  const [title, setTitle] = useState("")
-  const [date, setDate] = useState<Date | null>(null)
-  const [description, setDescription] = useState("")
-  const [label, setLabel] = useState("")
-  const [items, setItems] = useState<Item[]>([])
-  const [loading, setLoading] = useState(false)
-  const [markdownContent, setMarkdownContent] = useState("")
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState<Date | null>(null);
+  const [description, setDescription] = useState("");
+  const [label, setLabel] = useState("");
+  const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [markdownContent, setMarkdownContent] = useState("");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        console.log("user", user)
+        console.log("user", user);
       }
-      setLoading(false)
-    })
-    return (): void => unsubscribe()
-  }, [])
+      setLoading(false);
+    });
+    return (): void => unsubscribe();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       const newItem: Item = {
@@ -79,41 +83,37 @@ export function NewItem({ content }: NewItemProps) {
         subject,
         selectedDate: date,
         label,
-      }
+      };
 
-      const docRef = await addDoc(collection(db, "items"), newItem)
-      newItem.id = docRef.id
+      const docRef = await addDoc(collection(db, "items"), newItem);
+      newItem.id = docRef.id;
 
-      setItems((prevItems: Item[]) => [newItem, ...prevItems])
-      setDescription("")
-      setTitle("")
-      setDate(null)
-      setSubject("")
-      setLabel("")
-      setMarkdownContent("")
+      setItems((prevItems: Item[]) => [newItem, ...prevItems]);
+      setDescription("");
+      setTitle("");
+      setDate(null);
+      setSubject("");
+      setLabel("");
+      setMarkdownContent("");
       toast({
         title: "Item created successfully.",
         description: `with title ${title}`,
-      })
+      });
     } catch (error) {
       toast({
         title: "Something went wrong.",
         description: `Your request failed. Please try again. ${error}`,
         variant: "destructive",
-      })
-      console.error(error)
+      });
+      console.error(error);
     } finally {
-      setOpen(false)
+      setOpen(false);
     }
-  }
+  };
 
   // Render form and other JSX here...
 
-  return (
-    <>
-      {/* Render Drawer and other JSX here... */}
-    </>
-  )
+  return <>{/* Render Drawer and other JSX here... */}</>;
 }
 ```
 
@@ -134,14 +134,14 @@ In the `useEffect` hook, you can use the `onSnapshot` function from `firebase/fi
 ```tsx filename="Fetching Data" copy
 useEffect(() => {
   const unsubscribe = onSnapshot(collection(db, "items"), (snapshot) => {
-    const fetchedItems: Item[] = []
+    const fetchedItems: Item[] = [];
     snapshot.forEach((doc) => {
-      const item = doc.data() as Item
-      item.id = doc.id
-      fetchedItems.push(item)
-    })
-    setItems(fetchedItems)
-  })
-  return (): void => unsubscribe()
-}, [])
+      const item = doc.data() as Item;
+      item.id = doc.id;
+      fetchedItems.push(item);
+    });
+    setItems(fetchedItems);
+  });
+  return (): void => unsubscribe();
+}, []);
 ```

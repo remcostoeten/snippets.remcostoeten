@@ -5,15 +5,15 @@ This guide walks through the process of creating a scroll-into-view triggered an
 <Image src="/scroll-into-view.gif" alt="Scroll into view gif react hook" width={500} height={500} />
 Live Demo: <a href='https://github.com/remcostoeten/remcostoeten/blob/dev/hooks/useInView.tsx' target='_blank'>Here/</a>
 
-
 Source code <a href='https://github.com/remcostoeten/remco-tools/tree/master/hooks/UseInView.tsx' target='_blank'>https://github.com/remcostoeten/remco-tools/tree/master/hooks/UseInView.tsx</a>
 
 ## Steps
 
 ### 1. Create
+
 In the `hooks` folder, create a file named `useInView.tsx`:
 
-```tsx filename="useInView.tsx"
+````tsx filename="useInView.tsx"
 'use client';
 go
 import { useState, useEffect, Ref } from 'react';
@@ -87,32 +87,31 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({ text, italic = false }) => 
 }
 
 export default AnimatedText;
-```
+````
 
 ### 3. Style the Animation
 
-
 ```css filename="animations.css"
 @keyframes gradienText {
-    50% {
-        background-size: 200% 4px;
-    }
-    100% {
-        background-position: 0 100%;
-    }
+  50% {
+    background-size: 200% 4px;
+  }
+  100% {
+    background-position: 0 100%;
+  }
 }
 
 @keyframes gradientTextGrow {
-    0% {
-        width: 0;
-    }
-    100% {
-        width: 100%;
-    }
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
 }
-   ```
+```
 
-   ### 4. Use the Animation Component
+### 4. Use the Animation Component
 
 ```tsx filename="SomeComponent.tsx"
 'use client';
