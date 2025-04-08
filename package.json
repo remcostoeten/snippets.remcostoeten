@@ -1,11 +1,15 @@
 {
   "name": "snippets-remcostoeten",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Remcostoeten personal snippets",
   "scripts": {
+    "postinstall": "echo '\\x1b[33mWarning: This legacy v1 branch requires npm i --force to install properly!\\x1b[0m'",
     "dev": "next dev",
+    "new:mdx":"chmod +X ./run.sh && ./run.sh --6",
+    "manage": "chmod +x ./run.sh && ./run.sh",
+    "start": "chmod +x ./run.sh && ./run.sh --1",
     "build": "next build",
-    "start": "next start"
+    "setup": "npm i --force && echo '\\x1b[32mDependencies installed with force flag. Now run npm run dev\\x1b[0m'"
   },
   "repository": {
     "type": "git",
@@ -15,15 +19,15 @@
   "homepage": "https://snippets.remcostoeten.com",
   "dependencies": {
     "next": "^13.0.6",
-    "nextra": "latest",
-    "nextra-theme-docs": "latest",
+    "nextra": "^2.2.14",
+    "nextra-theme-docs": "^2.2.14",
     "prism-react-renderer": "^2.0.6",
     "prismjs": "^1.29.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "18.11.10",
+    "@types/node": "^18.11.10",
     "typescript": "^4.9.3"
   }
 }
