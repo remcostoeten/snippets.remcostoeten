@@ -1,7 +1,0 @@
-footer {
-  display: none;
-}
-
-h2:not(:first-child) {
-  font-size: 16px;
-}
