@@ -1,0 +1,51 @@
+"{
+  "name": "remcostoeten-snippets",
+  "version": "0.1.0",
+  "description": "Open source collection of code snippets and components by Remco Stoeten",
+  "author": "Remco Stoeten",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/remcostoeten/snippets.remcostoeten.git"
+  },
+  "homepage": "https://github.com/remcostoeten/snippets.remcostoeten",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "next": "15.2.4"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.0.0",
+    "postcss": "^8.0.0",
+    "tailwindcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.4",
+    "@eslint/eslintrc": "^3",
+    "prettier": "^3.0.0"
+  },
+  "keywords": [
+    "snippets",
+    "code",
+    "components",
+    "react",
+    "nextjs",
+    "typescript"
+  ]
+}
