@@ -24,6 +24,6 @@ export default function JsonLd() {
         keywords: 'code snippets, programming, documentation, development, tutorials'
     }
 
-    // biome-ignore lint/suspicious/noDangerouslySetInnerHtml: <explanation>
+    // biome-ignore lint/security/noDangerouslySetInnerHTML: JSON-LD requires innerHTML for SEO
     return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 }
