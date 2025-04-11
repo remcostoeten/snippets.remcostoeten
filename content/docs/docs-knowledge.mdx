@@ -1,0 +1,109 @@
+---
+title: Text Formatting Demo
+description: Demonstrates the usage of various text formatting components.
+---
+
+import { getEmoji } from "@/core/emoji-map";
+import {
+  CodeNote,
+  Example,
+  Important,
+  Tip,
+  Warning,
+} from "@/components/ui/text/text-wrappers";
+import {
+  Backend,
+  Database,
+  Frontend,
+} from "@/components/ui/text/text-wrappers";
+import {
+  EmojiBeforeAfter,
+  WithEmoji,
+} from "@/components/ui/text/text-wrappers";
+import { B, I, Ping, Pulse, U } from "@/components/ui/text/text-wrappers";
+import { EmojiItalic, PulseBold } from "@/components/ui/text/text-wrappers";
+
+<div className="space-y-6 p-4 bg-gray-50 rounded-lg">
+  <h2 className="text-xl font-bold mb-4">Text Formatting Components</h2>
+
+{" "}
+
+<section className="space-y-2">
+  <h3 className="font-medium text-gray-700">Basic Formatting</h3>
+  <p>
+    <I>Italic text</I> - Use for emphasis
+  </p>
+  <p>
+    <U>Underlined text</U> - Use for links or highlighting
+  </p>
+  <p>
+    <B>Bold text</B> - Use for important terms
+  </p>
+</section>
+
+{" "}
+
+<section className="space-y-2">
+  <h3 className="font-medium text-gray-700">Animations</h3>
+  <p>
+    <Pulse>Pulsing text</Pulse> - Draws attention with subtle animation
+  </p>
+  <p>
+    <Ping>Pinging text</Ping> - Creates a more pronounced effect
+  </p>
+</section>
+
+{" "}
+
+<section className="space-y-2">
+  <h3 className="font-medium text-gray-700">Emoji Components</h3>
+  <p>
+    <WithEmoji>Navigation emojis (default)</WithEmoji>
+  </p>
+  <p>
+    <WithEmoji emojiCategory="frontend">Frontend development</WithEmoji>
+  </p>
+  <p>
+    <WithEmoji emojiCategory="backend">Backend development</WithEmoji>
+  </p>
+  <p>
+    <WithEmoji emojiCategory="database">Database concepts</WithEmoji>
+  </p>
+</section>
+
+{" "}
+
+<section className="space-y-2">
+  <h3 className="font-medium text-gray-700">Documentation Elements</h3>
+  <p>
+    <CodeNote>Code notes stand out with code-related emojis</CodeNote>
+  </p>
+  <p>
+    <Tip>Tips help guide users with lightbulb emojis</Tip>
+  </p>
+  <p>
+    <Warning>Warnings alert users to potential issues</Warning>
+  </p>
+  <p>
+    <Important>Important information gets extra emphasis</Important>
+  </p>
+  <p>
+    <Example>Examples help illustrate concepts</Example>
+  </p>
+</section>
+
+  <section className="space-y-2">
+    <h3 className="font-medium text-gray-700">Composite Components</h3>
+    <p>
+      <PulseBold>Bold and pulsing for extreme emphasis</PulseBold>
+    </p>
+    <p>
+      <EmojiItalic>Italic text with relevant code emojis</EmojiItalic>
+    </p>
+    <p>
+      <EmojiBeforeAfter>
+        Animated emojis that move outward on hover
+      </EmojiBeforeAfter>
+    </p>
+  </section>
+</div>
