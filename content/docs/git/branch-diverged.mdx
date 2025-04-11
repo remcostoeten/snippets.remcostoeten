@@ -1,0 +1,21 @@
+---
+title: "Git Branch Diverged"
+language: "Git"
+lastModified: "2025-04-11"
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+
+If you clone, and get the question of `merge` /`rebase` or else, when your copy is different, and you don't feel like figuring out the history simply do:
+
+```shell
+git branch -D <branch-name>
+```
+
+This will delete the branch locally.
+
+If you want to delete the branch from the remote, you can do:
+
+```shell
+git push origin --delete <branch-name>
+```
