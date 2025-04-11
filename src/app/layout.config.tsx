@@ -1,5 +1,6 @@
-import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
-
+import { siteConfig } from "@/core/site-config";
+import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
+import { ShieldLogo } from "@/components/shield-logo";
 /**
  * Shared layout configurations
  *
@@ -8,22 +9,19 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
  * Docs Layout: app/docs/layout.tsx
  */
 export const baseOptions: BaseLayoutProps = {
-    nav: {
-        title: (
-            <>
-                <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" aria-label="Logo">
-                    <title>Logo</title>
-                    <circle cx={12} cy={12} r={12} fill="currentColor" />
-                </svg>
-                My App
-            </>
-        )
+  nav: {
+    title: (
+      <>
+        <ShieldLogo fill="white" animated animationVariant="scaleUp" />
+        {siteConfig.name}
+      </>
+    ),
+  },
+  links: [
+    {
+      text: "Snippets",
+      url: "/docs",
+      active: "nested-url",
     },
-    links: [
-        {
-            text: 'Documentation',
-            url: '/docs',
-            active: 'nested-url'
-        }
-    ]
-}
+  ],
+};

@@ -1,0 +1,84 @@
+---
+title: "Sudoers Configuration Guide"
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+<Callout>
+  Because OSX adds, on top of already being extremely sluggish and slow compared
+  to <span className="animate-pulse text-md">👑</span>
+  <span className="text-primary">Linux</span>
+  <span className="animate-pulse text-md">👑</span>, asks you to prompt your
+  password for every single thing you do. This
+</Callout>
+
+guide explains how to edit the `/etc/sudoers` file on macOS to disable
+password prompts when using `sudo`. This is useful for streamlining
+administrative tasks but should be used cautiously due to security
+implications.
+
+<Cards>
+  <Card
+    href="/docs/sudo-passwordless"
+    title="Disable Password Prompt"
+  >
+    Configure sudo to skip password prompts for users in the admin group.
+  </Card>
+
+  <Card href="/docs/sudo-security" title="Security Implications">
+    Understand the security risks and best practices when modifying the sudoers
+    file.
+  </Card>
+</Cards>
+
+## Installation
+
+Use this command to safely edit the sudoers file.
+
+#### CLI
+
+`bash sudo visudo `
+
+#### GUI
+
+### Steps to Configure Passwordless `sudo`
+
+```bash
+# Open the sudoers file using visudo
+
+sudo visudo
+
+# Locate the following line:
+
+%admin ALL=(ALL) ALL
+
+# Replace it with:
+
+%admin ALL=(ALL) NOPASSWD: ALL
+
+# Save and exit
+```
+
+### Explanation of Changes
+
+- `%admin ALL=(ALL) NOPASSWD: ALL`: This line allows all users in the
+  `admin` group (macOS's default admin group) to run `sudo` commands without
+  being prompted for a password.
+
+- `visudo`: The `visudo` command ensures syntax validation of the
+  sudoers file, preventing accidental misconfigurations that could lock you out
+  of administrative access.
+
+## Testing
+
+```bash
+
+# Run any sudo command to verify
+
+sudo ls /var/root
+
+# Expected Result:
+
+# The command should execute without prompting for a password.
+
+```
