@@ -20,6 +20,14 @@ const DATABASE_LANGUAGES = [
   "turso",
   "orm",
   "drizzle-orm",
+  "databases",
+  "database",
+  "drizzle-kit",
+  "sqlite3",
+  "better-sqlite3",
+  "libsql",
+  "turso",
+  "turso-orm",
 ];
 
 // Language detection patterns based on code block language identifiers
@@ -58,50 +66,48 @@ const LANGUAGE_PATTERNS: Record<string, { identifiers: string[] }> = {
     ],
   },
   Git: {
-    identifiers: ["git", "gitignore"],
+    identifiers: [
+      "git",
+      "gitignore",
+      "git-set-upstream",
+      "git-branch-diverged",
+    ],
+  },
+  Blog: {
+    identifiers: [
+      "blog",
+      "text-formatting",
+      "documentation",
+      "docs",
+      "markdown",
+      "mdx",
+      "misc",
+      "miscellaneous",
+      "other",
+      "rant",
+      "random",
+    ],
   },
 };
 
-// Language colors
 const LANGUAGE_COLORS: Record<string, string> = {
-  JavaScript: "bg-yellow-400",
-  TypeScript: "bg-blue-400",
-  Python: "bg-green-400",
-  Shell: "bg-gray-400",
-  JSON: "bg-purple-400",
-  CSS: "bg-pink-400",
-  HTML: "bg-orange-400",
-  Databases: "bg-indigo-400",
-  Git: "bg-red-400",
-  Unknown: "bg-zinc-400",
+  JavaScript:
+    "bg-yellow-500/10 text-yellow-400 border-yellow-500/20 hover:bg-yellow-500/20",
+  Databases:
+    "bg-blue-500/10 text-blue-400 border-blue-500/20 hover:bg-blue-500/20",
+  JSON: "bg-sky-500/10 text-sky-400 border-sky-500/20 hover:bg-sky-500/20",
+  Shell:
+    "bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20",
+  TypeScript:
+    "bg-purple-500/10 text-purple-400 border-purple-500/20 hover:bg-purple-500/20",
+  CSS: "bg-pink-500/10 text-pink-400 border-pink-500/20 hover:bg-pink-500/20",
+  HTML: "bg-orange-500/10 text-orange-400 border-orange-500/20 hover:bg-orange-500/20",
+  Python: "bg-sky-600/10 text-sky-400 border-sky-600/20 hover:bg-sky-600/20",
+  Git: "bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20",
+  Blog: "bg-violet-500/10 text-violet-400 border-violet-500/20 hover:bg-violet-500/20",
+  Unknown:
+    "bg-zinc-500/10 text-zinc-400 border-zinc-500/20 hover:bg-zinc-500/20",
 };
-
-function detectLanguage(content: string): string {
-  // Look for code blocks with language identifiers
-  const codeBlockRegex = /```(\w+)/g;
-  const matches = Array.from(content.matchAll(codeBlockRegex));
-
-  // Count occurrences of each language
-  const languageCounts = new Map<string, number>();
-
-  for (const match of matches) {
-    const identifier = match[1].toLowerCase();
-
-    // Find which language this identifier belongs to
-    for (const [lang, { identifiers }] of Object.entries(LANGUAGE_PATTERNS)) {
-      if (identifiers.includes(identifier)) {
-        languageCounts.set(lang, (languageCounts.get(lang) || 0) + 1);
-      }
-    }
-  }
-
-  // Return the most common language, or 'Unknown' if none found
-  if (languageCounts.size === 0) {
-    return "Unknown";
-  }
-
-  return Array.from(languageCounts.entries()).sort((a, b) => b[1] - a[1])[0][0];
-}
 
 function mapLanguage(language: string): string {
   // Convert to lowercase for case-insensitive comparison
@@ -120,6 +126,53 @@ function mapLanguage(language: string): string {
   return "Unknown";
 }
 
+export async function getCategories() {
+  try {
+    const files = await readdir(SNIPPETS_DIR, { recursive: true });
+    const mdxFiles = files.filter((file) => file.endsWith(".mdx"));
+
+    // Get all unique categories from snippets
+    const categoryMap = new Map<
+      string,
+      { count: number; description: string }
+    >();
+
+    for (const file of mdxFiles) {
+      const filePath = join(SNIPPETS_DIR, file);
+      const content = await readFile(filePath, "utf-8");
+      const { data: frontmatter } = matter(content);
+
+      if (frontmatter.category) {
+        const category = frontmatter.category;
+        const current = categoryMap.get(category) || {
+          count: 0,
+          description: frontmatter.categoryDescription || "",
+        };
+        categoryMap.set(category, {
+          count: current.count + 1,
+          description:
+            current.description || frontmatter.categoryDescription || "",
+        });
+      }
+    }
+
+    // Convert to array and sort by count
+    const categories = Array.from(categoryMap.entries())
+      .map(([name, data]) => ({
+        name,
+        description: data.description,
+        count: data.count,
+        href: `/docs/${name.toLowerCase().replace(/\s+/g, "-")}`,
+      }))
+      .sort((a, b) => b.count - a.count);
+
+    return categories;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return [];
+  }
+}
+
 export async function getRecentSnippets() {
   try {
     console.log("Reading snippets from:", SNIPPETS_DIR);
@@ -134,7 +187,7 @@ export async function getRecentSnippets() {
         const filePath = join(SNIPPETS_DIR, file);
         console.log("Reading file:", filePath);
         const content = await readFile(filePath, "utf-8");
-        const { data: frontmatter } = matter(content);
+        const { data: frontmatter, content: mdxContent } = matter(content);
         console.log("Frontmatter for", file, ":", frontmatter);
 
         // Get the page from Fumadocs source to ensure the path is correct
@@ -147,6 +200,11 @@ export async function getRecentSnippets() {
         // Map the language from frontmatter to our categories
         const language = mapLanguage(frontmatter.language || "Unknown");
 
+        // Calculate content metrics
+        const wordCount = mdxContent.trim().split(/\s+/).length;
+        const codeBlocks = (mdxContent.match(/```[\s\S]*?```/g) || []).length;
+        const estimatedReadTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute reading speed
+
         return {
           title:
             frontmatter.title || file.split("/").pop()?.replace(".mdx", ""),
@@ -156,6 +214,11 @@ export async function getRecentSnippets() {
           languageColor:
             LANGUAGE_COLORS[language] || LANGUAGE_COLORS["Unknown"],
           lastModified: frontmatter.lastModified || new Date().toISOString(),
+          metrics: {
+            wordCount,
+            codeBlocks,
+            estimatedReadTime,
+          },
         };
       })
     );
@@ -172,11 +235,14 @@ export async function getRecentSnippets() {
     // Get the total number of snippets
     const totalSnippets = sortedSnippets.length;
 
-    // Return only the 3 most recent snippets and the total count
+    // Get categories
+    const categories = await getCategories();
+
     return {
-      snippets: sortedSnippets.slice(0, 3),
+      snippets: sortedSnippets.slice(0, 5),
       totalCount: totalSnippets,
       remainingCount: totalSnippets - 3,
+      categories: categories.slice(0, 3), // Return top 3 categories
     };
   } catch (error) {
     console.error("Error fetching snippets:", error);
@@ -184,6 +250,7 @@ export async function getRecentSnippets() {
       snippets: [],
       totalCount: 0,
       remainingCount: 0,
+      categories: [],
     };
   }
 }
