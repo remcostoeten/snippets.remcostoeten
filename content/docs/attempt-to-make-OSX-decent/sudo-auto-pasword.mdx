@@ -9,9 +9,10 @@ import { Callout } from "fumadocs-ui/components/callout";
 import { Card, Cards } from "fumadocs-ui/components/card";
 
 <Callout>
-  macOS can be frustrating with its frequent password prompts for administrative
-  tasks. This guide provides instructions on how to disable these prompts for
-  `sudo` commands. Be aware of the security implications before proceeding.
+  As macOS itself already feels extremely sluggish and laggy compared to linux{" "}
+  <s>masterrace</s>, having to type your password a million times a day makes
+  you wish you opted for a proper OS, but this tweak makes it a bit more
+  bearable.
 </Callout>
 
 This guide explains how to modify the `/etc/sudoers` file on macOS to disable password prompts when using `sudo`. This can streamline administrative tasks, but it's crucial to understand and mitigate the associated security risks.
@@ -25,8 +26,6 @@ This guide explains how to modify the `/etc/sudoers` file on macOS to disable pa
     ```bash
     sudo visudo
     ```
-
-    `visudo` ensures that the file is syntactically correct before saving, preventing potential issues.
 
 ## Locate the admin group line
 
