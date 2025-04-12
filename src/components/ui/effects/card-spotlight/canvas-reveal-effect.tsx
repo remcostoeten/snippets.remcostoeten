@@ -182,18 +182,14 @@ type Uniforms = {
     type: string;
   };
 };
-const ShaderMaterial = ({
-  source,
-  uniforms,
-  maxFps = 60,
-}: {
+
+const ShaderMaterial: React.FC<{
   source: string;
-  hovered?: boolean;
-  maxFps?: number;
   uniforms: Uniforms;
-}) => {
+  maxFps?: number;
+}> = ({ source, uniforms, maxFps = 60 }) => {
   const { size } = useThree();
-  const ref = useRef<THREE.Mesh>();
+  const ref = useRef<THREE.Mesh>(null);
   let lastFrameTime = 0;
 
   useFrame(({ clock }) => {
@@ -251,11 +247,10 @@ const ShaderMaterial = ({
     preparedUniforms["u_time"] = { value: 0, type: "1f" };
     preparedUniforms["u_resolution"] = {
       value: new THREE.Vector2(size.width * 2, size.height * 2),
-    }; // Initialize u_resolution
+    };
     return preparedUniforms;
   };
 
-  // Shader material
   const material = useMemo(() => {
     const materialObject = new THREE.ShaderMaterial({
       vertexShader: `
@@ -283,27 +278,21 @@ const ShaderMaterial = ({
   }, [size.width, size.height, source]);
 
   return (
-    <mesh ref={ref as any}>
+    <mesh ref={ref}>
       <planeGeometry args={[2, 2]} />
       <primitive object={material} attach="material" />
     </mesh>
   );
 };
 
-const Shader: React.FC<ShaderProps> = ({ source, uniforms, maxFps = 60 }) => {
+const Shader: React.FC<{
+  source: string;
+  uniforms: Uniforms;
+  maxFps?: number;
+}> = ({ source, uniforms, maxFps = 60 }) => {
   return (
-    <Canvas className="absolute inset-0  h-full w-full">
+    <Canvas className="absolute inset-0 h-full w-full">
       <ShaderMaterial source={source} uniforms={uniforms} maxFps={maxFps} />
     </Canvas>
   );
 };
-interface ShaderProps {
-  source: string;
-  uniforms: {
-    [key: string]: {
-      value: number[] | number[][] | number;
-      type: string;
-    };
-  };
-  maxFps?: number;
-}
