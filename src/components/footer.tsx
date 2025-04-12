@@ -2,7 +2,7 @@ import { FileCode, GitCommit, Rocket } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { GradientText } from "./ui/effects/gradient-text";
 import { AnimatedNumber } from "./ui/effects/number-flow";
-
+import Link from "next/link";
 interface FooterProps {
   stats: {
     totalPosts: number;
@@ -113,7 +113,6 @@ export function Footer({ stats }: FooterProps) {
           </div>
         </div>
 
-        {/* Version Info */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm border-t border-zinc-800/50 pt-4">
           <div className="flex items-center gap-2">
             <Badge className="bg-indigo-500/10 text-indigo-500 border-indigo-500/20">
@@ -124,7 +123,22 @@ export function Footer({ stats }: FooterProps) {
             </span>
           </div>
           <div className="text-center md:text-left text-sm text-zinc-500">
-            © {new Date().getFullYear()} Remco Sto Stoeten. All rights reserved.
+            <p>
+              Built by{" "}
+              <Link
+                href="https://github.com/remcostoeten"
+                className="underline"
+              >
+                Remco Stoeten
+              </Link>{" "}
+              with a little{" "}
+              <span
+                className="animate-pulse "
+                style={{ transform: "rotate(15deg)" }}
+              >
+                ❤️
+              </span>
+            </p>
           </div>
         </div>
       </div>
