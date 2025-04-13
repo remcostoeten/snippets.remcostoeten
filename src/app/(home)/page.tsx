@@ -168,21 +168,7 @@ export default async function HomePage() {
                             group-hover:scale-105
                           `}
                         >
-                          <span className="flex items-center gap-1.5">
-                            <span className="relative flex h-2 w-2">
-                              <span
-                                className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-30 ${
-                                  snippet.languageColor.split(" ")[1]
-                                }`}
-                              ></span>
-                              <span
-                                className={`relative inline-flex rounded-full h-2 w-2 ${
-                                  snippet.languageColor.split(" ")[1]
-                                }`}
-                              ></span>
-                            </span>
-                            {snippet.language}
-                          </span>
+                          {snippet.language}
                         </Badge>
                       </TextAnimate>
                     </div>

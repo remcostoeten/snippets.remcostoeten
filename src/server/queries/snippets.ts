@@ -203,7 +203,7 @@ export async function getRecentSnippets() {
         // Calculate content metrics
         const wordCount = mdxContent.trim().split(/\s+/).length;
         const codeBlocks = (mdxContent.match(/```[\s\S]*?```/g) || []).length;
-        const estimatedReadTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute reading speed
+        const estimatedReadTime = Math.ceil(wordCount / 200);
 
         return {
           title:

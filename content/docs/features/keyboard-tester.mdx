@@ -1,0 +1,125 @@
+---
+title: "Keyboard Tester Feature Prompt"
+language: "TypeScript"
+description: "Build a Keyboard Tester Component in a Next.js App Router app that mimics a VIA-style interface, designed for user interaction and input visualization. No storage in localStorage or PostgreSQL is required, but a toggleable settings system should be implemented (can use URL params, Zustand, or context)."
+lastModified: "2025-04-13"
+---
+
+### 🎹 Key Press Audio Feedback
+
+- On each key press, **play a sound effect**
+  - Notes ascend from left to right like a piano (A = lower tone, L = higher tone)
+  - Add variation for modifiers (Enter, Shift, etc.)
+- Should be **toggleable** via settings panel
+- Use `AudioContext` for smooth playback
+
+---
+
+### 📖 Key Press History
+
+- Collapsible panel that shows **latest 5 or 10** key presses
+- Options:
+  - Off (no history at all)
+  - Show last 5
+  - Show last 10
+- History only registers **on key release**
+  - Holding a key does not flood the list
+- Each item in history:
+  - Displays the key, keyCode, and timestamp
+
+---
+
+### 🎛️ Visual Keyboard Overlay
+
+- Show a **full visual keyboard layout**
+
+  - Based on US QWERTY (for now)
+  - Support for laptop layout & external keyboards
+
+- Two **visualization modes** (toggleable):
+
+  1. **Sticky Mode**
+     - Keys remain visually "pressed" after interaction
+     - A "Reset" button clears the state
+  2. **Animated Mode**
+     - Keys animate down on press and fade out on release
+     - Holding a key animates press but doesn't add to history
+
+- Special handling:
+  - Modifiers (Shift, Ctrl, etc.) should also be represented
+  - Spacebar, Backspace, Tab, and arrow keys too
+
+---
+
+### ⚙️ Settings Panel
+
+- Toggle controls:
+  - ✅ Key sound feedback
+  - ✅ Sticky or animated key press behavior
+  - ✅ History panel mode: Off / Last 5 / Last 10
+  - 🎯 Future-proofing: Layout (QWERTY / ISO / Mac)
+
+---
+
+### ♿ Accessibility & UX
+
+- Works on physical keyboards, not just on-screen
+- Keyboard-only users can navigate history/settings
+- Visually impaired users can:
+  - Rely on audio feedback
+  - Enable sticky mode for clarity
+- Mobile support not required
+
+---
+
+### 🧱 Internal State (No DB Required)
+
+```ts
+type KeyPress = {
+  key: string;
+  keyCode: number;
+  timestamp: string;
+};
+
+type KeyboardTesterSettings = {
+  enableSound: boolean;
+  visualMode: "sticky" | "animated";
+  historyLimit: 0 | 5 | 10;
+};
+```
+
+---
+
+### Example State in Memory
+
+```ts
+const history: KeyPress[] = [
+  { key: "A", keyCode: 65, timestamp: "2025-04-13T17:11:32.551Z" },
+  { key: "S", keyCode: 83, timestamp: "2025-04-13T17:11:33.011Z" },
+];
+
+const settings: KeyboardTesterSettings = {
+  enableSound: true,
+  visualMode: "animated",
+  historyLimit: 5,
+};
+```
+
+---
+
+### 🧠 Implementation Notes
+
+- Use `keydown`, `keyup`, and `keypress` events wisely:
+  - `keydown` for animating press
+  - `keyup` for history + visual reset (unless in sticky mode)
+- `Set<string>` can help track currently held keys
+- Optionally preload audio clips or use `AudioBufferSourceNode`
+- A `<canvas>` or `<div>`-based grid can be used for the visual layout
+
+---
+
+Let me know if you'd like:
+
+- 🧑‍🎨 A visual keyboard component mock (Shadcn UI + Tailwind)
+- 🎼 A MIDI integration version for full piano key mapping
+- 🧠 A unified “Device Tester” dashboard that includes mic, webcam, and keyboard
