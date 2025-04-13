@@ -20,8 +20,6 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         <div>
           <PostMetadata
             date={frontmatter.lastModified || new Date().toISOString()}
-            readingTime={readingTime}
-            wordCount={wordCount}
           />
           {children}
         </div>
