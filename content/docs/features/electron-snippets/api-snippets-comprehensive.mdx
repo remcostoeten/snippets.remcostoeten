@@ -1,0 +1,485 @@
+---
+title: "Practical Electron + Prisma Integration Guide"
+language: "TypeScript"
+description: "A practical, example-driven guide for integrating Prisma with Electron, featuring a real-world task management system"
+lastModified: "2024-04-13"
+---
+
+## Introduction
+
+This guide walks you through building a real-world task management system using Electron and Prisma. We'll cover everything from initial setup to handling complex edge cases, using a practical example that you can follow along with.
+
+## Example System: TaskMaster Pro
+
+We'll build a task management application that works offline, syncs when online, and handles multiple windows efficiently. This example will demonstrate all the key concepts in a practical context.
+
+### System Requirements
+
+- Offline-first task management
+- Real-time sync between windows
+- Data persistence across app updates
+- Efficient handling of large task lists
+- Crash recovery and data integrity
+
+## 1. Database Schema & Models
+
+First, let's define our data model. We'll use a practical task management schema:
+
+```prisma
+// prisma/schema.prisma
+datasource db {
+  provider = "sqlite"
+  url      = "file:./taskmaster.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "binary" // Optimized for desktop
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  status      TaskStatus
+  priority    Priority
+  dueDate     DateTime?
+  tags        Tag[]
+  project     Project?  @relation(fields: [projectId], references: [id])
+  projectId   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  syncStatus  SyncStatus @default(PENDING)
+}
+
+model Project {
+  id          String    @id @default(cuid())
+  name        String
+  tasks       Task[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Tag {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  tasks       Task[]
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum SyncStatus {
+  PENDING
+  SYNCED
+  CONFLICT
+}
+```
+
+### Why This Schema?
+
+1. **Offline-First**: The `syncStatus` field helps manage offline/online synchronization
+2. **Relationships**: Demonstrates one-to-many (Project-Tasks) and many-to-many (Tasks-Tags) relationships
+3. **Enums**: Shows how to handle fixed-value fields properly in Electron
+4. **Timestamps**: Crucial for sync conflict resolution
+
+## 2. Database Setup & Initialization
+
+Here's how we handle database setup in an Electron context:
+
+```typescript
+// src/main/database/setup.ts
+import { app } from 'electron';
+import path from 'path';
+import { PrismaClient } from '@prisma/client';
+import { DatabaseMigrator } from './migrator';
+
+export class DatabaseSetup {
+  private static instance: DatabaseSetup;
+  private prisma: PrismaClient;
+  private readonly dbPath: string;
+
+  private constructor() {
+    this.dbPath = this.resolveDatabasePath();
+    this.prisma = this.createPrismaClient();
+  }
+
+  private resolveDatabasePath(): string {
+    // In development, use a local database
+    if (process.env.NODE_ENV === 'development') {
+      return path.join(process.cwd(), 'prisma/taskmaster.db');
+    }
+    
+    // In production, store in user's app data
+    return path.join(app.getPath('userData'), 'taskmaster.db');
+  }
+
+  private createPrismaClient(): PrismaClient {
+    process.env.DATABASE_URL = `file:${this.dbPath}`;
+    
+    return new PrismaClient({
+      log: process.env.NODE_ENV === 'development' 
+        ? ['query', 'error', 'warn']
+        : ['error'],
+      errorFormat: 'minimal',
+    });
+  }
+
+  async initialize(): Promise<void> {
+    try {
+      // Ensure database exists and is migrated
+      const migrator = new DatabaseMigrator(this.dbPath);
+      await migrator.ensureDatabase();
+      
+      // Test connection
+      await this.prisma.$connect();
+      
+      console.log('Database initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize database:', error);
+      throw error;
+    }
+  }
+
+  static getInstance(): DatabaseSetup {
+    if (!DatabaseSetup.instance) {
+      DatabaseSetup.instance = new DatabaseSetup();
+    }
+    return DatabaseSetup.instance;
+  }
+}
+```
+
+### Key Points About Database Setup
+
+1. **Path Resolution**: 
+   - Development: Uses local database for easy debugging
+   - Production: Stores in user's app data directory
+   - Why? Ensures proper permissions and data persistence
+
+2. **Singleton Pattern**:
+   - Why use it? Prevents multiple database connections
+   - When to create? At app startup
+   - How to access? Through getInstance()
+
+## 3. IPC Communication Layer
+
+Let's build a type-safe IPC layer for database operations:
+
+```typescript
+// src/shared/ipc/types.ts
+export interface TaskOperation<T = any> {
+  type: 'CREATE' | 'UPDATE' | 'DELETE' | 'READ';
+  model: 'Task' | 'Project' | 'Tag';
+  data?: T;
+  where?: Record<string, unknown>;
+}
+
+// src/shared/ipc/channels.ts
+export const IPC_CHANNELS = {
+  TASK: {
+    OPERATION: 'task:operation',
+    SYNC: 'task:sync',
+    STATUS: 'task:status'
+  }
+} as const;
+```
+
+Now, let's implement the IPC handler:
+
+```typescript
+// src/main/ipc/task-handler.ts
+import { ipcMain } from 'electron';
+import { IPC_CHANNELS } from '@shared/ipc/channels';
+import { TaskOperation } from '@shared/ipc/types';
+import { DatabaseSetup } from '../database/setup';
+
+export class TaskIpcHandler {
+  private db: PrismaClient;
+
+  constructor() {
+    this.db = DatabaseSetup.getInstance().getPrismaClient();
+    this.setupHandlers();
+  }
+
+  private setupHandlers(): void {
+    ipcMain.handle(
+      IPC_CHANNELS.TASK.OPERATION,
+      async (_event, operation: TaskOperation) => {
+        try {
+          return await this.handleOperation(operation);
+        } catch (error) {
+          console.error('Task operation failed:', error);
+          throw error;
+        }
+      }
+    );
+  }
+
+  private async handleOperation(operation: TaskOperation): Promise<any> {
+    const { type, model, data, where } = operation;
+
+    switch (type) {
+      case 'CREATE':
+        return this.db[model.toLowerCase()].create({ data });
+      
+      case 'UPDATE':
+        return this.db[model.toLowerCase()].update({
+          where,
+          data
+        });
+      
+      case 'DELETE':
+        return this.db[model.toLowerCase()].delete({
+          where
+        });
+      
+      case 'READ':
+        return this.db[model.toLowerCase()].findMany({
+          where,
+          include: this.getIncludes(model)
+        });
+      
+      default:
+        throw new Error(`Unknown operation type: ${type}`);
+    }
+  }
+
+  private getIncludes(model: string): Record<string, boolean> {
+    // Define relationships to include based on model
+    const includes: Record<string, Record<string, boolean>> = {
+      Task: {
+        project: true,
+        tags: true
+      },
+      Project: {
+        tasks: true
+      }
+    };
+
+    return includes[model] || {};
+  }
+}
+```
+
+### Why This IPC Structure?
+
+1. **Type Safety**: 
+   - All operations are typed
+   - Prevents runtime errors from invalid operations
+   - Enables better IDE support
+
+2. **Centralized Handling**:
+   - Single point of database access
+   - Consistent error handling
+   - Easy to add middleware (logging, validation, etc.)
+
+## 4. Practical Usage Example
+
+Here's how you'd use this system in a React component:
+
+```typescript
+// src/renderer/components/TaskList.tsx
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { Task } from '@shared/types';
+
+export function TaskList() {
+  // Fetch tasks
+  const { data: tasks, isLoading } = useQuery({
+    queryKey: ['tasks'],
+    queryFn: async () => {
+      return window.electron.invoke(IPC_CHANNELS.TASK.OPERATION, {
+        type: 'READ',
+        model: 'Task',
+        where: {
+          status: 'TODO'
+        }
+      });
+    }
+  });
+
+  // Create task mutation
+  const createTask = useMutation({
+    mutationFn: async (newTask: Partial<Task>) => {
+      return window.electron.invoke(IPC_CHANNELS.TASK.OPERATION, {
+        type: 'CREATE',
+        model: 'Task',
+        data: newTask
+      });
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    }
+  });
+
+  if (isLoading) return <div>Loading tasks...</div>;
+
+  return (
+    <div className="task-list">
+      {tasks.map(task => (
+        <TaskItem 
+          key={task.id} 
+          task={task} 
+          onStatusChange={handleStatusChange} 
+        />
+      ))}
+      
+      <button
+        onClick={() => createTask.mutate({
+          title: 'New Task',
+          status: 'TODO',
+          priority: 'MEDIUM'
+        })}
+      >
+        Add Task
+      </button>
+    </div>
+  );
+}
+```
+
+## 5. Handling Edge Cases
+
+### Offline Support
+
+```typescript
+// src/renderer/hooks/useOfflineTask.ts
+import { useOfflineStore } from '@/store/offline';
+
+export function useOfflineTask() {
+  const { addPendingOperation, processPendingOperations } = useOfflineStore();
+  const isOnline = useOnlineStatus();
+
+  const createTask = async (task: Partial<Task>) => {
+    try {
+      if (isOnline) {
+        // Direct operation
+        return await window.electron.invoke(
+          IPC_CHANNELS.TASK.OPERATION,
+          {
+            type: 'CREATE',
+            model: 'Task',
+            data: task
+          }
+        );
+      } else {
+        // Store for later
+        addPendingOperation({
+          type: 'CREATE',
+          model: 'Task',
+          data: task
+        });
+        
+        // Return optimistic result
+        return {
+          ...task,
+          id: `temp_${Date.now()}`,
+          syncStatus: 'PENDING'
+        };
+      }
+    } catch (error) {
+      console.error('Failed to create task:', error);
+      throw error;
+    }
+  };
+
+  return { createTask };
+}
+```
+
+### Real-world Considerations
+
+1. **Data Integrity**:
+   - Always validate data before operations
+   - Use transactions for related changes
+   - Handle sync conflicts gracefully
+
+2. **Performance**:
+   - Implement pagination for large lists
+   - Cache frequently accessed data
+   - Batch updates when possible
+
+3. **Error Recovery**:
+   - Log all operations
+   - Implement retry mechanisms
+   - Provide data export/import
+
+## 6. Testing Strategy
+
+Here's how to test this system effectively:
+
+```typescript
+// tests/integration/task-operations.test.ts
+import { TestContext } from './test-context';
+import { TaskOperation } from '@shared/ipc/types';
+
+describe('Task Operations', () => {
+  let context: TestContext;
+
+  beforeEach(async () => {
+    context = await TestContext.create();
+  });
+
+  afterEach(async () => {
+    await context.cleanup();
+  });
+
+  it('should handle concurrent task creation', async () => {
+    const operations: TaskOperation[] = Array(5).fill(null).map((_, i) => ({
+      type: 'CREATE',
+      model: 'Task',
+      data: {
+        title: `Task ${i}`,
+        status: 'TODO',
+        priority: 'MEDIUM'
+      }
+    }));
+
+    const results = await Promise.all(
+      operations.map(op => 
+        context.ipc.invoke(IPC_CHANNELS.TASK.OPERATION, op)
+      )
+    );
+
+    expect(results).toHaveLength(5);
+    expect(results.every(r => r.id)).toBe(true);
+  });
+});
+```
+
+## Next Steps
+
+Consider implementing:
+
+1. **Sync System**:
+   - Real-time updates between windows
+   - Conflict resolution
+   - Background sync
+
+2. **Performance Monitoring**:
+   - Query timing
+   - Memory usage
+   - Operation queuing
+
+3. **Advanced Features**:
+   - Task templates
+   - Batch operations
+   - Data export/import
+
+Let me know if you'd like me to expand on:
+
+- 📊 Database schema visualization
+- 🔍 Advanced query patterns
+- 🏗️ Window management strategies
+- 🔒 Security best practices
+- 🚀 Performance optimization techniques 
