@@ -1,13 +1,10 @@
-// Predefined color schemes for the CardSpotlight component
-// Each scheme contains two colors for the gradient effect
-
-export type ColorScheme = {
+export type TColorScheme = {
     name: string
     colors: [number[], number[]] // RGB values for the gradient
     bgColor?: string // Optional background color
 }
 
-export const SPOTLIGHT_COLORS: ColorScheme[] = [
+export const SPOTLIGHT_COLORS: TColorScheme[] = [
     {
         name: 'blue-purple',
         colors: [
@@ -53,7 +50,7 @@ export const SPOTLIGHT_COLORS: ColorScheme[] = [
 /**
  * Get a random color scheme from the predefined list
  */
-export function getRandomColorScheme(): ColorScheme {
+export function getRandomColorScheme(): TColorScheme {
     const randomIndex = Math.floor(Math.random() * SPOTLIGHT_COLORS.length)
     return SPOTLIGHT_COLORS[randomIndex]
 }
@@ -61,7 +58,7 @@ export function getRandomColorScheme(): ColorScheme {
 /**
  * Get a specific color scheme by index or name
  */
-export function getColorScheme(identifier: number | string): ColorScheme {
+export function getColorScheme(identifier: number | string): TColorScheme {
     if (typeof identifier === 'number') {
         return SPOTLIGHT_COLORS[identifier % SPOTLIGHT_COLORS.length]
     }

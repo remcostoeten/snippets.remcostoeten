@@ -3,6 +3,7 @@ import { Badge } from "./ui/badge";
 import { GradientText } from "./ui/effects/gradient-text";
 import { AnimatedNumber } from "./ui/effects/number-flow";
 import Link from "next/link";
+
 interface FooterProps {
   stats: {
     totalPosts: number;
@@ -32,9 +33,7 @@ export function Footer({ stats }: FooterProps) {
   return (
     <footer className="mt-auto border-t border-zinc-800 py-8 bg-zinc-950/50 backdrop-blur-sm">
       <div className="container flex flex-col gap-8 md:gap-4">
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Posts Stats */}
           <div className="flex items-center gap-3 p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
             <FileCode className="w-5 h-5 text-zinc-400" />
             <div>
@@ -47,8 +46,7 @@ export function Footer({ stats }: FooterProps) {
             </div>
           </div>
 
-          {/* Commits Stats */}
-          <div className="flex items-center gap-3 p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
+          <section className="flex items-center gap-3 p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
             <GitCommit className="w-5 h-5 text-zinc-400" />
             <div>
               <GradientText variant="chromatic" className="text-sm font-medium">
@@ -64,9 +62,8 @@ export function Footer({ stats }: FooterProps) {
                 </span>
               </div>
             </div>
-          </div>
+          </section>
 
-          {/* Deployments Stats */}
           <div className="flex items-center gap-3 p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
             <Rocket className="w-5 h-5 text-zinc-400" />
             <div>
@@ -80,8 +77,7 @@ export function Footer({ stats }: FooterProps) {
           </div>
         </div>
 
-        {/* Latest Activity */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-sm">
+        <section className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-sm">
           <div className="flex items-center gap-2">
             <GitCommit className="w-4 h-4 text-zinc-400" />
             <span className="text-zinc-400">Latest commit:</span>
@@ -101,9 +97,10 @@ export function Footer({ stats }: FooterProps) {
                     ? "bg-green-500/10 text-green-500 border-green-500/20"
                     : stats.lastDeployment.status === "failed"
                     ? "bg-red-500/10 text-red-500 border-red-500/20"
-                    : "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
-                }
-              `}
+                    : stats.lastDeployment.status === "pending"
+                    ? "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
+                    : ""
+                }`}
             >
               {stats.lastDeployment.status}
             </Badge>
@@ -111,7 +108,7 @@ export function Footer({ stats }: FooterProps) {
               {new Date(stats.lastDeployment.date).toLocaleDateString()}
             </Badge>
           </div>
-        </div>
+        </section>
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm border-t border-zinc-800/50 pt-4">
           <div className="flex items-center gap-2">

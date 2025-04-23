@@ -1,0 +1,181 @@
+---
+title: Suspense Wrapper Guide for SSR and Client UX
+description: Learn how to create, use, and master Suspense Wrappers for SSR-heavy apps in Next.js 14+ with real-world examples, best practices, and common pitfalls.
+language: "tsx"
+lastModified: "2025-04-23"
+---
+
+import { getEmoji } from "@/core/emoji-map"
+import {
+  CodeNote,
+  Example,
+  Important,
+  Tip,
+  Warning,
+  DemoSection,
+} from "@/components/ui/text/text-wrappers"
+
+<div className="max-w-full prose prose-invert">
+  <h1 className="mb-4 text-4xl font-bold tracking-tight">{frontmatter.title}</h1>
+  <p className="text-lg text-gray-400 mb-8">{frontmatter.description}</p>
+
+<Warning>
+  Suspense wrappers are not a magic fix. If used improperly, they can harm UX more than help.
+</Warning>
+
+## 💡 What is a Suspense Wrapper?
+
+<p className="text-gray-400">
+A Suspense Wrapper is a composable React component built on top of React’s native `<Suspense />`. It lets you render a fallback UI (like a skeleton or spinner) while waiting for a nested async component to load or resolve its data.
+</p>
+
+<Important>
+  In Next.js 14+ with SSR, Suspense can render loading states during server rendering — great for skeleton UIs and smoother hydration.
+</Important>
+
+## ✅ When to Use It
+
+<Tip>
+  Use Suspense Wrappers when:
+</Tip>
+
+- You're fetching **server-side data using `use()`** in child components
+- You want to **avoid layout shift** by showing a skeleton immediately
+- You're displaying components that **load lazily or stream chunks**
+- You want **modularity** and encapsulated loading behavior
+
+## ❌ When NOT to Use It
+
+<Warning>
+  Avoid Suspense Wrappers:
+</Warning>
+
+- Around **client-only** components relying on `useEffect` or dynamic logic — it won’t block render
+- For **above-the-fold, critical UI** unless you pair it with static skeleton fallback
+- When fallback is **too heavy** or breaks visual consistency
+
+---
+
+## 🧱 Creating a Suspense Wrapper
+
+```tsx
+// src/components/suspense-wrapper.tsx
+
+'use client'
+
+import { ReactNode, Suspense } from 'react'
+
+type Props = {
+  children: ReactNode
+  fallback: ReactNode
+}
+
+export function SuspenseWrapper({ children, fallback }: Props) {
+  return <Suspense fallback={fallback}>{children}</Suspense>
+}
+```
+
+<CodeNote>
+{"<SuspenseWrapper fallback={<YourSkeleton />}><AsyncComponent /></SuspenseWrapper>"}
+</CodeNote>
+
+---
+
+## 🧪 Example Usage (With Skeleton)
+
+```tsx
+// app/dashboard/page.tsx
+import { SuspenseWrapper } from '@/components/suspense-wrapper'
+import { DashboardSkeleton } from '@/components/skeletons/dashboard-skeleton'
+import { DashboardContent } from '@/components/dashboard-content'
+
+export default function DashboardPage() {
+  return (
+    <SuspenseWrapper fallback={<DashboardSkeleton />}>
+      <DashboardContent />
+    </SuspenseWrapper>
+  )
+}
+```
+
+<Example>Encapsulates loading logic, avoids layout shift, and enhances UX consistency.</Example>
+
+---
+
+## 👎 Anti-pattern Example
+
+```tsx
+// Don't do this
+<SuspenseWrapper fallback={<div>Loading...</div>}>
+  <ClientOnlyComponent />
+</SuspenseWrapper>
+```
+
+<Warning>
+  This has no real effect. Client components aren’t blocked by Suspense, so fallback won’t be shown.
+</Warning>
+
+---
+
+## 🔁 Nested Suspense Wrappers
+
+<p className="text-gray-400">
+You can nest wrappers to load independent parts of the page asynchronously — for example, a sidebar, main content, and notifications section.
+</p>
+
+```tsx
+<div className="grid grid-cols-4 gap-6">
+  <SuspenseWrapper fallback={<SidebarSkeleton />}>
+    <Sidebar />
+  </SuspenseWrapper>
+
+  <div className="col-span-2">
+    <SuspenseWrapper fallback={<MainSkeleton />}>
+      <MainContent />
+    </SuspenseWrapper>
+  </div>
+
+  <SuspenseWrapper fallback={<NotificationsSkeleton />}>
+    <Notifications />
+  </SuspenseWrapper>
+</div>
+```
+
+---
+
+## 🧠 Best Practices
+
+<Tip>
+  Follow these for optimal results:
+</Tip>
+
+- Use lightweight, **visually accurate skeletons**
+- Keep fallbacks **specific to the component** (not generic spinners)
+- Ensure async components use `use()` or await server-side data
+- If a component renders instantly, **don’t wrap it**
+
+---
+
+## 🚫 Pitfalls to Avoid
+
+<Warning>
+  Common mistakes include:
+</Warning>
+
+- Wrapping **everything** in Suspense — causes slow first paint
+- Fallbacks that **don’t match** the real content layout
+- Using it on **client-only** code
+
+---
+
+## 🎯 Final Thoughts
+
+<p className="text-gray-400">
+Suspense Wrappers are a powerful tool when paired with SSR and `use()` in Next.js 14+. When used correctly, they deliver fluid loading experiences with minimal effort and clear separation of concerns.
+</p>
+
+<Tip>
+  Think of Suspense as layout-preserving progressive rendering. Skeletons serve as visual contracts.
+</Tip>
+
+</div>
