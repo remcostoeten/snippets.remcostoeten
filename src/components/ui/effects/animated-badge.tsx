@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, CSSProperties } from 'react'
+import type { ComponentPropsWithoutRef, CSSProperties } from 'react'
 import { cn } from '@/helpers'
 
 type TProps = ComponentPropsWithoutRef<'span'> & {

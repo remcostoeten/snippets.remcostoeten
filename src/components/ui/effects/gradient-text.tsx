@@ -1,17 +1,17 @@
 import { cn } from "@/helpers";
-import React from "react";
+import type React from "react";
 
 interface GradientTextProps extends React.HTMLAttributes<HTMLHeadingElement> {
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "span";
-  variant?: "default" | "subtle" | "vibrant" | "chromatic";
+  variant?: "default" | "subtle" | "silver" | "chromatic";
 }
 
 const gradientVariants = {
-  default: "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500",
-  subtle: "bg-gradient-to-r from-zinc-200/90 via-zinc-100 to-zinc-200/90",
-  vibrant: "bg-gradient-to-r from-[#FF1CF7] via-[#b249f8] to-[#6699FF]",
+  default: "bg-gradient-to-r from-zinc-400 via-zinc-600 to-zinc-800",
+  subtle: "bg-gradient-to-r from-zinc-300 via-zinc-400 to-zinc-500",
+  silver: "bg-gradient-to-r from-[#919191] via-[#747474] to-[#919191]",
   chromatic:
-    "bg-[linear-gradient(90deg,rgb(255,255,255)_0%,rgb(200,200,200)_25%,rgb(255,255,255)_50%,rgb(200,200,200)_75%,rgb(255,255,255)_100%)]",
+    "bg-[linear-gradient(90deg,rgb(240,240,240)_0%,rgb(180,180,180)_25%,rgb(220,220,220)_50%,rgb(180,180,180)_75%,rgb(240,240,240)_100%)]",
 };
 
 export function GradientText({

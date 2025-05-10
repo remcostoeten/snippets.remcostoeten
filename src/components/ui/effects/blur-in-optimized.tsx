@@ -2,9 +2,22 @@
 
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@/helpers";
+import { cn } from "@/helpers"; 
 
-interface TextAnimateProps {
+/** 
+ * cn.ts 
+   import { type ClassValue, clsx } from 'clsx'
+   import { twMerge } from 'tailwind-merge'
+
+   export function cn(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs))
+   }
+
+  * index.ts
+    export * from './cn'
+*/
+
+type TProps = {
   children: React.ReactNode;
   animation?: "fadeIn" | "blurIn" | "blurInUp";
   delay?: number;
@@ -14,9 +27,9 @@ interface TextAnimateProps {
   fontWeight?: "normal" | "medium" | "semibold" | "bold";
   textColor?: string;
   letterSpacing?: "normal" | "wide" | "wider" | "widest" | "tight" | "tighter";
-}
+};
 
-export const OptimizedTextAnimate: React.FC<TextAnimateProps> = ({
+export function OptimizedTextAnimate({
   children,
   animation = "fadeIn",
   delay = 0,
@@ -26,21 +39,21 @@ export const OptimizedTextAnimate: React.FC<TextAnimateProps> = ({
   fontWeight = "normal",
   textColor,
   letterSpacing = "normal",
-}) => {
+}: TProps) {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
+        for (const entry of entries) {
           if (entry.isIntersecting) {
             setTimeout(() => {
               setIsVisible(true);
-            }, delay * 1000);
+            }, delay * 1000 || 0);
             observer.unobserve(entry.target);
           }
-        });
+        }
       },
       { threshold: 0.1 }
     );
@@ -114,4 +127,4 @@ export const OptimizedTextAnimate: React.FC<TextAnimateProps> = ({
       {children}
     </div>
   );
-};
+}

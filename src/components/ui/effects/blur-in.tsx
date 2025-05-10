@@ -1,8 +1,8 @@
 'use client'
 
 import { cn } from '@/helpers'
-import { MotionProps, Variants, motion, AnimatePresence } from 'framer-motion'
-import { ReactNode } from 'react'
+import { type MotionProps, type Variants, motion, AnimatePresence } from 'framer-motion'
+import type { ReactNode } from 'react'
 
 type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 type ElementType = HeadingLevel | 'p' | 'span' | 'div' | 'li' | 'blockquote'
@@ -367,8 +367,7 @@ export function TextAnimate({
     letterSpacing,
     ...props
 }: TextAnimateProps) {
-    // Create a motion component from the specified element type
-    const MotionComponent = motion(as as any)
+    const MotionComponent = motion(as as ElementType)
 
     // If children is not a string, render it directly without animation
     if (typeof children !== 'string') {

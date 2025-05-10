@@ -45,7 +45,7 @@ export default async function HomePage() {
               delay={0.6}
             >
               <GradientText variant="subtle">Recent Snippets</GradientText>
-            </TextAnimate>
+              </TextAnimate>
             <div className="flex items-center gap-4">
               {remainingCount > 0 && (
                 <TextAnimate

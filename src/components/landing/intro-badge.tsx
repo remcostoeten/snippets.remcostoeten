@@ -8,6 +8,7 @@ import { ShinyBadge } from "@/components/ui/effects/animated-badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Search } from "./search";
+import { GradientText } from "../ui/effects/gradient-text";
 
 export function Hero() {
   return (
@@ -41,7 +42,10 @@ export function Hero() {
         letterSpacing="tight"
         delay={0.1}
       >
+        <GradientText variant='subtle'>
+          
         Nothing really to see here
+        </GradientText>
       </OptimizedTextAnimate>
 
       <OptimizedTextAnimate

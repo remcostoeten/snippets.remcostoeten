@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/helpers'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Copy, Check, SeparatorHorizontal } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
