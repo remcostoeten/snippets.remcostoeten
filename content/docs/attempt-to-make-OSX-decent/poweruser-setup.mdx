@@ -1,0 +1,424 @@
+---
+title: "Disable Sudo Password Prompts on macOS"
+language: "Shell"
+lastModified: "2025-04-11"
+---
+
+import { Callout } from "fumadocs-ui/components/callout";
+import { Card, Cards } from "fumadocs-ui/components/card";
+
+in an attempt to make osx not so painfully sluggish and extremely poor window managment wise.
+
+```shell
+mkdir ~/.config/dotfiles;
+mkdir ~/dev
+mkdir ~/sandbox ## temp projects/tryouts
+mkdir ~/files
+```
+
+## essentials
+
+```bash
+echo "\033[1;36m▶ Installing Homebrew\033[0m"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+echo "\033[1;36m▶ Additional setup\033[0m"
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+
+echo "\033[1;36m▶ ✅ Done\033[0m"
+```
+
+```shell
+#!/bin/bash
+
+echo "\033[1;36m▶ Installing Fish shell\033[0m"
+brew install fish
+
+echo "\033[1;36m▶ Adding Fish to allowed shells\033[0m"
+echo "/opt/homebrew/bin/fish" | sudo tee -a /etc/shells
+
+echo "\033[1;36m▶ Setting Fish as default shell\033[0m"
+chsh -s /opt/homebrew/bin/fish
+
+echo "\033[1;36m▶ ✅ Done\033[0m"
+```
+
+```shell
+#!/bin/bash
+
+echo "\033[1;36m▶ Installing Oh My Fish\033[0m"
+curl -L https://get.oh-my.fish | fish
+
+echo "\033[1;36m▶ ✅ Done\033[0m"
+```
+
+```shell
+#!/bin/bash
+
+echo "\033[1;36m▶ Installing Raycast\033[0m"
+brew install --cask raycast
+
+echo "\033[1;36m▶ ✅ Done\033[0m"
+```
+
+```shell
+#!/bin/bash
+
+echo "\033[1;36m▶ Installing CLI tools: fzf, bat, ripgrep, fd, exa\033[0m"
+brew install fzf bat ripgrep fd exa
+
+echo "\033[1;36m▶ Installing lazygit\033[0m"
+brew install lazygit
+
+echo "\033[1;36m▶ ✅ Done\033[0m"
+```
+
+```bash
+#!/bin/bash
+
+# Set error handling
+set -e
+
+# Function to check if a setting was applied successfully
+check_success() {
+  if [ $? -eq 0 ]; then
+    echo -e "\033[1;32m✓ $1\033[0m"
+  else
+    echo -e "\033[1;31m✗ Failed to set $1\033[0m"
+  fi
+}
+
+# Function to handle errors during installation
+handle_error() {
+  echo -e "\033[1;31m❌ Error occurred during installation. Please check the output above.\033[0m"
+  exit 1
+}
+
+trap 'handle_error' ERR
+
+echo -e "\033[1;34m==================================\033[0m"
+echo -e "\033[1;34m  🚀 Complete System Setup 🚀\033[0m"
+echo -e "\033[1;34m==================================\033[0m"
+
+# Create necessary directories
+echo -e "\n\033[1;36m▶ Creating directory structure\033[0m"
+mkdir -p ~/.config/dotfiles
+mkdir -p ~/dev
+mkdir -p ~/sandbox
+mkdir -p ~/files
+check_success "Create directory structure"
+
+# Install Homebrew if not installed
+if ! command -v brew &> /dev/null; then
+    echo -e "\n\033[1;36m▶ Installing Homebrew\033[0m"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    check_success "Install Homebrew"
+fi
+
+# Install and setup Fish shell
+echo -e "\n\033[1;36m▶ Installing Fish shell\033[0m"
+brew install fish
+echo "/opt/homebrew/bin/fish" | sudo tee -a /etc/shells
+chsh -s /opt/homebrew/bin/fish
+check_success "Install and configure Fish shell"
+```
+
+# Install Oh My Fish
+
+```bash
+echo -e "\n\033[1;36m▶ Installing Oh My Fish\033[0m"
+curl -L https://get.oh-my.fish | fish
+check_success "Install Oh My Fish"
+```
+
+# Setup dotfiles structure
+
+```bash
+echo -e "\n\033[1;36m▶ Setting up dotfiles structure\033[0m"
+mkdir -p ~/.config/dotfiles/{alias,config}
+mkdir -p ~/.config/dotfiles/config/{terminal,navigation}
+
+# Backup existing fish config
+mv ~/.config/fish/config.fish ~/.config/fish/config.fish.backup 2>/dev/null || true
+
+# Create shell-config (source of truth)
+cat > ~/.config/dotfiles/shell-config <<EOL
+# Main shell configuration file
+# This is the source of truth for all shell configurations
+
+# Source all configuration files
+source ~/.config/dotfiles/alias/git
+source ~/.config/dotfiles/config/navigation
+source ~/.config/dotfiles/config/terminal
+
+# Set default shell options
+set -g fish_greeting ""
+EOL
+
+# Create git aliases
+cat > ~/.config/dotfiles/alias/git <<EOL
+# Git aliases
+alias g='git'
+alias add='git add'
+alias commit='git commit'
+alias push='git push'
+alias pull='git pull'
+alias status='git status'
+alias diff='git diff'
+alias checkout='git checkout'
+alias branch='git branch'
+alias newbranch='git checkout -b'
+alias log='git  log'
+alias stash='git stash'
+EOL
+
+# Create navigation configuration
+cat > ~/.config/dotfiles/config/navigation <<EOL
+# Navigation shortcuts
+alias .='cd ..'
+alias ..='cd ../..'
+alias ...='cd ../../..'
+alias ....='cd ../../../..'
+alias .....='cd ../../../../..'
+
+# Install and configure zoxide
+if type -q zoxide
+    zoxide init fish | source
+end
+
+# Quick directory shortcuts
+alias h='cd ~'
+alias dev='cd ~/dev'
+alias downloads='cd ~/Downloads'
+alias docs='cd ~/Documents'
+EOL
+
+# Create terminal configuration
+cat > ~/.config/dotfiles/config/terminal <<EOL
+# Terminal configuration
+set -gx TERMINAL ghostty
+
+# Default terminal settings
+set -gx SHELL (which fish)
+set -gx EDITOR nvim
+set -gx VISUAL \$EDITOR
+
+# Set default working directory
+if test -d ~/
+    cd ~/
+end
+EOL
+
+# Create symlink to fish config
+ln -sf ~/.config/dotfiles/shell-config ~/.config/fish/config.fish
+check_success "Setup dotfiles structure and configuration"
+
+# Install zoxide if not already installed
+if ! command -v zoxide &> /dev/null; then
+    echo -e "\n\033[1;36m▶ Installing zoxide\033[0m"
+    brew install zoxide
+    check_success "Install zoxide"
+fi
+
+# Install Ghostty Terminal
+echo -e "\n\033[1;36m▶ Installing Ghostty Terminal\033[0m"
+brew install --cask ghostty
+
+# Set Ghostty as default terminal
+mkdir -p ~/.config/ghostty
+cat > ~/.config/ghostty/config <<EOL
+# Ghostty Configuration
+font-family = "JetBrainsMono Nerd Font"
+font-size = 18
+theme = "Catppuccin Mocha"
+window-padding-x = 10
+window-padding-y = 10
+EOL
+
+# Add Ghostty to Fish config
+echo "set -gx TERMINAL ghostty" >> ~/.config/fish/config.fish
+check_success "Install and configure Ghostty"
+
+# Install Bun
+echo -e "\n\033[1;36m▶ Installing Bun\033[0m"
+curl -fsSL https://bun.sh/install | bash
+echo "set -gx BUN_INSTALL \$HOME/.bun" >> ~/.config/fish/config.fish
+echo "set -gx PATH \$BUN_INSTALL/bin \$PATH" >> ~/.config/fish/config.fish
+check_success "Install Bun"
+
+echo -e "\n\033[1;36m▶ Installing CLI tools: fzf, bat, ripgrep, fd, exa\033[0m"
+brew install fzf bat ripgrep fd exa
+
+echo -e "\033[1;36m▶ Installing lazygit\033[0m"
+brew install lazygit
+
+echo -e "\033[1;36m▶ ✅ Done\033[0m"
+
+echo -e "\n\033[1;36m▶ Disabling all animations and visual effects\033[0m"
+
+# Disable window opening and closing animations
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+check_success "Disable window animations"
+
+defaults write NSGlobalDomain NSScrollAnimationEnabled -bool false
+check_success "Disable smooth scrolling"
+
+defaults write com.apple.finder DisableAllAnimations -bool true
+check_success "Disable Finder animations"
+
+defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
+check_success "Accelerate window resize speed"
+
+defaults write -g QLPanelAnimationDuration -float 0
+check_success "Disable Quick Look animations"
+
+# Disable Dock animations
+defaults write com.apple.dock autohide-time-modifier -float 0
+defaults write com.apple.dock autohide-delay -float 0
+defaults write com.apple.dock expose-animation-duration -float 0.1
+defaults write com.apple.dock springboard-show-duration -float 0
+defaults write com.apple.dock springboard-hide-duration -float 0
+defaults write com.apple.dock springboard-page-duration -float 0
+check_success "Disable Dock animations"
+
+# Disable Mission Control animations (same as expose-animation-duration)
+defaults write com.apple.dock expose-animation-duration -float 0.1
+check_success "Disable Mission Control animations"
+
+# Disable Launchpad animations
+defaults write com.apple.dock springboard-show-duration -int 0
+defaults write com.apple.dock springboard-hide-duration -int 0
+check_success "Disable Launchpad animations"
+
+echo -e "\n\033[1;36m▶ Optimizing Dock for speed\033[0m"
+
+defaults write com.apple.dock autohide -bool true
+check_success "Auto-hide Dock"
+
+defaults write com.apple.dock tilesize -int 36
+check_success "Minimize Dock size"
+
+defaults write com.apple.dock minimize-to-application -bool true
+check_success "Minimize to application icon"
+
+defaults write com.apple.dock show-recents -bool false
+check_success "Disable recent applications in Dock"
+
+defaults write com.apple.dock mru-spaces -bool false
+check_success "Disable automatic Space rearrangement"
+
+# Remove the auto-hiding Dock delay (already set but double checked)
+defaults write com.apple.dock autohide-delay -float 0
+check_success "Remove Dock hiding delay"
+
+echo -e "\n\033[1;36m▶ Optimizing Finder for speed and Linux-like experience\033[0m"
+
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+check_success "Show all filename extensions"
+
+defaults write com.apple.finder ShowPathbar -bool true
+check_success "Show path bar"
+
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+check_success "Show full path in title"
+
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+check_success "Keep folders on top"
+
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+check_success "Set default search scope"
+
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+check_success "Disable extension change warning"
+
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+check_success "Disable .DS_Store file creation"
+
+chflags nohidden ~/Library
+check_success "Unhide Library folder"
+
+sudo chflags nohidden /Volumes
+check_success "Unhide Volumes folder"
+
+echo -e "\n\033[1;36m▶ System-wide speed optimizations\033[0m"
+
+defaults write NSGlobalDomain KeyRepeat -int 1
+defaults write NSGlobalDomain InitialKeyRepeat -int 10
+check_success "Faster keyboard repeat rate"
+
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+check_success "Disable press-and-hold for keys"
+
+defaults write com.apple.universalaccess reduceTransparency -bool true
+check_success "Reduce transparency"
+
+defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
+check_success "Disable automatic app termination"
+
+# Disable "Are you sure you want to open this application?" dialog
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+check_success "Disable app open confirmation dialog"
+
+defaults write com.apple.frameworks.diskimages skip-verify -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
+check_success "Disable disk image verification"
+
+sudo pmset -a hibernatemode 0
+check_success "Disable hibernation"
+
+sudo pmset -a sms 0
+check_success "Disable sudden motion sensor"
+
+echo -e "\n\033[1;36m▶ Installing Linux-like utilities and UI enhancements\033[0m"
+
+brew install coreutils
+brew install findutils
+brew install gnu-sed
+brew install grep
+brew install bash
+check_success "Install GNU tools"
+
+# Add GNU tools to PATH in fish config
+mkdir -p ~/.config/fish
+{
+    echo ""
+    echo "# GNU tools path (from speed optimization script)"
+    echo "set -gx PATH /usr/local/opt/coreutils/libexec/gnubin \$PATH"
+    echo "set -gx PATH /usr/local/opt/findutils/libexec/gnubin \$PATH"
+    echo "set -gx PATH /usr/local/opt/gnu-sed/libexec/gnubin \$PATH"
+    echo "set -gx PATH /usr/local/opt/grep/libexec/gnubin \$PATH"
+    echo ""
+} >> ~/.config/fish/config.fish
+check_success "Set GNU tools path in fish config"
+
+brew install --cask alt-tab
+check_success "Install Alt-Tab"
+
+echo -e "\n\033[1;36m▶ Installing essential system utilities\033[0m"
+brew install wget
+brew install curl
+brew install jq
+brew install xz
+check_success "Install essential system utilities"
+
+echo -e "\n\033[1;36m▶ Setting up Git and version control tools\033[0m"
+brew install git
+brew install gh
+
+git config --global init.defaultBranch master
+git config --global core.editor "vim"
+git config --global pull.rebase false
+
+check_success "Set up Git and version control tools"
+
+echo -e "\n\033[1;36m▶ Installing Node.js ecosystem\033[0m"
+brew install node
+brew install pnpm
+
+echo -e "\n\033[1;32m✅ Installation complete!\033[0m"
+echo -e "\033[1;33mPlease restart your terminal to apply all changes.\033[0m"
+```
