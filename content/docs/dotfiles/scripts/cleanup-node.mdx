@@ -1,0 +1,102 @@
+---
+title: "Cleanup enviorment "
+description: "Cleans up generated development files based on if it's a nextjs or vite app"
+language: "shell"
+lastModified: "2025-05-17"
+---
+
+> [!NOTE]
+> This is for .fish style shell
+
+Create the extensionless script file at `~/.config/dotfiles/scripts/cleanup-node`:
+
+```fish
+#!/usr/bin/env fish
+
+function rmnode
+    bash -c '
+        set -euo pipefail
+
+        RED="\033[0;31m"
+        GREEN="\033[0;32m"
+        BLUE="\033[0;34m"
+        RESET="\033[0m"
+
+        log() {
+            echo -e "${BLUE}[INFO]${RESET} $1"
+        }
+
+        success() {
+            echo -e "${GREEN}[DONE]${RESET} $1"
+        }
+
+        error() {
+            echo -e "${RED}[ERROR]${RESET} $1" >&2
+        }
+
+        # Remove common build/dependency folders
+        remove_folder() {
+            local folder=$1
+            if [ -d "$folder" ]; then
+                log "Removing $folder..."
+                rm -rf "$folder"
+                success "$folder removed"
+            fi
+        }
+
+        # Main logic
+        log "Cleaning project..."
+
+        remove_folder node_modules
+        remove_folder .next
+        remove_folder dist
+        remove_folder .vite
+        remove_folder out
+
+        if ! command -v bun >/dev/null 2>&1; then
+            error "bun is not installed or not in PATH"
+            exit 1
+        fi
+
+        log "Reinstalling dependencies with bun..."
+        bun install && success "Dependencies reinstalled with bun"
+
+        success "Project cleaned and ready!"
+
+    ' -- $argv
+end
+```
+
+## Setup Instructions
+
+1. **Create the script directory:**
+   ```fish
+   mkdir -p ~/.config/dotfiles/scripts
+   ```
+
+2. **Make the script executable:**
+   ```fish
+   chmod +x ~/.config/dotfiles/scripts/cleanup-node
+   ```
+
+3. **Source it in your fish config** (`~/.config/fish/config.fish`):
+   ```fish
+   # Source all scripts in dotfiles/scripts directory
+   for script in ~/.config/dotfiles/scripts/*
+       if test -f $script
+           source $script
+       end
+   end
+   ```
+
+   Or source just this specific script:
+   ```fish
+   source ~/.config/dotfiles/scripts/cleanup-node
+   ```
+
+4. **Reload your fish config:**
+   ```fish
+   source ~/.config/fish/config.fish
+   ```
+
+Now you can use `rmnode` command from anywhere in your terminal!
