@@ -1,0 +1,18 @@
+---
+title: "Recursive file & folder creation"
+description: "Allow writing touch & mkdir which allows to create recursive with auto folder creation and runs chmod +x  on the created file by default"
+language: "shell"
+lastModified: "2025-05-17"
+---
+
+ToDo:
+
+Instead of having to type
+```bash
+mkdir -p some/folder/that/doesnt/exist
+&&
+touch some/folder/that/doesnt/exist/some-file.sh 
+&&
+chmod +x some/folder/that/doesnt/exist/some-file.sh
+```
+You simply want to be able to do `mkdir` recursive instead of `mkdir -p` or `touch` recursive without having to create the directory first.
