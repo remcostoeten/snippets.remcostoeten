@@ -1,0 +1,150 @@
+---
+title: "Clipboard Copy Commands"
+description: "A set of functions to simplify copying to the clipboard in the terminal."
+language: "shell"
+lastModified: "2025-06-24"
+---
+
+import {
+  CodeNote,
+  Tip,
+  Important,
+  Example,
+  Warning,
+} from "@/components/ui/text/text-wrappers";
+
+<div className="max-w-full prose prose-invert">
+  <h1 className="mb-4 text-4xl font-bold tracking-tight">{frontmatter.title}</h1>
+  <p className="text-lg text-gray-400 mb-8">{frontmatter.description}</p>
+</div>
+
+<Important>
+  This file adds `copy` and `copypwd` functions to your Fish shell. It's designed for fast CLI clipboard workflows and includes a smart help menu with colorized output.
+</Important>
+
+<Warning>
+  Ensure <code>xclip</code> is installed, as it's required for copying to your system clipboard.
+</Warning>
+
+## Installation
+
+Place the script in your shell config directory (e.g., `~/.config/fish/functions/clipboard`) and source it from your main config:
+
+<CodeNote>
+  {"echo 'source ~/.config/fish/functions/clipboard' >> ~/.config/fish/config.fish"}
+</CodeNote>
+
+It will remain silent when sourced.
+
+## Usage
+
+🧪 **Copy current working directory**
+
+```fish
+copypwd
+```
+📋 Will copy: `/current/path/you/are/in`
+
+---
+
+🧪 **Copy a full path to a file**
+
+```fish
+copypwd ./myfile.ts
+```
+📋 Will copy: `/full/path/to/myfile.ts`
+
+---
+
+🧪 **Copy a file's contents**
+
+```fish
+copy myfile.txt
+```
+📋 If the file contains "hello world", this string will be copied to the clipboard.
+
+---
+
+🧪 **Show the colorized help menu**
+
+Any of the following commands will show the help menu:
+
+```fish
+copy --help
+```
+⏹️ **Recognized aliases:** `copy`, `copy -h`, `copy --h`, `copy help`, `copy -help`, `copy --help`
+
+## Full Source Code
+
+```fish
+##!/usr/bin/env fish
+
+# A silent sourceable clipboard helper for Fish shell
+# Adds `copy`, `copypwd`, and a built-in colorized help menu
+
+function copy
+  set -l arg1 $argv[1]
+  set -l arg2 $argv[2]
+
+  if test (count $argv) -eq 0
+    echo -e (set_color yellow)"✦ No arguments provided. Type "(set_color cyan)"copy --help"(set_color yellow)" for usage."
+    return 1
+  end
+
+  switch $arg1
+    case "help" "-h" "--h" "-help" "--help"
+      echo ""
+      echo -e (set_color brmagenta)"╭──────────────────────────────────────────────╮"
+      echo -e (set_color brmagenta)"│"(set_color green)"         Fish Clipboard Helper v1.0        "(set_color brmagenta)"│"
+      echo -e (set_color brmagenta)"╰──────────────────────────────────────────────╯"
+      echo ""
+      echo -e (set_color cyan)"Commands:"
+      echo -e (set_color green)"  copy [file]"(set_color normal)"         → Copies the contents of a file"
+      echo -e (set_color green)"  copypwd"(set_color normal)"            → Copies the current working directory"
+      echo -e (set_color green)"  copypwd [file]"(set_color normal)"     → Copies full absolute path to file"
+      echo ""
+      echo -e (set_color cyan)"Help Aliases:"
+      echo -e (set_color yellow)"  help, -h, --h, -help, --help"
+      echo ""
+      return 0
+
+    case "pwd"
+      if test -n "$arg2"
+        set -l abs (realpath "$arg2" ^/dev/null)
+        if test -e "$abs"
+          echo -n "$abs" | xclip -selection clipboard
+          echo -e (set_color green)"✓ Copied:"(set_color normal)" $abs"
+        else
+          echo -e (set_color red)"✗ File not found:"(set_color normal)" $arg2"
+        end
+      else
+        echo -n (pwd) | xclip -selection clipboard
+        echo -e (set_color green)"✓ Copied current directory to clipboard."
+      end
+      return 0
+
+    case '*'
+      if test -f "$arg1"
+        cat "$arg1" | xclip -selection clipboard
+        echo -e (set_color green)"✓ Copied contents of file:"(set_color normal)" $arg1"
+      else
+        echo -e (set_color red)"✗ File not found:"(set_color normal)" $arg1"
+      end
+  end
+end
+
+function copypwd
+  if test (count $argv) -eq 0
+    echo -n (pwd) | xclip -selection clipboard
+    echo -e (set_color green)"✓ Copied current directory."
+  else
+    set -l abs (realpath "$argv[1]" ^/dev/null)
+    if test -e "$abs"
+      echo -n "$abs" | xclip -selection clipboard
+      echo -e (set_color green)"✓ Copied full path to:"(set_color normal)" $abs"
+    else
+      echo -e (set_color red)"✗ File not found:"(set_color normal)" $argv[1]"
+    end
+  end
+end
+```

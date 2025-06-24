@@ -1,0 +1,186 @@
+---
+title: "Fish Shell Port and File Utilities"
+description: "A set of Fish shell functions to list listening ports, interactively kill processes by port, and create timestamped file backups."
+language: "shell"
+lastModified: "2025-06-25"
+---
+
+import {
+  CodeNote,
+  Tip,
+  Important,
+  Example,
+  Warning,
+} from "@/components/ui/text/text-wrappers";
+
+<div className="max-w-full prose prose-invert">
+  <h1 className="mb-4 text-4xl font-bold tracking-tight">{frontmatter.title}</h1>
+  <p className="text-lg text-gray-400 mb-8">{frontmatter.description}</p>
+</div>
+
+<Important>
+  This script adds three convenient utilities to your Fish shell: `ports` to see what's running, `pkillport` to stop a process, and `backup` for quick file snapshots.
+</Important>
+
+<Warning>
+  The `ports` function requires either `lsof` or `ss` to be installed on your system. The `pkillport` function requires `fzf` (a command-line fuzzy finder) for its interactive menu.
+</Warning>
+
+## Installation
+
+Save the script's content to a file in your Fish functions directory, for example, `~/.config/fish/functions/utils.fish`. Fish will automatically load the functions in new shell sessions. You do not need to source it manually.
+
+## Usage
+
+### `ports` - List Listening Ports
+
+Run this command to get a colorized list of all processes currently listening on TCP ports. It shows the PID, process name, port number, and the full command.
+
+**Example Command:**
+```fish
+ports
+```
+
+**Example Output:**
+```
+PID      PROCESS    PORT   COMMAND
+1234     sshd       22     sshd: user [priv]
+5678     node       3000   node /path/to/your/app.js
+9101     python     8000   python -m http.server
+```
+
+### `pkillport` - Interactively Kill a Process by Port
+
+This command displays an interactive `fzf` menu of listening ports. You can fuzzy-find a process, see a preview of what will be killed, and press Enter to select. It will then ask for confirmation before killing the process.
+
+**Example Command:**
+```fish
+pkillport
+```
+This will open a screen where you can type to filter and use arrow keys to select a process to terminate.
+
+### `backup` - Create a Timestamped Backup
+
+Creates a quick backup of any file. A timestamp in `YYYYMMDD-HHMMSS` format is appended to the original filename.
+
+**Example Command:**
+```fish
+backup my_important_document.txt
+```
+
+**Example Output:**
+```
+Backup created: my_important_document.txt.20250625-203000.bak
+```
+
+## Full Source Code
+
+```fish
+#!/usr/bin/env fish
+
+# Provides utility functions for port management and file backups in Fish shell.
+# Functions:
+#   - ports: Lists listening TCP ports with process info.
+#   - pkillport: Interactively kills a process by selecting a port (requires fzf).
+#   - backup: Creates a timestamped backup of a file.
+
+function ports
+    # List listening TCP ports with PID and process name, colorized
+    set -l header (printf "%-8s %-10s %-6s %-s\n" "PID" "PROCESS" "PORT" "COMMAND")
+    echo (set_color cyan)$header(set_color normal)
+
+    # Use lsof to find listening TCP ports; fallback to ss if lsof missing
+    if type -q lsof
+        lsof -nP -iTCP -sTCP:LISTEN | tail -n +2 | while read -l line
+            # Parse line: COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME
+            set -l cols (string split -r ' ' $line)
+            set -l pid $cols[2]
+            set -l cmd <span class="math-inline">cols\[0\]
+\# Extract port from last col, e\.g\. \*\:8080 or \[\:\:\]\:80
+set \-l rawport \(string match \-r '\:\(\\d\+\)</span>' <span class="math-inline">cols\[\-1\]\)
+set \-l port \(string replace \-r '\.\*\:\(\\d\+\)</span>' '$1' $rawport)
+            if test -n "$port"
+                printf "%-8s %-10s %-6s %-s\n" (set_color green)$pid(set_color normal) (set_color yellow)$cmd(set_color normal) (set_color magenta)$port(set_color normal) $line
+            end
+        end
+    else if type -q ss
+        ss -ltpn | tail -n +2 | while read -l line
+            # Sample output: LISTEN 0      128         *:22                    *:* users:(("sshd",pid=1234,fd=3))
+            set -l port (string match -r '.*:(\d+) ' $line | string replace -r '.*:(\d+) ' '$1')
+            set -l pid (string match -r 'pid=(\d+),' $line | string replace -r 'pid=(\d+),.*' '$1')
+            set -l cmd (string match -r '\("([^"]+)",pid' $line | string replace -r '\("([^"]+)",pid.*' '$1')
+            if test -n "$pid" -a -n "$port"
+                printf "%-8s %-10s %-6s %-s\n" (set_color green)$pid(set_color normal) (set_color yellow)$cmd(set_color normal) (set_color magenta)$port(set_color normal) $line
+            end
+        end
+    else
+        echo (set_color red)"Error: Neither 'lsof' nor 'ss' found on system."(set_color normal)
+        return 1
+    end
+end
+
+function pkillport
+    # List ports and PIDs, let user pick one to kill, confirm and kill
+    if not type -q fzf
+        echo (set_color red)"Error: fzf not installed. Install fzf to use pkillport."(set_color normal)
+        return 1
+    end
+
+    set -l choices (ports | tail -n +2 | awk '{print $3 "\t" $1 "\t" $2}')
+    if test -z "$choices"
+        echo (set_color yellow)"No listening ports found."(set_color normal)
+        return 0
+    end
+
+    echo (set_color cyan)"Select a port to kill (use arrows and enter):"(set_color normal)
+    # Format: port TAB pid TAB cmd
+    set -l selection (echo $choices | fzf --prompt="port\tpid\tcmd> " --with-nth=1,3,2 --delimiter="\t" --preview="echo Killing PID {2} on port {1} running {3}")
+
+    if test -z "$selection"
+        echo (set_color yellow)"No selection made, aborting."(set_color normal)
+        return 0
+    end
+
+    set -l port (echo $selection | awk '{print $1}')
+    set -l pid (echo $selection | awk '{print $2}')
+    set -l cmd (echo $selection | awk '{print $3}')
+
+    echo (set_color red)"Confirm kill process $cmd with PID $pid listening on port $port? (y/N)"(set_color normal)
+    read -l answer
+    if test "$answer" = "y" -o "$answer" = "Y"
+        kill $pid
+        if test $status -eq 0
+            echo (set_color green)"Successfully killed PID $pid ($cmd)." (set_color normal)
+        else
+            echo (set_color red)"Failed to kill PID $pid."(set_color normal)
+        end
+    else
+        echo (set_color yellow)"Kill aborted."(set_color normal)
+    end
+end
+
+function backup
+    # Backup file with timestamp suffix
+    if test (count $argv) -eq 0
+        echo (set_color red)"Usage: backup <file>"(set_color normal)
+        return 1
+    end
+
+    set -l file $argv[1]
+
+    if not test -f $file
+        echo (set_color red)"File not found: $file"(set_color normal)
+        return 1
+    end
+
+    set -l timestamp (date "+%Y%m%d-%H%M%S")
+    set -l backupfile "$file.$timestamp.bak"
+
+    cp $file $backupfile
+
+    if test $status -eq 0
+        echo (set_color green)"Backup created: $backupfile"(set_color normal)
+    else
+        echo (set_color red)"Failed to create backup."(set_color normal)
+    end
+end

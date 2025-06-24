@@ -1,11 +1,22 @@
 // source.config.ts
 import { defineConfig, defineDocs } from "fumadocs-mdx/config";
+import rehypePrettyCode from "rehype-pretty-code";
 var docs = defineDocs({
   dir: "content/docs"
 });
 var source_config_default = defineConfig({
   mdxOptions: {
-    // MDX options
+    rehypePlugins: [
+      [
+        rehypePrettyCode,
+        {
+          theme: {
+            light: "github-light",
+            dark: "one-dark-pro"
+          }
+        }
+      ]
+    ]
   }
 });
 export {

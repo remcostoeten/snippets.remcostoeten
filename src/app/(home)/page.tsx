@@ -7,6 +7,7 @@ import Link from "next/link";
 import { getRecentSnippets } from "@/server/queries/snippets";
 import { GradientText } from "@/components/ui/effects/gradient-text";
 import { AnimatedNumber } from "@/components/ui/effects/number-flow";
+import FeatureCards from "@/components/landing/feature-card-parent";
 
 function formatDescription(description: string) {
   return description.split(/(`[^`]+`)/).map((part, index) => {
@@ -177,6 +178,7 @@ export default async function HomePage() {
               </TextAnimate>
             ))}
           </div>
+          <FeatureCards/>
         </section>
       </main>
     </div>

@@ -1,4 +1,5 @@
 import { defineConfig, defineDocs } from "fumadocs-mdx/config";
+import rehypePrettyCode from "rehype-pretty-code";
 
 // Options: https://fumadocs.vercel.app/docs/mdx/collections#define-docs
 export const docs = defineDocs({
@@ -7,6 +8,16 @@ export const docs = defineDocs({
 
 export default defineConfig({
   mdxOptions: {
-    // MDX options
+    rehypePlugins: [
+      [
+        rehypePrettyCode,
+        {
+          theme: {
+            light: 'github-light',
+            dark: 'one-dark-pro'
+          }
+        }
+      ]
+    ]
   },
 });

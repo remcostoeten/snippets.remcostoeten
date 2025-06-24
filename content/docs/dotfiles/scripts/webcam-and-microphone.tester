@@ -1,0 +1,325 @@
+---
+title: "Test  your webcam and microphone in the CLI"
+description: "A handy script for in your dotfiles (`.fish`) to test if your webcam and microphone are working.  No more awkward meetings."
+language: "shell"
+lastModified: "2025-06-24"
+---
+
+import {
+  CodeNote,
+  Tip,
+  Important,
+  Example,
+  Warning,
+} from "@/components/ui/text/text-wrappers";
+
+<div className="max-w-full prose prose-invert">
+  <h1 className="mb-4 text-4xl font-bold tracking-tight">{frontmatter.title}</h1>
+  <p className="text-lg text-gray-400 mb-8">{frontmatter.description}</p>
+</div>
+
+<Important>
+  This script provides a powerful suite of command-line utilities for the Fish shell, covering clipboard workflows, process management, file backups, and hardware testing. All functions are designed to be placed in a single file for easy installation.
+</Important>
+
+<Warning>
+  **Dependencies:** Different functions in this script require external tools. Before using, ensure you have the following installed for the functions you need:
+  - `xclip`: For `copy` and `copypwd`.
+  - `lsof` or `ss`: For the `ports` command.
+  - `fzf`: For the interactive `pkillport` command.
+  - `ffmpeg`, `v4l2-utils`, `pactl`: For the `webcam` and `mic` testing utilities.
+</Warning>
+
+## Installation
+
+Save the **Full Source Code** at the bottom of this document into a single file in your Fish functions directory. A good name would be `~/.config/fish/functions/custom_utils.fish`.
+
+Once saved, all functions will be automatically available in new shell sessions.
+
+## Usage
+
+The script provides several commands, grouped by category below.
+
+### Clipboard Utilities (`copy`, `copypwd`)
+
+- **`copy [file]`**: Copies the entire content of a file to the clipboard.
+  ```fish
+  copy my_script.sh
+  ```
+- **`copypwd`**: Copies the current working directory path to the clipboard.
+  ```fish
+  copypwd
+  ```
+- **`copypwd [file_or_dir]`**: Copies the full, absolute path of a file or directory to the clipboard.
+  ```fish
+  copypwd ./src/main.ts
+  ```
+
+### Process and Port Management (`ports`, `pkillport`)
+
+- **`ports`**: Lists all listening TCP ports with their associated PID, process name, and command.
+  ```fish
+  ports
+  ```
+- **`pkillport`**: Opens an interactive fuzzy-finder menu (`fzf`) to select and kill a process by its port.
+  ```fish
+  pkillport
+  ```
+
+### File Utilities (`backup`)
+
+- **`backup [file]`**: Creates a timestamped backup of a given file (e.g., `myfile.txt.20250624-205000.bak`).
+  ```fish
+  backup important_config.json
+  ```
+
+### Device Testing (`webcam`, `mic`)
+
+- **`webcam`**: Checks for a webcam, displays its technical information, and opens a live preview window.
+  ```fish
+  webcam
+  ```
+- **`mic` or `microphone`**: Starts a live audio level meter to test if your microphone is working and shows its volume in decibels. Press `Ctrl+C` to stop.
+  ```fish
+  mic
+  ```
+
+## Full Source Code
+
+```fish
+#!/usr/bin/env fish
+
+# ==============================================================================
+# A Comprehensive Collection of Fish Shell Utilities
+#
+# This file includes functions for:
+# - Clipboard management (copy, copypwd)
+# - Process/port control (ports, pkillport)
+# - File backups (backup)
+# - Device testing (webcam, mic)
+# ==============================================================================
+
+
+# ==============================================================================
+# SECTION 1: CLIPBOARD UTILITIES
+# Dependencies: xclip
+# ==============================================================================
+
+function copy
+    set -l arg1 $argv[1]
+    set -l arg2 $argv[2]
+
+    if test (count $argv) -eq 0
+        echo -e (set_color yellow)"✦ No arguments provided. Type "(set_color cyan)"copy --help"(set_color yellow)" for usage."
+        return 1
+    end
+
+    switch $arg1
+        case "help" "-h" "--h" "-help" "--help"
+            echo ""
+            echo -e (set_color brmagenta)"╭──────────────────────────────────────────────╮"
+            echo -e (set_color brmagenta)"│"(set_color green)"         Fish Clipboard Helper v1.0        "(set_color brmagenta)"│"
+            echo -e (set_color brmagenta)"╰──────────────────────────────────────────────╯"
+            echo ""
+            echo -e (set_color cyan)"Commands:"
+            echo -e (set_color green)"  copy [file]"(set_color normal)"         → Copies the contents of a file"
+            echo -e (set_color green)"  copypwd"(set_color normal)"            → Copies the current working directory"
+            echo -e (set_color green)"  copypwd [file]"(set_color normal)"     → Copies full absolute path to file"
+            return 0
+        case '*'
+            if test -f "$arg1"
+                cat "$arg1" | xclip -selection clipboard
+                echo -e (set_color green)"✓ Copied contents of file:"(set_color normal)" $arg1"
+            else
+                echo -e (set_color red)"✗ File not found:"(set_color normal)" $arg1"
+            end
+    end
+end
+
+function copypwd
+    if test (count $argv) -eq 0
+        echo -n (pwd) | xclip -selection clipboard
+        echo -e (set_color green)"✓ Copied current directory."
+    else
+        set -l abs (realpath "$argv[1]" ^/dev/null)
+        if test -e "$abs"
+            echo -n "$abs" | xclip -selection clipboard
+            echo -e (set_color green)"✓ Copied full path to:"(set_color normal)" $abs"
+        else
+            echo -e (set_color red)"✗ File not found:"(set_color normal)" $argv[1]"
+        end
+    end
+end
+
+
+# ==============================================================================
+# SECTION 2: PROCESS, PORT, AND FILE UTILITIES
+# Dependencies: lsof or ss, fzf
+# ==============================================================================
+
+function ports
+    set -l header (printf "%-8s %-10s %-6s %-s\n" "PID" "PROCESS" "PORT" "COMMAND")
+    echo (set_color cyan)$header(set_color normal)
+
+    if type -q lsof
+        lsof -nP -iTCP -sTCP:LISTEN | tail -n +2 | while read -l line
+            set -l cols (string split -r ' ' $line)
+            set -l pid $cols[2]
+            set -l cmd <span class="math-inline">cols\[0\]
+set \-l rawport \(string match \-r '\:\(\\d\+\)</span>' <span class="math-inline">cols\[\-1\]\)
+set \-l port \(string replace \-r '\.\*\:\(\\d\+\)</span>' '$1' $rawport)
+            if test -n "$port"
+                printf "%-8s %-10s %-6s %-s\n" (set_color green)$pid(set_color normal) (set_color yellow)$cmd(set_color normal) (set_color magenta)$port(set_color normal) $line
+            end
+        end
+    else if type -q ss
+        ss -ltpn | tail -n +2 | while read -l line
+            set -l port (string match -r '.*:(\d+) ' $line | string replace -r '.*:(\d+) ' '$1')
+            set -l pid (string match -r 'pid=(\d+),' $line | string replace -r 'pid=(\d+),.*' '$1')
+            set -l cmd (string match -r '\("([^"]+)",pid' $line | string replace -r '\("([^"]+)",pid.*' '$1')
+            if test -n "$pid" -a -n "$port"
+                printf "%-8s %-10s %-6s %-s\n" (set_color green)$pid(set_color normal) (set_color yellow)$cmd(set_color normal) (set_color magenta)$port(set_color normal) $line
+            end
+        end
+    else
+        echo (set_color red)"Error: Neither 'lsof' nor 'ss' found on system."(set_color normal)
+        return 1
+    end
+end
+
+function pkillport
+    if not type -q fzf
+        echo (set_color red)"Error: fzf not installed. Install fzf to use pkillport."(set_color normal)
+        return 1
+    end
+
+    set -l choices (ports | tail -n +2 | awk '{print $3 "\t" $1 "\t" $2}')
+    if test -z "$choices"
+        echo (set_color yellow)"No listening ports found."(set_color normal)
+        return 0
+    end
+
+    echo (set_color cyan)"Select a port to kill (use arrows and enter):"(set_color normal)
+    set -l selection (echo $choices | fzf --prompt="port\tpid\tcmd> " --with-nth=1,3,2 --delimiter="\t" --preview="echo Killing PID {2} on port {1} running {3}")
+
+    if test -z "$selection"
+        echo (set_color yellow)"No selection made, aborting."(set_color normal)
+        return 0
+    end
+
+    set -l port (echo $selection | awk '{print $1}')
+    set -l pid (echo $selection | awk '{print $2}')
+    set -l cmd (echo $selection | awk '{print $3}')
+
+    echo (set_color red)"Confirm kill process $cmd with PID $pid listening on port $port? (y/N)"(set_color normal)
+    read -l answer
+    if test "$answer" = "y" -o "$answer" = "Y"
+        kill $pid
+        if test $status -eq 0
+            echo (set_color green)"Successfully killed PID $pid ($cmd)." (set_color normal)
+        else
+            echo (set_color red)"Failed to kill PID $pid."(set_color normal)
+        end
+    else
+        echo (set_color yellow)"Kill aborted."(set_color normal)
+    end
+end
+
+function backup
+    if test (count $argv) -eq 0
+        echo (set_color red)"Usage: backup <file>"(set_color normal)
+        return 1
+    end
+
+    set -l file $argv[1]
+
+    if not test -f $file
+        echo (set_color red)"File not found: $file"(set_color normal)
+        return 1
+    end
+
+    set -l timestamp (date "+%Y%m%d-%H%M%S")
+    set -l backupfile "$file.$timestamp.bak"
+
+    cp $file $backupfile
+
+    if test $status -eq 0
+        echo (set_color green)"Backup created: $backupfile"(set_color normal)
+    else
+        echo (set_color red)"Failed to create backup."(set_color normal)
+    end
+end
+
+
+# ==============================================================================
+# SECTION 3: DEVICE TESTING UTILITIES
+# Dependencies: ffmpeg, v4l2-utils, pulseaudio-utils
+# ==============================================================================
+
+function webcam
+    set -l arg (string lower $argv[1])
+    if contains -- $arg "help" "-h" "--h" "-help" "--help"
+        echo (set_color cyan)"\n📹 Webcam Test Command\n────────────────────────────"(set_color normal)
+        echo (set_color green)"webcam" (set_color normal)"- Show webcam info and open webcam preview"
+        echo (set_color cyan)"\nUsage:\n  "(set_color yellow)"webcam "(set_color normal)"# Open default webcam preview"
+        echo (set_color cyan)"\nRequirements:\n  - ffmpeg, v4l2-utils, and a /dev/video* device"(set_color normal)
+        return 0
+    end
+
+    if test -d /dev && test -c /dev/video0
+        set -l device /dev/video0
+        echo (set_color green)"Using webcam device:" (set_color normal)$device
+
+        if type -q v4l2-ctl
+            echo (set_color cyan)"Device info:"(set_color normal)
+            v4l2-ctl -d $device --all | grep -E 'Driver|Card|Bus|Format'
+        end
+
+        if type -q ffplay
+            echo (set_color cyan)"Opening webcam preview. Press q to quit."(set_color normal)
+            ffplay -f v4l2 -i $device -vf "drawtext=text='%{localtime}':x=10:y=10:fontcolor=yellow" -loglevel quiet
+        else
+            echo (set_color red)"ffplay not found. Install ffmpeg package."(set_color normal)
+        end
+    else
+        echo (set_color red)"No webcam device found at /dev/video0"(set_color normal)
+        return 1
+    end
+end
+
+function mic
+    set -l arg (string lower $argv[1])
+    if contains -- $arg "help" "-h" "--h" "-help" "--help"
+        echo (set_color cyan)"\n🎤 Microphone Test Command\n──────────────────────────────"(set_color normal)
+        echo (set_color green)"mic" (set_color normal)"- Show mic info and test audio input level meter"
+        echo (set_color cyan)"\nUsage:\n  "(set_color yellow)"mic "(set_color normal)"# Start mic test"
+        echo (set_color cyan)"\nRequirements:\n  - ffmpeg, pulseaudio-utils (pactl)"(set_color normal)
+        return 0
+    end
+
+    set -l default_sink "default"
+    if type -q pactl
+        set default_sink (pactl info | grep 'Default Source:' | cut -d ' ' -f3)
+    end
+
+    if test -z "$default_sink"
+      echo (set_color red)"No default microphone source found."(set_color normal); return 1
+    end
+
+    if type -q ffmpeg
+        echo (set_color cyan)"Starting mic level meter for device: $default_sink. Press Ctrl+C to stop."(set_color normal)
+        ffmpeg -f pulse -i $default_sink -filter_complex "astats=metadata=1:reset=1,ametadata=print:key=lavfi.astats.Overall.Peak_level:file=-" -f null - 2>&1 | grep --line-buffered lavfi.astats.Overall.Peak_level | while read -l line
+            set -l peak (echo $line | sed -n 's/.*=//p')
+            set -l peak_db (math "$peak * -1")
+            if test (math "$peak_db > 30"); echo (set_color green)"Mic level: $peak_db dB"
+            else if test (math "$peak_db > 15"); echo (set_color yellow)"Mic level: $peak_db dB"
+            else; echo (set_color red)"Mic level: $peak_db dB"; end
+        end
+    else
+        echo (set_color red)"ffmpeg not found. Please install ffmpeg to use this."(set_color normal)
+        return 1
+    end
+end
+
+functions -c mic microphone
+```

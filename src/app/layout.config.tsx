@@ -1,6 +1,9 @@
 import { siteConfig } from '@/core/site-config'
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
-import { ShieldLogo } from '@/components/shield-logo'
+import { Logo } from '@/components/logo'
+import { CodeThemeSwitch } from '@/components/ui/code-theme-switch'
+import { ThemeSwitcher } from '@/components/ui/theme-switcher'
+
 /**
  * Shared layout configurations
  *
@@ -12,8 +15,16 @@ export const baseOptions: BaseLayoutProps = {
     nav: {
         title: (
             <>
-                <ShieldLogo fill="white" animated animationVariant="scaleUp" />
+                <Logo />
                 {siteConfig.name}
+            </>
+        )
+    },
+    themeSwitch: {
+        enabled: true,
+        component: (
+            <>
+                <CodeThemeSwitch />
             </>
         )
     },

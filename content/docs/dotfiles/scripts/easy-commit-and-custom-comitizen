@@ -1,0 +1,156 @@
+function commit
+    # Check for help flags
+    if test (count $argv) -eq 1
+        switch $argv[1]
+            case "--help" "--h" "-h"
+                _commit_help
+                return 0
+        end
+    end
+    
+    # Check if any arguments were provided
+    if test (count $argv) -eq 0
+        _commit_help
+        return 1
+    end
+    
+    set -l message_parts
+    set -l file_parts
+    set -l parsing_files false
+    
+    # Parse arguments
+    for arg in $argv
+        if test "$arg" = "--"
+            set parsing_files true
+            continue
+        end
+        
+        if test "$parsing_files" = true
+            set -a file_parts $arg
+        else
+            set -a message_parts $arg
+        end
+    end
+    
+    # Join message parts with spaces
+    set -l commit_message (string join " " $message_parts)
+    
+    # Check if we have a commit message
+    if test -z "$commit_message"
+        echo "Error: Commit message cannot be empty"
+        return 1
+    end
+    
+    # Process commitizen-style prefixes
+    set commit_message (_process_commitizen_prefix "$commit_message")
+    
+    # Build the git command
+    set -l git_cmd git commit -m "$commit_message"
+    
+    # Add file arguments if provided
+    if test (count $file_parts) -gt 0
+        # Process each file part for brace expansion
+        set -l expanded_files
+        for file_part in $file_parts
+            # Split by comma and expand each part
+            set -l comma_split (string split "," $file_part)
+            for part in $comma_split
+                # Trim whitespace
+                set part (string trim $part)
+                # Add to expanded files if not empty
+                if test -n "$part"
+                    set -a expanded_files $part
+                end
+            end
+        end
+        
+        # Add files to git command
+        if test (count $expanded_files) -gt 0
+            set git_cmd $git_cmd $expanded_files
+        end
+    end
+    
+    # Execute the command
+    echo (set_color green)"Executing:"(set_color normal) "$git_cmd"
+    eval $git_cmd
+end
+
+# Helper function for displaying help
+function _commit_help
+    echo
+    echo (set_color --bold cyan)"🚀 Git Commit Helper"(set_color normal)
+    echo (set_color yellow)"═══════════════════════════════════════════════════════════════"(set_color normal)
+    echo
+    echo (set_color --bold white)"USAGE:"(set_color normal)
+    echo "  "(set_color green)"commit"(set_color normal)" "(set_color blue)"<message>"(set_color normal)" "(set_color magenta)"[-- <files>]"(set_color normal)
+    echo
+    echo (set_color --bold white)"EXAMPLES:"(set_color normal)
+    echo
+    echo "  "(set_color dim)"# Simple commit message (no quotes needed!):"(set_color normal)
+    echo "  "(set_color green)"commit"(set_color normal)" fix bug in user authentication"
+    echo "  "(set_color dim)"→ git commit -m \"fix bug in user authentication\""(set_color normal)
+    echo
+    echo "  "(set_color dim)"# Commit with specific files:"(set_color normal)
+    echo "  "(set_color green)"commit"(set_color normal)" update docs "(set_color magenta)"--"(set_color normal)" README.md CHANGELOG.md"
+    echo "  "(set_color dim)"→ git commit -m \"update docs\" README.md CHANGELOG.md"(set_color normal)
+    echo
+    echo "  "(set_color dim)"# Commit with comma-separated files:"(set_color normal)
+    echo "  "(set_color green)"commit"(set_color normal)" refactor utils "(set_color magenta)"--"(set_color normal)" src/utils.js, tests/utils.test.js"
+    echo "  "(set_color dim)"→ git commit -m \"refactor utils\" src/utils.js tests/utils.test.js"(set_color normal)
+    echo
+    echo "  "(set_color dim)"# Works with brace expansion:"(set_color normal)
+    echo "  "(set_color green)"commit"(set_color normal)" update components "(set_color magenta)"--"(set_color normal)" src/{components,styles}/button.*"
+    echo "  "(set_color dim)"→ git commit -m \"update components\" src/components/button.* src/styles/button.*"(set_color normal)
+    echo
+    echo (set_color --bold white)"COMMITIZEN SUPPORT:"(set_color normal)
+    echo "  "(set_color dim)"# Automatic conventional commit formatting:"(set_color normal)
+    echo "  "(set_color green)"commit"(set_color normal)" "(set_color cyan)"feat"(set_color normal)" add user login"
+    echo "  "(set_color dim)"→ git commit -m \"feat: add user login\""(set_color normal)
+    echo
+    echo "  "(set_color green)"commit"(set_color normal)" "(set_color red)"fix"(set_color normal)" authentication bug"
+    echo "  "(set_color dim)"→ git commit -m \"fix: authentication bug\""(set_color normal)
+    echo
+    echo "  "(set_color green)"commit"(set_color normal)" "(set_color yellow)"chore"(set_color normal)" update dependencies"
+    echo "  "(set_color dim)"→ git commit -m \"chore: update dependencies\""(set_color normal)
+    echo
+    echo "  "(set_color dim)"# Supported prefixes: "(set_color cyan)"feat"(set_color normal)", "(set_color red)"fix"(set_color normal)", "(set_color yellow)"chore"(set_color normal)", "(set_color blue)"refactor"(set_color normal)", "(set_color magenta)"optimize"(set_color normal)
+    echo "  "(set_color dim)"# Aliases: feature→feat, bugfix→fix, perf/performance→optimize"(set_color normal)
+    echo
+    echo (set_color --bold white)"KEY FEATURES:"(set_color normal)
+    echo "  "(set_color cyan)"✓"(set_color normal)" No quotes needed for commit messages"
+    echo "  "(set_color cyan)"✓"(set_color normal)" Use "(set_color magenta)"--"(set_color normal)" to separate message from files"
+    echo "  "(set_color cyan)"✓"(set_color normal)" Comma-separated file lists supported"
+    echo "  "(set_color cyan)"✓"(set_color normal)" Fish brace expansion works naturally"
+    echo "  "(set_color cyan)"✓"(set_color normal)" Shows actual git command before executing"
+    echo
+    echo (set_color --bold white)"HELP:"(set_color normal)
+    echo "  "(set_color green)"commit"(set_color normal)" "(set_color yellow)"-h"(set_color normal)", "(set_color yellow)"--h"(set_color normal)", "(set_color yellow)"--help"(set_color normal)" - Show this help"
+    echo
+# Function to process commitizen-style prefixes
+function _process_commitizen_prefix
+    set -l message $argv[1]
+    
+    # Check if message starts with a commitizen prefix
+    if string match -qr '^(feat|fix|chore|refactor|optimize):' $message
+        echo $message
+        return
+    end
+    
+    # Check for shorthand prefixes and expand them
+    set -l first_word (string split " " $message)[1]
+    
+    switch $first_word
+        case "feat" "feature"
+            set message (string replace -r '^(feat|feature)\s*' 'feat: ' $message)
+        case "fix" "bugfix"
+            set message (string replace -r '^(fix|bugfix)\s*' 'fix: ' $message)
+        case "chore"
+            set message (string replace -r '^chore\s*' 'chore: ' $message)
+        case "refactor"
+            set message (string replace -r '^refactor\s*' 'refactor: ' $message)
+        case "optimize" "perf" "performance"
+            set message (string replace -r '^(optimize|perf|performance)\s*' 'optimize: ' $message)
+    end
+    
+    echo $message
+end
