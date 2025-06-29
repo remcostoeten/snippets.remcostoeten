@@ -54,7 +54,6 @@ const LogoIcon = () => {
 				d="M16 2L28 9V23L16 30L4 23V9L16 2Z"
 				className="fill-primary/10 stroke-primary"
 				strokeWidth="1"
-				variants={pathVariants}
 			/>
 
 			{/* Animated data streams with staggered fade-in */}
