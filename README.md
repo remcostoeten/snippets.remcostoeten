@@ -1,13 +1,24 @@
-## Snippets.remcostoeten v2
+# Snippets
 
-See deployed version [here 🚀](https://snippets-remcostoeten.vercel.app)
+Personal collection of code snippets, shell configurations, and development notes.
 
-This site contains snippets, guides, personal reminders, and boilerplates I often need. I use it to quickly access shell configurations, obscure commands, or reminders on setting up authentication. It also stores commonly used queries for PostgreSQL/SQLite and implementation details for various packages and programs.
+[View site](https://snippets-remcostoeten.vercel.app)
 
-This is version 2, built with React 19 and Next.js 15+ using Static Site Generation (SSG). It's fully managed through `.mdx` files and built on the [Fumadocs framework](https://fumadocs.vercel.app/). Fumadocs provides enhanced MDX support, automatic ToC generation, site-wide search, and excellent aesthetics and DX.
+## What's here
 
-Version 1 was built on [Nextra](https://nextra.site), another static site generator. After two years, I decided to rethink my documentation, which I rarely used anymore.
+- Code snippets and boilerplates
+- Shell configurations
+- Database queries (PostgreSQL/SQLite)
+- Authentication setup guides
+- Package implementation notes
 
-xxx yours sincerely,
+## Tech stack
+
+- Next.js 15 with React 19
+- Fumadocs (MDX framework)
+- Static site generation
+- Vercel hosting
+
+xxx,
 
 Remco Stoeten
