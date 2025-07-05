@@ -28,13 +28,13 @@ export default async function HomePage() {
     return (
         <div className="flex  flex-col bg-zinc-950 text-zinc-100">
             <main className="flex-1">
-          <div className='flex flex-col gap-10'>
-              <section className="container pt-20 md:pt-32">
-                    <Hero />
-                </section>
+                <div className="flex flex-col gap-10">
+                    <section className="container pt-20 md:pt-32">
+                        <Hero />
+                    </section>
 
-                <FeatureSection />
-</div>
+                    <FeatureSection />
+                </div>
                 <section className="container py-12">
                     <div className="flex items-center justify-between mb-8">
                         <TextAnimate

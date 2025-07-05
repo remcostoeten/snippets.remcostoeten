@@ -1,40 +1,40 @@
 'use client'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Zap, BookOpen, Gauge, Terminal, Search, RefreshCw } from 'lucide-react';
+import { Zap, BookOpen, Gauge, Terminal, Search, RefreshCw } from 'lucide-react'
 import { FeatureCard } from './feature-card'
 
 const features = [
-	{
-		title: 'Instant Snippets',
-		icon: Zap,
-		description: 'Copy-paste solutions for common React & Next.js tasks.',
-	},
-	{
-		title: 'MDX Docs',
-		icon: BookOpen,
-		description: 'Structured guides powered by Fumadocs for deep dives.',
-	},
-	{
-		title: 'Performance Tips',
-		icon: Gauge,
-		description: 'SSR, caching, and Drizzle ORM patterns for blazing speed.',
-	},
-	{
-		title: 'Tooling Boost',
-		icon: Terminal,
-		description: 'Shell configs & CLI tricks to streamline daily workflow.',
-	},
-	{
-		title: 'Searchable Knowledge',
-		icon: Search,
-		description: 'Find exactly what you need with lightning search.',
-	},
-	{
-		title: 'Always Up-to-Date',
-		icon: RefreshCw,
-		description: 'Built on Next.js 15 & React 19—stays aligned with modern stacks.',
-	},
-];
+    {
+        title: 'Instant Snippets',
+        icon: Zap,
+        description: 'Copy-paste solutions for common React & Next.js tasks.'
+    },
+    {
+        title: 'MDX Docs',
+        icon: BookOpen,
+        description: 'Structured guides powered by Fumadocs for deep dives.'
+    },
+    {
+        title: 'Performance Tips',
+        icon: Gauge,
+        description: 'SSR, caching, and Drizzle ORM patterns for blazing speed.'
+    },
+    {
+        title: 'Tooling Boost',
+        icon: Terminal,
+        description: 'Shell configs & CLI tricks to streamline daily workflow.'
+    },
+    {
+        title: 'Searchable Knowledge',
+        icon: Search,
+        description: 'Find exactly what you need with lightning search.'
+    },
+    {
+        title: 'Always Up-to-Date',
+        icon: RefreshCw,
+        description: 'Built on Next.js 15 & React 19—stays aligned with modern stacks.'
+    }
+]
 
 export function FeatureSection() {
     return (
