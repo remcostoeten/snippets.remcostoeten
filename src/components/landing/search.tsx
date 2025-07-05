@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { SearchIcon, FileCode, ChevronRight } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { useDocsSearch } from 'fumadocs-core/search/client'
-import Link from 'next/link'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@radix-ui/react-tooltip'
+import { useDocsSearch } from 'fumadocs-core/search/client'
+import { ChevronRight, FileCode, SearchIcon } from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
 
-interface SearchResult {
+type TSearchResult = {
     id: string
     url: string
     content: string
@@ -15,10 +15,10 @@ interface SearchResult {
     description?: string
 }
 
-interface GroupedResult {
+type TGroupedResult = {
     url: string
-    items: SearchResult[]
-    primaryItem: SearchResult
+    items: TSearchResult[]
+    primaryItem: TSearchResult
 }
 
 type TProps = {
@@ -39,8 +39,8 @@ export function Search({ placeholder = 'Search snippets...', className = '', var
     })
 
     // Group results by URL
-    const groupResults = (results: SearchResult[]): GroupedResult[] => {
-        const groupedMap = new Map<string, SearchResult[]>()
+    const groupResults = (results: TSearchResult[]): TGroupedResult[] => {
+        const groupedMap = new Map<string, TSearchResult[]>()
 
         results.forEach((result) => {
             // Extract the base path by removing query parameters and anchors
@@ -118,7 +118,7 @@ export function Search({ placeholder = 'Search snippets...', className = '', var
     // Determine dropdown position based on variant
     const dropdownPosition = variant === 'header' ? 'top-[calc(100%+8px)]' : 'top-full'
 
-    const groupedResults = query.data && query.data !== 'empty' ? groupResults(query.data as SearchResult[]) : []
+    const groupedResults = query.data && query.data !== 'empty' ? groupResults(query.data as TSearchResult[]) : []
 
     return (
         <div className={`relative w-full ${className}`} ref={containerRef}>

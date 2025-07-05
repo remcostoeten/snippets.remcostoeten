@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server'
 import { exec } from 'child_process'
 import { promisify } from 'util'
+import { NextResponse } from 'next/server'
 
 const execAsync = promisify(exec)
 
@@ -20,9 +20,9 @@ export async function GET() {
         return NextResponse.json({
             commit: {
                 hash,
-                timestamp: parseInt(timestamp),
+                timestamp: Number.parseInt(timestamp),
                 message,
-                count: parseInt(commitCount)
+                count: Number.parseInt(commitCount)
             },
             deployment: {
                 id: deploymentId,

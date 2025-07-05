@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/helpers'
-import { type MotionProps, type Variants, motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, type MotionProps, type Variants, motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 
 type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
@@ -24,7 +24,7 @@ type FontSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5x
 
 type FontWeight = 'thin' | 'extralight' | 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
 
-interface TextAnimateProps extends MotionProps {
+type TProps = MotionProps & {
     /**
      * The text content to animate
      */
@@ -338,7 +338,7 @@ const getTextStylingClasses = ({
     lineHeight,
     textColor,
     letterSpacing
-}: Pick<TextAnimateProps, 'fontSize' | 'fontWeight' | 'lineHeight' | 'textColor' | 'letterSpacing'>) => {
+}: Pick<TProps, 'fontSize' | 'fontWeight' | 'lineHeight' | 'textColor' | 'letterSpacing'>) => {
     return cn(
         fontSize && `text-${fontSize}`,
         fontWeight && `font-${fontWeight}`,
@@ -366,7 +366,7 @@ export function TextAnimate({
     textColor,
     letterSpacing,
     ...props
-}: TextAnimateProps) {
+}: TProps) {
     const MotionComponent = motion(as as ElementType)
 
     // If children is not a string, render it directly without animation

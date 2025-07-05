@@ -1,0 +1,18 @@
+nohup: ignoring input
+
+> snippets-remcostoeten@2.0.0 dev
+> next dev --turbo
+
+[MDX] update map file: 8.263ms
+[MDX] started dev server
+ [33m[1m⚠[22m[39m Port 3000 is in use, trying 3001 instead.
+ [33m[1m⚠[22m[39m Port 3001 is in use, trying 3002 instead.
+ [33m[1m⚠[22m[39m Port 3002 is in use, trying 3003 instead.
+   [1m[38;2;173;127;168m▲ Next.js 15.2.4[39m[22m (Turbopack)
+   - Local:        http://localhost:3003
+   - Network:      http://192.168.1.92:3003
+   - Experiments (use with caution):
+     · turbo
+
+ [32m[1m✓[22m[39m Starting...
+ [32m[1m✓[22m[39m Ready in 1150ms

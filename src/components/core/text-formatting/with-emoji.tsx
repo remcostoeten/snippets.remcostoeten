@@ -1,12 +1,12 @@
-import { getEmoji, type EmojiMap } from '@/core/emoji-map'
-import { ReactNode } from 'react'
+import { type EmojiMap, getEmoji } from '@/core/emoji-map'
+import type { ReactNode } from 'react'
 
-interface WithEmojiProps {
+type TProps = {
     children: ReactNode
     emojiCategory?: keyof EmojiMap
 }
 
-export const WithEmoji = ({ children, emojiCategory = 'navigation' }: WithEmojiProps) => (
+export const WithEmoji = ({ children, emojiCategory = 'navigation' }: TProps) => (
     <div className="flex items-center gap-2">
         <span className="text-lg">{getEmoji(emojiCategory)}</span>
         <span>{children}</span>

@@ -1,5 +1,5 @@
 import { cn } from '@/helpers'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 // Component Props
 type TProps = {

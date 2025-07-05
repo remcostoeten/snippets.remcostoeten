@@ -25,6 +25,12 @@
             }
         ]
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "content/docs/dotfiles/scripts/cleanup-node.msx"],
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        ".next/types/**/*.ts",
+        "content/docs/dotfiles/scripts/cleanup-node.msx"
+    ],
     "exclude": ["node_modules"]
 }

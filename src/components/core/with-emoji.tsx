@@ -1,6 +1,6 @@
+import { type EmojiMap, getEmoji } from '@/core/emoji-map'
 import { cn } from '@/helpers'
-import { ReactNode } from 'react'
-import { EmojiMap, getEmoji } from '@/core/emoji-map'
+import type { ReactNode } from 'react'
 
 // Component Props
 type TProps = {

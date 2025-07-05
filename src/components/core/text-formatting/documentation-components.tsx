@@ -1,5 +1,5 @@
 import { getEmoji } from '@/core/emoji-map'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 interface DocumentationComponentProps {
     children: ReactNode

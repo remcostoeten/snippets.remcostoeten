@@ -2,12 +2,12 @@
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/helpers'
-import { Check, Copy } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { Check, Copy } from 'lucide-react'
 import { useTheme } from 'next-themes'
-import { HTMLAttributes, useEffect, useState } from 'react'
+import { type HTMLAttributes, useEffect, useState } from 'react'
 
-interface ScriptCopyBtnProps extends HTMLAttributes<HTMLDivElement> {
+type TProps = HTMLAttributes<HTMLDivElement> & {
     showMultiplePackageOptions?: boolean
     codeLanguage: string
     lightTheme: string
@@ -23,7 +23,7 @@ export function ScriptCopyBtn({
     darkTheme,
     commandMap,
     className
-}: ScriptCopyBtnProps) {
+}: TProps) {
     const packageManagers = Object.keys(commandMap)
     const [packageManager, setPackageManager] = useState(packageManagers[0])
     const [copied, setCopied] = useState(false)

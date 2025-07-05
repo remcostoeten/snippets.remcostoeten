@@ -1,5 +1,5 @@
-import { AnimationVariant } from '@/core/types'
-import { Variants } from 'framer-motion'
+import type { AnimationVariant } from '@/core/types'
+import type { Variants } from 'framer-motion'
 
 export function useAnimationVariant(variant: AnimationVariant = 'trace') {
     // Define base variants that can be reused
@@ -94,7 +94,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                     opacity: 1,
                     filter: 'brightness(1.5)',
                     transition: {
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                         repeatType: 'reverse'
                     }
                 }
@@ -121,7 +121,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                 visible: {
                     opacity: [0.5, 1, 0.5],
                     transition: {
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                         duration: 3,
                         ease: 'easeInOut'
                     }
@@ -206,11 +206,8 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                     opacity: 1,
                     x: [0, -2, 2, -2, 0],
                     transition: {
-                        x: {
-                            repeat: Infinity,
-                            duration: 0.5,
-                            ease: 'steps(5)'
-                        }
+                        repeat: Number.POSITIVE_INFINITY,
+                        duration: 0.5
                     }
                 }
             },
@@ -227,7 +224,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                     scale: [1, 1.05, 0.95, 1],
                     transition: {
                         scale: {
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             duration: 4,
                             ease: 'easeInOut'
                         }
@@ -239,7 +236,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                 visible: {
                     pathLength: [0, 1, 0],
                     transition: {
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                         duration: 6,
                         ease: 'easeInOut'
                     }
@@ -257,12 +254,12 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                     scale: [1, 1.02, 0.98, 1],
                     transition: {
                         rotate: {
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             duration: 2,
                             ease: 'easeInOut'
                         },
                         scale: {
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             duration: 2,
                             ease: 'easeInOut'
                         }
@@ -325,7 +322,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                     opacity: 1,
                     transition: {
                         y: {
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             repeatType: 'reverse',
                             duration: 2,
                             ease: 'easeInOut'
@@ -342,7 +339,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                     scale: [1, 1.1, 1],
                     transition: {
                         scale: {
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             repeatType: 'reverse',
                             duration: 2,
                             ease: 'easeInOut'

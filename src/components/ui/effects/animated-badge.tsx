@@ -1,5 +1,5 @@
-import type { ComponentPropsWithoutRef, CSSProperties } from 'react'
 import { cn } from '@/helpers'
+import type { CSSProperties, ComponentPropsWithoutRef } from 'react'
 
 type TProps = ComponentPropsWithoutRef<'span'> & {
     shimmerWidth?: number

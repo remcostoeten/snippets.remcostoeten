@@ -1,8 +1,7 @@
-import { siteConfig } from '@/core/site-config'
-import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 import { Logo } from '@/components/logo'
 import { CodeThemeSwitch } from '@/components/ui/code-theme-switch'
-import { ThemeSwitcher } from '@/components/ui/theme-switcher'
+import { siteConfig } from '@/core/site-config'
+import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 
 /**
  * Shared layout configurations

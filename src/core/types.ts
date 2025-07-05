@@ -30,7 +30,7 @@ export type AnimationVariant =
     | 'tooltip-slide'
     | 'none'
 
-export interface ShieldLogoProps {
+export type TShieldLogoProps = {
     className?: string
     size?: LogoSize
     width?: number

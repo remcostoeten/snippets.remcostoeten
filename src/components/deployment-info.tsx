@@ -19,9 +19,9 @@ async function getDeploymentInfo() {
         return {
             commit: {
                 hash,
-                timestamp: parseInt(timestamp),
+                timestamp: Number.parseInt(timestamp),
                 message,
-                count: parseInt(commitCount)
+                count: Number.parseInt(commitCount)
             },
             deployment: {
                 id: deploymentId,

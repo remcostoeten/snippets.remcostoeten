@@ -1,10 +1,10 @@
 'use client'
 
-import { cn } from '@/helpers'
-import type { ReactNode } from 'react'
-import { Copy, Check, SeparatorHorizontal } from 'lucide-react'
-import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/helpers'
+import { Check, Copy, SeparatorHorizontal } from 'lucide-react'
+import type { ReactNode } from 'react'
+import { useState } from 'react'
 import { OptimizedTextAnimate } from '../effects/blur-in-optimized'
 
 /**
