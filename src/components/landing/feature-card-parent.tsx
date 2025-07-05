@@ -1,38 +1,38 @@
 'use client'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Zap, BookOpen, Gauge, Terminal, Search, RefreshCw } from 'lucide-react'
+import { Database, FileCode, GitBranch, Settings, Terminal, Zap } from 'lucide-react'
 import { FeatureCard } from './feature-card'
 
 const features = [
     {
-        title: 'Instant Snippets',
-        icon: Zap,
-        description: 'Copy-paste solutions for common React & Next.js tasks.'
-    },
-    {
-        title: 'MDX Docs',
-        icon: BookOpen,
-        description: 'Structured guides powered by Fumadocs for deep dives.'
-    },
-    {
-        title: 'Performance Tips',
-        icon: Gauge,
-        description: 'SSR, caching, and Drizzle ORM patterns for blazing speed.'
-    },
-    {
-        title: 'Tooling Boost',
+        title: 'macOS Power-User Setup',
         icon: Terminal,
-        description: 'Shell configs & CLI tricks to streamline daily workflow.'
+        description: 'Scripts and configurations to enhance your macOS development environment.'
     },
     {
-        title: 'Searchable Knowledge',
-        icon: Search,
-        description: 'Find exactly what you need with lightning search.'
+        title: 'Database Best Practices',
+        icon: Database,
+        description: 'Guides on environment validation and scalable schema design with Drizzle ORM.'
     },
     {
-        title: 'Always Up-to-Date',
-        icon: RefreshCw,
-        description: 'Built on Next.js 15 & React 19—stays aligned with modern stacks.'
+        title: 'Dotfiles & Dev Scripts',
+        icon: FileCode,
+        description: 'Optimize your workflow with configurations for Neovim, custom shell prompts, and useful scripts.'
+    },
+    {
+        title: 'Git Recipes',
+        icon: GitBranch,
+        description: 'Practical solutions for common Git problems, like handling diverged branches.'
+    },
+    {
+        title: 'Frontend Snippets',
+        icon: Zap,
+        description: 'Code for Next.js suspense, Electron APIs, and browser-based hardware testers.'
+    },
+    {
+        title: 'System Configurations',
+        icon: Settings,
+        description: 'Tips for system-level tweaks, like running sudo commands without a password prompt.'
     }
 ]
 
@@ -42,7 +42,7 @@ export function FeatureSection() {
             <div className="mx-auto w-full max-w-5xl space-y-8 px-4">
                 <AnimatedContainer className="mx-auto max-w-3xl text-center">
                     <p className="text-muted-foreground mt-4 text-sm tracking-wide text-balance md:text-base">
-                        Reusable snippets, docs, and best practices in one place.
+                        Practical guides and code snippets for everyday development challenges.
                     </p>
                 </AnimatedContainer>
 

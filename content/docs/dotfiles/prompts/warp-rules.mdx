@@ -5,14 +5,10 @@ language: "system"
 lastModified: "2025-06-05"
 ---
 
-
-```
+```bash
 Practical Functional Programming
 ```
-
----
-
-```
+```bash
 We write predictable, functional-style code in modern TypeScript and Next.js.
 
 Follow these rules:
@@ -35,15 +31,13 @@ Follow these rules:
 - Favor **composition** over inheritance — build from small, reusable parts
 - Favor **immutability** — do not mutate arguments or external state
 - Code should be **declarative** when it improves clarity
-```
 
 ```
+---
+```bash
 No code comments
 ```
-
----
-
-```
+```bash
 Code must be self-explanatory and readable without comments.
 
 🚫 Not Allowed
@@ -56,27 +50,26 @@ Code must be self-explanatory and readable without comments.
 - ✅ Use clear, descriptive function and variable names instead of comments
 
 📌 If you feel the need to comment, rewrite the code for clarity instead.
-```
 
 ```
+---
+```bash
 Component Props Typing — Mandatory `TProps` for Single Type Files
 ```
-
----
-
-```
+```bash
 When defining a React/Next.js component with props, if the file contains **only one non-exported type**, it **MUST** be named exactly `TProps`.
 
 Example:
 For this component:
 
-```tsx
+"""tsx
 function Button({ name, onClick, another }) {
   // ...
-}```
+}
+"""
 
 You MUST define props like this:
-```tsx
+"""tsx
 type TProps = {
   name: string;
   onClick?: () => void;
@@ -85,7 +78,8 @@ type TProps = {
 
 export function Button({ name, onClick, another }: TProps) {
   // ...
-}```
+}
+"""
 Key points:
 
 - TProps is always used if there’s only one type in the file.
@@ -96,13 +90,10 @@ Key points:
 This ensures consistent, clear, and easy-to-find component prop typings across the codebase.
 
 ```
-
+---
 ```
 Use Types only, no Interfaces
 ```
-
----
-
 ```
 - Use **`type`** declarations exclusively — do **not** use `interface`.
 - All type names **must** be prefixed with `T`.
@@ -117,15 +108,13 @@ Use Types only, no Interfaces
     };
     ```
 - Exported types must use descriptive names with the `T` prefix.
-```
 
 ```
+---
+```bash
 📦Export and Page Structure
 ```
-
----
-
-```
+```bash
 - ❌ No default exports anywhere **except** in **pages** and **views**.
 - Use **named exports only** for all modules and components (e.g., `export function foo() {}`).
 - **Pages and views** may use default exports **only** for React components.
@@ -140,17 +129,12 @@ Views are the render of the page which consist of all the ui components and logi
 e.g: `login-view`, `dashboard-view`, `settings-view`.
 - Views are located over at `/views` or `src/views`
 - -The view directory  never makes use of a barrel file
-
 ```
-
-```
+---
+```bash
 Use reducers for complex or stateful logic
 ```
-
----
-
-```
-
+```bash
 - For complex state management or business logic with multiple steps or actions, **use pure reducer functions** (`(state, action) => newState`).
 - Avoid sprawling imperative code or deeply nested conditionals—prefer reducer composition and clear action types.
 - Reducers must be **pure functions** without side effects.
@@ -161,7 +145,7 @@ Use reducers for complex or stateful logic
 - Keep reducer logic separate from UI code — export from dedicated files.
 - Example:
 
-```ts
+"""ts
 type Action =
   | { type: 'increment' }
   | { type: 'decrement' }
@@ -174,17 +158,15 @@ function counterReducer(state: number, action: Action): number {
     case 'reset': return action.payload;
     default: return state;
   }
-}```
-
+}
+"""
 ```
-
-```
+---
+```bash
 Use Factory Functions and Functional Abstractions
 ```
 
----
-
-```
+```bash
 AI RULES: Functional Factories & Base Types for Next.js + Drizzle ORM
 
 1. Functional Factories
@@ -219,17 +201,15 @@ AI RULES: Functional Factories & Base Types for Next.js + Drizzle ORM
 
 Summary:
 Use strongly typed, reusable functional factories for CRUD operations on typed base entities with timestamps. Maintain separation of concerns, modularity, and strict functional style across the codebase.
-
 ```
-
-
-```
-No testing needed except if requested
-```
-
 ---
+```bash
 
 ```
+```bash
+No testing needed except if requested
+
+```shell
 For normal code we never write tests, except if mentioned that we need tests.
 If you feel like there's a need for tests, discuss the thoughts first and only execute if confirmed
 ```
