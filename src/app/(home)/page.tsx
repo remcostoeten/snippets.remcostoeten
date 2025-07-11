@@ -15,7 +15,7 @@ function formatDescription(description: string) {
 			return (
 				<code
 					key={index}
-					className='px-1.5 py-0.5 rounded bg-zinc-800 font-mono text-xs text-zinc-300'
+					className='px-1.5 py-0.5 rounded bg-muted font-mono text-xs text-muted-foreground'
 				>
 					{part.slice(1, -1)}
 				</code>
@@ -29,7 +29,7 @@ export default async function HomePage() {
 	const { snippets, remainingCount } = await getRecentSnippets()
 
 	return (
-		<div className='flex  flex-col bg-zinc-950 text-zinc-100'>
+        <div className="flex flex-col bg-background text-foreground">
 			<main className='flex-1'>
 				<div className='flex flex-col gap-10'>
 					<section className='container pt-20 md:pt-32'>
@@ -58,7 +58,7 @@ export default async function HomePage() {
 									as='span'
 									animation='fadeIn'
 									delay={0.7}
-									className='text-sm text-zinc-400'
+									className='text-sm text-muted-foreground'
 								>
 									<AnimatedNumber
 										value={remainingCount}
@@ -70,13 +70,13 @@ export default async function HomePage() {
 								as='span'
 								animation='fadeIn'
 								delay={0.8}
-								className='text-zinc-400'
+								className='text-muted-foreground'
 							>
 								/
 							</TextAnimate>
 							<Link
 								href='/docs'
-								className='text-sm text-zinc-400 hover:text-zinc-300 hover:underline inline-flex items-center gap-1'
+								className='text-sm text-muted-foreground hover:text-foreground hover:underline inline-flex items-center gap-1'
 							>
 								<TextAnimate
 									as='span'
@@ -99,7 +99,7 @@ export default async function HomePage() {
 							>
 								<Link href={snippet.href} className='group'>
 									<CardSpotlight
-										className='p-4 bg-zinc-900/50'
+										className='p-4 bg-card/50 border border-border/50'
 										radius={600}
 										color='rgba(59, 130, 246, 0.05)'
 									>
@@ -116,18 +116,18 @@ export default async function HomePage() {
 															0.1 * index +
 															0.1
 														}
-														className='group-hover:text-zinc-300'
+														className='group-hover:text-primary'
 													>
 														<GradientText variant='subtle'>
 															{snippet.title}
 														</GradientText>
 													</TextAnimate>
-													<ExternalLink className='h-3.5 w-3.5 text-zinc-500 opacity-0 transition-opacity group-hover:opacity-100' />
+													<ExternalLink className='h-3.5 w-3.5 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100' />
 												</div>
 												<TextAnimate
 													as='p'
 													fontSize='sm'
-													textColor='zinc-400'
+													textColor='muted-foreground'
 													animation='fadeIn'
 													delay={
 														0.6 + 0.1 * index + 0.2
@@ -144,7 +144,7 @@ export default async function HomePage() {
 													delay={
 														0.6 + 0.1 * index + 0.3
 													}
-													className='mt-2 flex items-center gap-4 text-xs text-zinc-500'
+													className='mt-2 flex items-center gap-4 text-xs text-muted-foreground'
 												>
 													<span>
 														{new Date(

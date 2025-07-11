@@ -144,10 +144,10 @@ export function Search({
 	return (
 		<div className={`relative w-full ${className}`} ref={containerRef}>
 			<div className='relative'>
-				<SearchIcon className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500' />
+				<SearchIcon className='absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
 				<Input
 					ref={inputRef}
-					className='w-full bg-zinc-900 border-zinc-800 pl-10 pr-16 text-zinc-100 placeholder:text-zinc-500 focus:border-zinc-700 focus:ring-zinc-700'
+					className='w-full bg-card border-border pl-10 pr-16 text-foreground placeholder:text-muted-foreground focus:border-ring focus:ring-ring'
 					placeholder={placeholder}
 					value={search}
 					onChange={e => setSearch(e.target.value)}
@@ -155,7 +155,7 @@ export function Search({
 				<div className='absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none'>
 					<Tooltip>
 						<TooltipTrigger>
-							<kbd className='px-2 py-1 text-xs font-medium text-zinc-400 bg-zinc-800 border border-zinc-700 rounded-md'>
+							<kbd className='px-2 py-1 text-xs font-medium text-muted-foreground bg-muted border border-border rounded-md'>
 								/
 							</kbd>
 						</TooltipTrigger>
@@ -168,9 +168,9 @@ export function Search({
 
 			{isOpen && (
 				<div
-					className={`absolute ${dropdownPosition} left-0 right-0 z-50 mt-2 max-h-[70vh] overflow-auto rounded-lg border border-zinc-800 bg-zinc-900 shadow-xl shadow-black/20 backdrop-blur-sm`}
+					className={`absolute ${dropdownPosition} left-0 right-0 z-50 mt-2 max-h-[70vh] overflow-auto rounded-lg border border-border bg-card shadow-xl shadow-black/20 backdrop-blur-sm`}
 				>
-					<div className='sticky top-0 border-b border-zinc-800 bg-zinc-900/95 backdrop-blur-sm px-4 py-2 text-xs font-medium text-zinc-400'>
+					<div className='sticky top-0 border-b border-border bg-card/95 backdrop-blur-sm px-4 py-2 text-xs font-medium text-muted-foreground'>
 						{query.isLoading
 							? 'Searching...'
 							: !groupedResults.length
@@ -184,35 +184,35 @@ export function Search({
 
 					{query.isLoading ? (
 						<div className='flex items-center justify-center p-8'>
-							<div className='h-5 w-5 animate-spin rounded-full border-2 border-zinc-400 border-t-transparent'></div>
+							<div className='h-5 w-5 animate-spin rounded-full border-2 border-muted-foreground border-t-transparent'></div>
 						</div>
 					) : !groupedResults.length ? (
 						<div className='flex flex-col items-center justify-center p-8 text-center'>
-							<div className='mb-3 rounded-full bg-zinc-800 p-3'>
-								<SearchIcon className='h-6 w-6 text-zinc-400' />
+							<div className='mb-3 rounded-full bg-muted p-3'>
+								<SearchIcon className='h-6 w-6 text-muted-foreground' />
 							</div>
-							<p className='text-zinc-400'>
+							<p className='text-muted-foreground'>
 								No results found for "{search}"
 							</p>
-							<p className='mt-1 text-xs text-zinc-500'>
+							<p className='mt-1 text-xs text-muted-foreground'>
 								Try different keywords or check spelling
 							</p>
 						</div>
 					) : (
-						<ul className='divide-y divide-zinc-800/70'>
+						<ul className='divide-y divide-border/70'>
 							{groupedResults.map(group => (
 								<li key={group.url} className='group'>
 									<Link
 										href={group.url}
-										className='block p-4 transition-colors hover:bg-zinc-800'
+										className='block p-4 transition-colors hover:bg-muted'
 										onClick={() => setIsOpen(false)}
 									>
 										<div className='flex items-start gap-3'>
-											<div className='mt-0.5 rounded-md bg-zinc-800 p-1.5 text-zinc-400 group-hover:bg-zinc-700 group-hover:text-zinc-300'>
+											<div className='mt-0.5 rounded-md bg-muted p-1.5 text-muted-foreground group-hover:bg-muted/80 group-hover:text-foreground'>
 												<FileCode className='h-4 w-4' />
 											</div>
 											<div className='flex-1 min-w-0'>
-												<div className='font-medium text-zinc-200 group-hover:text-white'>
+												<div className='font-medium text-foreground group-hover:text-primary'>
 													{group.primaryItem.title ? (
 														<span
 															dangerouslySetInnerHTML={{
@@ -239,7 +239,7 @@ export function Search({
 												</div>
 												{group.primaryItem
 													.description && (
-													<div className='mt-1 text-sm text-zinc-400 line-clamp-2 group-hover:text-zinc-300'>
+													<div className='mt-1 text-sm text-muted-foreground line-clamp-2 group-hover:text-foreground'>
 														<span
 															dangerouslySetInnerHTML={{
 																__html: highlightMatch(
@@ -253,14 +253,14 @@ export function Search({
 													</div>
 												)}
 												<div className='mt-1.5 flex items-center justify-between'>
-													<span className='text-xs text-zinc-500 truncate'>
+													<span className='text-xs text-muted-foreground truncate'>
 														{group.url
 															.split('/')
 															.slice(0, 3)
 															.join('/')}
 													</span>
 													{group.items.length > 1 && (
-														<span className='text-xs text-zinc-400 flex items-center gap-1'>
+														<span className='text-xs text-muted-foreground flex items-center gap-1'>
 															{group.items
 																.length -
 																1}{' '}

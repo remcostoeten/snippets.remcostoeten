@@ -56,7 +56,7 @@ export function Hero() {
 				animation='blurInUp'
 				className='mb-8'
 				fontSize='lg'
-				textColor='zinc-400'
+				textColor='muted-foreground'
 				delay={0.2}
 			>
 				A collection of reusable code snippets, notes, and documentation
@@ -71,9 +71,7 @@ export function Hero() {
 				className='flex flex-col sm:flex-row items-center justify-center gap-4'
 			>
 				<Link href='/docs'>
-					<Button className='bg-zinc-800 hover:bg-zinc-700 text-zinc-100'>
-						Browse Documentation
-					</Button>
+					<Button className="bg-primary text-primary-foreground hover:bg-primary/90">Browse Documentation</Button>
 				</Link>
 				<div className='relative w-full max-w-sm'>
 					<Search
