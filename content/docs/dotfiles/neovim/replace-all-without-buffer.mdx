@@ -1,7 +1,7 @@
 ---
-title: "Replace all without overwriting current clipboard"
-language: "neovim"
-lastModified: "20$25-05-14"
+title: 'Replace all without overwriting current clipboard'
+language: 'neovim'
+lastModified: '20$25-05-14'
 ---
 
 ```bash
@@ -10,7 +10,8 @@ ggVG
 "+p
 ```
 
-###  Explanation
+### Explanation
+
 `gg` to go to start of the file.
 `VG` To select all below (entire file as you're at start because of `gg`.
 `"_d` `_` prevents d from overwriting clipboard. `d` deletes the selection. Why `"` is needed, no clue.

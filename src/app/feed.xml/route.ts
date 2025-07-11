@@ -1,7 +1,7 @@
 export async function GET() {
-    const baseUrl = 'https://snippets.remcostoeten.com'
+	const baseUrl = 'https://snippets.remcostoeten.com'
 
-    const feed = `<?xml version="1.0" encoding="UTF-8" ?>
+	const feed = `<?xml version="1.0" encoding="UTF-8" ?>
     <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
       <channel>
         <title>RemcoStoeten Snippets</title>
@@ -18,10 +18,10 @@ export async function GET() {
       </channel>
     </rss>`
 
-    return new Response(feed, {
-        headers: {
-            'Content-Type': 'application/xml',
-            'Cache-Control': 's-maxage=3600, stale-while-revalidate'
-        }
-    })
+	return new Response(feed, {
+		headers: {
+			'Content-Type': 'application/xml',
+			'Cache-Control': 's-maxage=3600, stale-while-revalidate'
+		}
+	})
 }

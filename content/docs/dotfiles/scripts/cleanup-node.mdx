@@ -1,8 +1,8 @@
 ---
-title: "Cleanup enviorment "
+title: 'Cleanup enviorment '
 description: "Cleans up generated development files based on if it's a nextjs or vite app"
-language: "shell"
-lastModified: "2025-05-17"
+language: 'shell'
+lastModified: '2025-05-17'
 ---
 
 > [!NOTE]
@@ -70,33 +70,37 @@ end
 ## Setup Instructions
 
 1. **Create the script directory:**
-   ```fish
-   mkdir -p ~/.config/dotfiles/scripts
-   ```
+
+    ```fish
+    mkdir -p ~/.config/dotfiles/scripts
+    ```
 
 2. **Make the script executable:**
-   ```fish
-   chmod +x ~/.config/dotfiles/scripts/cleanup-node
-   ```
+
+    ```fish
+    chmod +x ~/.config/dotfiles/scripts/cleanup-node
+    ```
 
 3. **Source it in your fish config** (`~/.config/fish/config.fish`):
-   ```fish
-   # Source all scripts in dotfiles/scripts directory
-   for script in ~/.config/dotfiles/scripts/*
-       if test -f $script
-           source $script
-       end
-   end
-   ```
 
-   Or source just this specific script:
-   ```fish
-   source ~/.config/dotfiles/scripts/cleanup-node
-   ```
+    ```fish
+    # Source all scripts in dotfiles/scripts directory
+    for script in ~/.config/dotfiles/scripts/*
+        if test -f $script
+            source $script
+        end
+    end
+    ```
+
+    Or source just this specific script:
+
+    ```fish
+    source ~/.config/dotfiles/scripts/cleanup-node
+    ```
 
 4. **Reload your fish config:**
-   ```fish
-   source ~/.config/fish/config.fish
-   ```
+    ```fish
+    source ~/.config/fish/config.fish
+    ```
 
 Now you can use `rmnode` command from anywhere in your terminal!

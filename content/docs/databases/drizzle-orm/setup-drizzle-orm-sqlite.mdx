@@ -1,10 +1,10 @@
 ---
-title: "Setup Drizzle ORM with SQLite"
-language: "TypeScript"
-lastModified: "2025-04-11"
+title: 'Setup Drizzle ORM with SQLite'
+language: 'TypeScript'
+lastModified: '2025-04-11'
 ---
 
-import { Callout } from "fumadocs-ui/components/callout";
+import { Callout } from 'fumadocs-ui/components/callout'
 
 This guide shows you how to configure `drizzle.config.ts` with SQLite with the newest version of Drizzle ORM.
 
@@ -36,24 +36,24 @@ touch drizzle.config.ts
 This file consists of a `defineConfig` function that takes an object as an argument. It should always look like this as a minimum. There are morre advanced options, but likely you won't need them, or look up the official docs.
 
 ```ts
-import { defineConfig } from "drizzle-kit";
+import { defineConfig } from 'drizzle-kit'
 
-export default defineConfig({});
+export default defineConfig({})
 ```
 
 In here we define ther location of our client (db connection), the schema path, the migration path and the dialect (language of the database).
 
 ```ts
-import { defineConfig } from "drizzle-kit";
+import { defineConfig } from 'drizzle-kit'
 
 export default defineConfig({
-  out: "./src/server/db/migrations",
-  schema: "./src/server/db/schema/index.ts",
-  dialect: "sqlite",
-  dbCredentials: {
-    url: process.env.DATABASE_URL,
-  },
-});
+	out: './src/server/db/migrations',
+	schema: './src/server/db/schema/index.ts',
+	dialect: 'sqlite',
+	dbCredentials: {
+		url: process.env.DATABASE_URL
+	}
+})
 ```
 
 The paths can be any you want, `out` will be generrated, `schema` and `client` must exist. I prefer to have these files. Typically you want to validate enviorment variables with zod, or a custom implementation which you can find in the guide I wrote here [here](/docs/databases/validate-env-variables).ß
@@ -75,20 +75,20 @@ I will show you the most basic version. I perrsonally tend to use a way more com
 Then we can create tables. This is a example of a userrs table.
 
 ```ts
-import { sqliteTable as table } from "drizzle-orm/sqlite-core";
-import * as t from "drizzle-orm/sqlite-core";
+import { sqliteTable as table } from 'drizzle-orm/sqlite-core'
+import * as t from 'drizzle-orm/sqlite-core'
 
 export const users = table(
-  "users",
-  {
-    id: t.int().primaryKey({ autoIncrement: true }),
-    firstName: t.text("first_name"),
-    lastName: t.text("last_name"),
-    email: t.text().notNull(),
-    role: t.text().$type<"guest" | "user" | "admin">().default("guest"),
-  },
-  (table) => [t.uniqueIndex("email_idx").on(table.email)]
-);
+	'users',
+	{
+		id: t.int().primaryKey({ autoIncrement: true }),
+		firstName: t.text('first_name'),
+		lastName: t.text('last_name'),
+		email: t.text().notNull(),
+		role: t.text().$type<'guest' | 'user' | 'admin'>().default('guest')
+	},
+	table => [t.uniqueIndex('email_idx').on(table.email)]
+)
 ```
 
 ## Creating the client

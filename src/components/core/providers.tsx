@@ -4,15 +4,20 @@ import type { ReactNode } from 'react'
 import { TooltipProvider } from '../ui'
 
 type TProps = {
-    children: ReactNode
+	children: ReactNode
 }
 
 export function Providers({ children }: TProps) {
-    return (
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <TooltipProvider>
-                <RootProvider>{children}</RootProvider>
-            </TooltipProvider>
-        </ThemeProvider>
-    )
+	return (
+		<ThemeProvider
+			attribute='class'
+			defaultTheme='system'
+			enableSystem
+			disableTransitionOnChange
+		>
+			<TooltipProvider>
+				<RootProvider>{children}</RootProvider>
+			</TooltipProvider>
+		</ThemeProvider>
+	)
 }

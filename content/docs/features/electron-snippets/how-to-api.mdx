@@ -10,20 +10,20 @@ lastModified: '2024-04-13'
 ```typescript
 // src/types/app-architecture.ts
 interface AppArchitecture {
-  main: {
-    database: PrismaClient
-    ipc: ElectronIpcMain
-    services: MainProcessServices
-  }
-  renderer: {
-    api: ApiClient
-    store: AppStore
-    ui: ReactComponents
-  }
-  preload: {
-    api: ExposedApi
-    bridge: IpcBridge
-  }
+	main: {
+		database: PrismaClient
+		ipc: ElectronIpcMain
+		services: MainProcessServices
+	}
+	renderer: {
+		api: ApiClient
+		store: AppStore
+		ui: ReactComponents
+	}
+	preload: {
+		api: ExposedApi
+		bridge: IpcBridge
+	}
 }
 ```
 
@@ -32,22 +32,25 @@ interface AppArchitecture {
 ```typescript
 // src/main/index.ts
 class MainProcess {
-  private window: BrowserWindow
-  private prisma: PrismaClient
-  private services: ServiceRegistry
+	private window: BrowserWindow
+	private prisma: PrismaClient
+	private services: ServiceRegistry
 
-  constructor() {
-    this.initializePrisma()
-    this.setupIpcHandlers()
-    this.createWindow()
-  }
+	constructor() {
+		this.initializePrisma()
+		this.setupIpcHandlers()
+		this.createWindow()
+	}
 
-  private async initializePrisma() {
-    this.prisma = new PrismaClient({
-      log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error']
-    })
-    await this.prisma.$connect()
-  }
+	private async initializePrisma() {
+		this.prisma = new PrismaClient({
+			log:
+				process.env.NODE_ENV === 'development'
+					? ['query', 'error', 'warn']
+					: ['error']
+		})
+		await this.prisma.$connect()
+	}
 }
 ```
 
@@ -79,10 +82,10 @@ import { app } from 'electron'
 import path from 'path'
 
 export function getDatabasePath(): string {
-  const userDataPath = app.getPath('userData')
-  return process.env.NODE_ENV === 'development'
-    ? path.join(process.cwd(), 'prisma/data.db')
-    : path.join(userDataPath, 'data.db')
+	const userDataPath = app.getPath('userData')
+	return process.env.NODE_ENV === 'development'
+		? path.join(process.cwd(), 'prisma/data.db')
+		: path.join(userDataPath, 'data.db')
 }
 
 // Usage in main process
@@ -99,17 +102,17 @@ process.env.DATABASE_URL = `file:${dbPath}`
 ```typescript
 // src/shared/ipc/channels.ts
 export const IPC_CHANNELS = {
-  DATABASE: {
-    QUERY: 'db:query',
-    MUTATION: 'db:mutation',
-    TRANSACTION: 'db:transaction',
-    SYNC: 'db:sync'
-  },
-  APP: {
-    READY: 'app:ready',
-    ERROR: 'app:error',
-    UPDATE: 'app:update'
-  }
+	DATABASE: {
+		QUERY: 'db:query',
+		MUTATION: 'db:mutation',
+		TRANSACTION: 'db:transaction',
+		SYNC: 'db:sync'
+	},
+	APP: {
+		READY: 'app:ready',
+		ERROR: 'app:error',
+		UPDATE: 'app:update'
+	}
 } as const
 
 type IpcChannels = typeof IPC_CHANNELS
@@ -123,20 +126,26 @@ import { contextBridge, ipcRenderer } from 'electron'
 import type { DatabaseOperations } from '../shared/types'
 
 export const api = {
-  database: {
-    query: async <T>(operation: DatabaseOperations, args?: unknown): Promise<T> => {
-      return ipcRenderer.invoke(IPC_CHANNELS.DATABASE.QUERY, {
-        operation,
-        args
-      })
-    },
+	database: {
+		query: async <T>(
+			operation: DatabaseOperations,
+			args?: unknown
+		): Promise<T> => {
+			return ipcRenderer.invoke(IPC_CHANNELS.DATABASE.QUERY, {
+				operation,
+				args
+			})
+		},
 
-    // Watch for database changes
-    subscribe: (callback: (event: DatabaseEvent) => void) => {
-      const unsubscribe = ipcRenderer.on(IPC_CHANNELS.DATABASE.SYNC, callback)
-      return () => unsubscribe()
-    }
-  }
+		// Watch for database changes
+		subscribe: (callback: (event: DatabaseEvent) => void) => {
+			const unsubscribe = ipcRenderer.on(
+				IPC_CHANNELS.DATABASE.SYNC,
+				callback
+			)
+			return () => unsubscribe()
+		}
+	}
 }
 
 contextBridge.exposeInMainWorld('electron', api)
@@ -153,19 +162,19 @@ contextBridge.exposeInMainWorld('electron', api)
 import { z } from 'zod'
 
 const QuerySchema = z.object({
-  operation: z.enum(['findMany', 'findUnique', 'create', 'update', 'delete']),
-  model: z.enum(['User', 'Post', 'Comment']),
-  args: z.record(z.unknown()).optional()
+	operation: z.enum(['findMany', 'findUnique', 'create', 'update', 'delete']),
+	model: z.enum(['User', 'Post', 'Comment']),
+	args: z.record(z.unknown()).optional()
 })
 
 export function validateQuery(query: unknown): boolean {
-  try {
-    QuerySchema.parse(query)
-    return true
-  } catch (error) {
-    console.error('Invalid query:', error)
-    return false
-  }
+	try {
+		QuerySchema.parse(query)
+		return true
+	} catch (error) {
+		console.error('Invalid query:', error)
+		return false
+	}
 }
 ```
 
@@ -174,19 +183,21 @@ export function validateQuery(query: unknown): boolean {
 ```typescript
 // src/main/window/security.ts
 export function setupSecurityPolicy(window: BrowserWindow): void {
-  window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-    callback({
-      responseHeaders: {
-        ...details.responseHeaders,
-        'Content-Security-Policy': [
-          "default-src 'self'",
-          "script-src 'self'",
-          "style-src 'self' 'unsafe-inline'",
-          "img-src 'self' data: https:"
-        ].join('; ')
-      }
-    })
-  })
+	window.webContents.session.webRequest.onHeadersReceived(
+		(details, callback) => {
+			callback({
+				responseHeaders: {
+					...details.responseHeaders,
+					'Content-Security-Policy': [
+						"default-src 'self'",
+						"script-src 'self'",
+						"style-src 'self' 'unsafe-inline'",
+						"img-src 'self' data: https:"
+					].join('; ')
+				}
+			})
+		}
+	)
 }
 ```
 
@@ -199,35 +210,35 @@ export function setupSecurityPolicy(window: BrowserWindow): void {
 ```typescript
 // src/main/services/sync-service.ts
 export class DatabaseSyncService {
-  private subscribers: Set<BrowserWindow> = new Set()
+	private subscribers: Set<BrowserWindow> = new Set()
 
-  constructor(private prisma: PrismaClient) {
-    this.setupMiddleware()
-  }
+	constructor(private prisma: PrismaClient) {
+		this.setupMiddleware()
+	}
 
-  private setupMiddleware() {
-    this.prisma.$use(async (params, next) => {
-      const result = await next(params)
+	private setupMiddleware() {
+		this.prisma.$use(async (params, next) => {
+			const result = await next(params)
 
-      if (params.action !== 'findMany') {
-        this.notifySubscribers({
-          model: params.model,
-          action: params.action,
-          data: result
-        })
-      }
+			if (params.action !== 'findMany') {
+				this.notifySubscribers({
+					model: params.model,
+					action: params.action,
+					data: result
+				})
+			}
 
-      return result
-    })
-  }
+			return result
+		})
+	}
 
-  private notifySubscribers(event: DatabaseEvent) {
-    this.subscribers.forEach((window) => {
-      if (!window.isDestroyed()) {
-        window.webContents.send(IPC_CHANNELS.DATABASE.SYNC, event)
-      }
-    })
-  }
+	private notifySubscribers(event: DatabaseEvent) {
+		this.subscribers.forEach(window => {
+			if (!window.isDestroyed()) {
+				window.webContents.send(IPC_CHANNELS.DATABASE.SYNC, event)
+			}
+		})
+	}
 }
 ```
 
@@ -238,36 +249,39 @@ export class DatabaseSyncService {
 import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface OfflineState {
-  pendingOperations: DatabaseOperation[]
-  addOperation: (op: DatabaseOperation) => void
-  processPendingOperations: () => Promise<void>
+	pendingOperations: DatabaseOperation[]
+	addOperation: (op: DatabaseOperation) => void
+	processPendingOperations: () => Promise<void>
 }
 
 export const useOfflineStore = create<OfflineState>()(
-  persist(
-    (set, get) => ({
-      pendingOperations: [],
-      addOperation: (operation) =>
-        set((state) => ({
-          pendingOperations: [...state.pendingOperations, operation]
-        })),
-      processPendingOperations: async () => {
-        const { pendingOperations } = get()
-        for (const operation of pendingOperations) {
-          try {
-            await window.electron.database.query(operation.type, operation.params)
-          } catch (error) {
-            console.error('Failed to process operation:', error)
-          }
-        }
-        set({ pendingOperations: [] })
-      }
-    }),
-    {
-      name: 'offline-store',
-      storage: createJSONStorage(() => localStorage)
-    }
-  )
+	persist(
+		(set, get) => ({
+			pendingOperations: [],
+			addOperation: operation =>
+				set(state => ({
+					pendingOperations: [...state.pendingOperations, operation]
+				})),
+			processPendingOperations: async () => {
+				const { pendingOperations } = get()
+				for (const operation of pendingOperations) {
+					try {
+						await window.electron.database.query(
+							operation.type,
+							operation.params
+						)
+					} catch (error) {
+						console.error('Failed to process operation:', error)
+					}
+				}
+				set({ pendingOperations: [] })
+			}
+		}),
+		{
+			name: 'offline-store',
+			storage: createJSONStorage(() => localStorage)
+		}
+	)
 )
 ```
 
@@ -280,37 +294,37 @@ export const useOfflineStore = create<OfflineState>()(
 ```typescript
 // src/main/database/connection.ts
 export class DatabaseConnectionManager {
-  private static instance: PrismaClient
-  private static connectionCount = 0
+	private static instance: PrismaClient
+	private static connectionCount = 0
 
-  static async getInstance(): Promise<PrismaClient> {
-    if (!this.instance) {
-      this.instance = new PrismaClient({
-        datasources: {
-          db: {
-            url: getDatabasePath()
-          }
-        },
-        // Optimize for desktop app usage
-        log: ['error'],
-        errorFormat: 'minimal',
-        connectionLimit: 5
-      })
+	static async getInstance(): Promise<PrismaClient> {
+		if (!this.instance) {
+			this.instance = new PrismaClient({
+				datasources: {
+					db: {
+						url: getDatabasePath()
+					}
+				},
+				// Optimize for desktop app usage
+				log: ['error'],
+				errorFormat: 'minimal',
+				connectionLimit: 5
+			})
 
-      await this.instance.$connect()
-    }
+			await this.instance.$connect()
+		}
 
-    this.connectionCount++
-    return this.instance
-  }
+		this.connectionCount++
+		return this.instance
+	}
 
-  static async releaseInstance(): Promise<void> {
-    this.connectionCount--
-    if (this.connectionCount === 0) {
-      await this.instance.$disconnect()
-      this.instance = null
-    }
-  }
+	static async releaseInstance(): Promise<void> {
+		this.connectionCount--
+		if (this.connectionCount === 0) {
+			await this.instance.$disconnect()
+			this.instance = null
+		}
+	}
 }
 ```
 
@@ -319,34 +333,34 @@ export class DatabaseConnectionManager {
 ```typescript
 // src/main/services/query-optimizer.ts
 export class QueryOptimizer {
-  static optimizeQuery(model: string, args: any): any {
-    // Implement select optimization
-    if (args.select === undefined && args.include === undefined) {
-      args.select = this.getDefaultSelection(model)
-    }
+	static optimizeQuery(model: string, args: any): any {
+		// Implement select optimization
+		if (args.select === undefined && args.include === undefined) {
+			args.select = this.getDefaultSelection(model)
+		}
 
-    // Implement pagination
-    if (args.take === undefined && !args.where?.id) {
-      args.take = 50
-    }
+		// Implement pagination
+		if (args.take === undefined && !args.where?.id) {
+			args.take = 50
+		}
 
-    return args
-  }
+		return args
+	}
 
-  private static getDefaultSelection(model: string): Record<string, boolean> {
-    const selections: Record<string, Record<string, boolean>> = {
-      User: {
-        id: true,
-        email: true,
-        name: true,
-        createdAt: false,
-        updatedAt: false
-      }
-      // Add more models...
-    }
+	private static getDefaultSelection(model: string): Record<string, boolean> {
+		const selections: Record<string, Record<string, boolean>> = {
+			User: {
+				id: true,
+				email: true,
+				name: true,
+				createdAt: false,
+				updatedAt: false
+			}
+			// Add more models...
+		}
 
-    return selections[model] || {}
-  }
+		return selections[model] || {}
+	}
 }
 ```
 
@@ -359,42 +373,45 @@ export class QueryOptimizer {
 ```typescript
 // src/main/database/lock-handler.ts
 export class DatabaseLockHandler {
-  private lockQueue: Array<() => Promise<void>> = []
-  private isLocked = false
+	private lockQueue: Array<() => Promise<void>> = []
+	private isLocked = false
 
-  async acquireLock<T>(operation: () => Promise<T>, timeout = 5000): Promise<T> {
-    if (this.isLocked) {
-      return new Promise((resolve, reject) => {
-        const timeoutId = setTimeout(() => {
-          reject(new Error('Database lock timeout'))
-        }, timeout)
+	async acquireLock<T>(
+		operation: () => Promise<T>,
+		timeout = 5000
+	): Promise<T> {
+		if (this.isLocked) {
+			return new Promise((resolve, reject) => {
+				const timeoutId = setTimeout(() => {
+					reject(new Error('Database lock timeout'))
+				}, timeout)
 
-        this.lockQueue.push(async () => {
-          clearTimeout(timeoutId)
-          try {
-            resolve(await operation())
-          } catch (error) {
-            reject(error)
-          }
-        })
-      })
-    }
+				this.lockQueue.push(async () => {
+					clearTimeout(timeoutId)
+					try {
+						resolve(await operation())
+					} catch (error) {
+						reject(error)
+					}
+				})
+			})
+		}
 
-    this.isLocked = true
-    try {
-      return await operation()
-    } finally {
-      this.isLocked = false
-      this.processQueue()
-    }
-  }
+		this.isLocked = true
+		try {
+			return await operation()
+		} finally {
+			this.isLocked = false
+			this.processQueue()
+		}
+	}
 
-  private async processQueue(): Promise<void> {
-    const next = this.lockQueue.shift()
-    if (next) {
-      await next()
-    }
-  }
+	private async processQueue(): Promise<void> {
+		const next = this.lockQueue.shift()
+		if (next) {
+			await next()
+		}
+	}
 }
 ```
 
@@ -403,39 +420,39 @@ export class DatabaseLockHandler {
 ```typescript
 // src/main/error/crash-handler.ts
 export class CrashHandler {
-  constructor(
-    private window: BrowserWindow,
-    private prisma: PrismaClient
-  ) {
-    this.setupHandlers()
-  }
+	constructor(
+		private window: BrowserWindow,
+		private prisma: PrismaClient
+	) {
+		this.setupHandlers()
+	}
 
-  private setupHandlers() {
-    // Handle renderer process crashes
-    this.window.webContents.on('crashed', async () => {
-      await this.cleanup()
-      this.restartRenderer()
-    })
+	private setupHandlers() {
+		// Handle renderer process crashes
+		this.window.webContents.on('crashed', async () => {
+			await this.cleanup()
+			this.restartRenderer()
+		})
 
-    // Handle main process crashes
-    process.on('uncaughtException', async (error) => {
-      console.error('Uncaught exception:', error)
-      await this.cleanup()
-      app.quit()
-    })
-  }
+		// Handle main process crashes
+		process.on('uncaughtException', async error => {
+			console.error('Uncaught exception:', error)
+			await this.cleanup()
+			app.quit()
+		})
+	}
 
-  private async cleanup() {
-    try {
-      await this.prisma.$disconnect()
-    } catch (error) {
-      console.error('Failed to disconnect Prisma:', error)
-    }
-  }
+	private async cleanup() {
+		try {
+			await this.prisma.$disconnect()
+		} catch (error) {
+			console.error('Failed to disconnect Prisma:', error)
+		}
+	}
 
-  private restartRenderer() {
-    this.window.loadURL(process.env.VITE_DEV_SERVER_URL)
-  }
+	private restartRenderer() {
+		this.window.loadURL(process.env.VITE_DEV_SERVER_URL)
+	}
 }
 ```
 
@@ -448,29 +465,31 @@ import { app } from 'electron'
 import path from 'path'
 
 export class DatabaseMigrator {
-  private readonly migrationPath: string
+	private readonly migrationPath: string
 
-  constructor() {
-    this.migrationPath = path.join(app.getPath('userData'), 'migrations')
-  }
+	constructor() {
+		this.migrationPath = path.join(app.getPath('userData'), 'migrations')
+	}
 
-  async migrate(): Promise<void> {
-    try {
-      // Copy migration files to user data directory
-      this.copyMigrationFiles()
+	async migrate(): Promise<void> {
+		try {
+			// Copy migration files to user data directory
+			this.copyMigrationFiles()
 
-      // Run migrations
-      execSync(`prisma migrate deploy --schema=${this.migrationPath}/schema.prisma`)
-    } catch (error) {
-      console.error('Migration failed:', error)
-      throw new Error('Failed to migrate database')
-    }
-  }
+			// Run migrations
+			execSync(
+				`prisma migrate deploy --schema=${this.migrationPath}/schema.prisma`
+			)
+		} catch (error) {
+			console.error('Migration failed:', error)
+			throw new Error('Failed to migrate database')
+		}
+	}
 
-  private copyMigrationFiles() {
-    // Implementation to copy migration files from app resources
-    // to user data directory
-  }
+	private copyMigrationFiles() {
+		// Implementation to copy migration files from app resources
+		// to user data directory
+	}
 }
 ```
 
@@ -483,14 +502,14 @@ export class DatabaseMigrator {
 ```typescript
 // electron-builder.config.js
 module.exports = {
-  extraResources: [
-    {
-      from: 'prisma',
-      to: 'prisma',
-      filter: ['*.prisma', 'migrations/**/*']
-    }
-  ]
-  // ... other config
+	extraResources: [
+		{
+			from: 'prisma',
+			to: 'prisma',
+			filter: ['*.prisma', 'migrations/**/*']
+		}
+	]
+	// ... other config
 }
 ```
 
@@ -499,34 +518,34 @@ module.exports = {
 ```typescript
 // src/main/setup/first-run.ts
 export class FirstRunSetup {
-  constructor(private dbPath: string) {}
+	constructor(private dbPath: string) {}
 
-  async perform(): Promise<void> {
-    if (await this.isFirstRun()) {
-      await this.setupDatabase()
-      await this.createInitialData()
-      await this.markSetupComplete()
-    }
-  }
+	async perform(): Promise<void> {
+		if (await this.isFirstRun()) {
+			await this.setupDatabase()
+			await this.createInitialData()
+			await this.markSetupComplete()
+		}
+	}
 
-  private async isFirstRun(): Promise<boolean> {
-    return !existsSync(this.dbPath)
-  }
+	private async isFirstRun(): Promise<boolean> {
+		return !existsSync(this.dbPath)
+	}
 
-  private async setupDatabase(): Promise<void> {
-    const migrator = new DatabaseMigrator()
-    await migrator.migrate()
-  }
+	private async setupDatabase(): Promise<void> {
+		const migrator = new DatabaseMigrator()
+		await migrator.migrate()
+	}
 
-  private async createInitialData(): Promise<void> {
-    const prisma = await DatabaseConnectionManager.getInstance()
-    // Create initial data...
-    await DatabaseConnectionManager.releaseInstance()
-  }
+	private async createInitialData(): Promise<void> {
+		const prisma = await DatabaseConnectionManager.getInstance()
+		// Create initial data...
+		await DatabaseConnectionManager.releaseInstance()
+	}
 
-  private async markSetupComplete(): Promise<void> {
-    // Save setup completion marker
-  }
+	private async markSetupComplete(): Promise<void> {
+		// Save setup completion marker
+	}
 }
 ```
 
@@ -541,31 +560,31 @@ export class FirstRunSetup {
 import { TestContext } from './test-context'
 
 describe('Database Integration', () => {
-  let context: TestContext
+	let context: TestContext
 
-  beforeEach(async () => {
-    context = await TestContext.create()
-  })
+	beforeEach(async () => {
+		context = await TestContext.create()
+	})
 
-  afterEach(async () => {
-    await context.cleanup()
-  })
+	afterEach(async () => {
+		await context.cleanup()
+	})
 
-  it('should handle concurrent operations', async () => {
-    const operations = Array(10)
-      .fill(null)
-      .map(() =>
-        context.prisma.user.create({
-          data: {
-            email: `user${Date.now()}@test.com`,
-            name: 'Test User'
-          }
-        })
-      )
+	it('should handle concurrent operations', async () => {
+		const operations = Array(10)
+			.fill(null)
+			.map(() =>
+				context.prisma.user.create({
+					data: {
+						email: `user${Date.now()}@test.com`,
+						name: 'Test User'
+					}
+				})
+			)
 
-    const results = await Promise.all(operations)
-    expect(results).toHaveLength(10)
-  })
+		const results = await Promise.all(operations)
+		expect(results).toHaveLength(10)
+	})
 })
 ```
 
@@ -578,25 +597,28 @@ import path from 'path'
 import winston from 'winston'
 
 export const logger = winston.createLogger({
-  level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
-  format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
-  transports: [
-    new winston.transports.File({
-      filename: path.join(app.getPath('userData'), 'logs', 'error.log'),
-      level: 'error'
-    }),
-    new winston.transports.File({
-      filename: path.join(app.getPath('userData'), 'logs', 'combined.log')
-    })
-  ]
+	level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
+	format: winston.format.combine(
+		winston.format.timestamp(),
+		winston.format.json()
+	),
+	transports: [
+		new winston.transports.File({
+			filename: path.join(app.getPath('userData'), 'logs', 'error.log'),
+			level: 'error'
+		}),
+		new winston.transports.File({
+			filename: path.join(app.getPath('userData'), 'logs', 'combined.log')
+		})
+	]
 })
 
 if (process.env.NODE_ENV === 'development') {
-  logger.add(
-    new winston.transports.Console({
-      format: winston.format.simple()
-    })
-  )
+	logger.add(
+		new winston.transports.Console({
+			format: winston.format.simple()
+		})
+	)
 }
 ```
 
@@ -609,4 +631,3 @@ Let me know if you'd like me to expand on any of these sections or add:
 - 🏗️ Additional architectural patterns
 - 🔒 Security hardening strategies
 - 🚀 Performance profiling guide
-

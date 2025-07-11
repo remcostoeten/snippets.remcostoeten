@@ -1,13 +1,14 @@
 ---
-title: "Warp terminal - rules"
-description: "Rules for Warp terminal to adhere to"
-language: "system"
-lastModified: "2025-06-05"
+title: 'Warp terminal - rules'
+description: 'Rules for Warp terminal to adhere to'
+language: 'system'
+lastModified: '2025-06-05'
 ---
 
 ```bash
 Practical Functional Programming
 ```
+
 ```bash
 We write predictable, functional-style code in modern TypeScript and Next.js.
 
@@ -33,10 +34,13 @@ Follow these rules:
 - Code should be **declarative** when it improves clarity
 
 ```
+
 ---
+
 ```bash
 No code comments
 ```
+
 ```bash
 Code must be self-explanatory and readable without comments.
 
@@ -52,10 +56,13 @@ Code must be self-explanatory and readable without comments.
 📌 If you feel the need to comment, rewrite the code for clarity instead.
 
 ```
+
 ---
+
 ```bash
 Component Props Typing — Mandatory `TProps` for Single Type Files
 ```
+
 ```bash
 When defining a React/Next.js component with props, if the file contains **only one non-exported type**, it **MUST** be named exactly `TProps`.
 
@@ -90,11 +97,14 @@ Key points:
 This ensures consistent, clear, and easy-to-find component prop typings across the codebase.
 
 ```
+
 ---
+
 ```
 Use Types only, no Interfaces
 ```
-```
+
+````
 - Use **`type`** declarations exclusively — do **not** use `interface`.
 - All type names **must** be prefixed with `T`.
   Example: `type TUser = { ... }`
@@ -109,11 +119,14 @@ Use Types only, no Interfaces
     ```
 - Exported types must use descriptive names with the `T` prefix.
 
-```
+````
+
 ---
+
 ```bash
 📦Export and Page Structure
 ```
+
 ```bash
 - ❌ No default exports anywhere **except** in **pages** and **views**.
 - Use **named exports only** for all modules and components (e.g., `export function foo() {}`).
@@ -130,10 +143,13 @@ e.g: `login-view`, `dashboard-view`, `settings-view`.
 - Views are located over at `/views` or `src/views`
 - -The view directory  never makes use of a barrel file
 ```
+
 ---
+
 ```bash
 Use reducers for complex or stateful logic
 ```
+
 ```bash
 - For complex state management or business logic with multiple steps or actions, **use pure reducer functions** (`(state, action) => newState`).
 - Avoid sprawling imperative code or deeply nested conditionals—prefer reducer composition and clear action types.
@@ -161,7 +177,9 @@ function counterReducer(state: number, action: Action): number {
 }
 """
 ```
+
 ---
+
 ```bash
 Use Factory Functions and Functional Abstractions
 ```
@@ -202,14 +220,17 @@ AI RULES: Functional Factories & Base Types for Next.js + Drizzle ORM
 Summary:
 Use strongly typed, reusable functional factories for CRUD operations on typed base entities with timestamps. Maintain separation of concerns, modularity, and strict functional style across the codebase.
 ```
+
 ---
+
 ```bash
 
 ```
-```bash
+
+````bash
 No testing needed except if requested
 
 ```shell
 For normal code we never write tests, except if mentioned that we need tests.
 If you feel like there's a need for tests, discuss the thoughts first and only execute if confirmed
-```
+````

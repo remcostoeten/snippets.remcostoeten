@@ -1,8 +1,8 @@
 ---
-title: "Microphone Tester Feature Prompt"
-language: "TypeScript"
-description: "A feature prompt for the Microphone Tester component which I still want to implement for my pheripherals tester tool."
-lastModified: "2025-04-13"
+title: 'Microphone Tester Feature Prompt'
+language: 'TypeScript'
+description: 'A feature prompt for the Microphone Tester component which I still want to implement for my pheripherals tester tool.'
+lastModified: '2025-04-13'
 ---
 
 ### 🔌 Input Devices
@@ -13,16 +13,16 @@ lastModified: "2025-04-13"
 ### 📈 Live Feedback
 
 - Show:
-  - A live waveform
-  - A gain meter
-  - Red “clipping” zone indicator when volume is too loud
+    - A live waveform
+    - A gain meter
+    - Red “clipping” zone indicator when volume is too loud
 
 ####🧠 Mic Optimal Range Feedback
 
 - Display message based on average gain level:
-  - ✅ “Perfect distance”
-  - ⚠️ “Too far, speak up”
-  - ❗“Too close, lower your voice”
+    - ✅ “Perfect distance”
+    - ⚠️ “Too far, speak up”
+    - ❗“Too close, lower your voice”
 - Visual feedback using icon + text
 - Adjustable thresholds optional (for dev mode)
 
@@ -35,20 +35,20 @@ lastModified: "2025-04-13"
 
 - Start / Pause / Resume / Stop buttons
 - Timer:
-  - Starts at 0
-  - Pauses timer on pause
-  - Resumes timer from paused value
+    - Starts at 0
+    - Pauses timer on pause
+    - Resumes timer from paused value
 
 ### 🧾 Track Visualization
 
 - After stop:
-  - Show full waveform with zoom out
-  - Playback control with:
-    - Click-to-seek
-    - Forward 5s / Backward 5s buttons
-    - Playback speed toggle:
-      - Faster: 1.25×, 1.5×, 1.75×, 2×
-      - Slower: 0.75×, 0.5×, 0.25×
+    - Show full waveform with zoom out
+    - Playback control with:
+        - Click-to-seek
+        - Forward 5s / Backward 5s buttons
+        - Playback speed toggle:
+            - Faster: 1.25×, 1.5×, 1.75×, 2×
+            - Slower: 0.75×, 0.5×, 0.25×
 
 ### 📝 File Management
 
@@ -67,9 +67,9 @@ lastModified: "2025-04-13"
 ### 🚫 Permission States
 
 - If no access:
-  - Show empty state with info + retry
+    - Show empty state with info + retry
 - If denied:
-  - Show persistent error with instructions
+    - Show persistent error with instructions
 
 ### ♿ Accessibility
 
@@ -137,22 +137,21 @@ lastModified: "2025-04-13"
 
 - Full on-screen keyboard (QWERTY)
 - Pressing a physical key:
-  - Animates key visually
-  - Plays tone (mapped L → R = low → high note)
-  - Sound toggle in settings
+    - Animates key visually
+    - Plays tone (mapped L → R = low → high note)
+    - Sound toggle in settings
 
 ### 💡 Visual Press Behavior
 
 Two toggleable animation modes:
 
 1. **Persistent Highlight Mode**
-
-   - Pressed key stays highlighted until “Reset” is clicked
+    - Pressed key stays highlighted until “Reset” is clicked
 
 2. **Pulse Mode**
-   - Key animates on press and fades back on release
-   - Holding a key keeps it visually down
-   - Only triggers history event on release
+    - Key animates on press and fades back on release
+    - Holding a key keeps it visually down
+    - Only triggers history event on release
 
 ### 🕘 Key History
 

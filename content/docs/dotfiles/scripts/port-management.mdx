@@ -1,29 +1,35 @@
 ---
-title: "Fish Shell Port and File Utilities"
-description: "A set of Fish shell functions to list listening ports, interactively kill processes by port, and create timestamped file backups."
-language: "shell"
-lastModified: "2025-06-25"
+title: 'Fish Shell Port and File Utilities'
+description: 'A set of Fish shell functions to list listening ports, interactively kill processes by port, and create timestamped file backups.'
+language: 'shell'
+lastModified: '2025-06-25'
 ---
 
 import {
-  CodeNote,
-  Tip,
-  Important,
-  Example,
-  Warning,
-} from "@/components/ui/text/text-wrappers";
+	CodeNote,
+	Tip,
+	Important,
+	Example,
+	Warning
+} from '@/components/ui/text/text-wrappers'
 
-<div className="max-w-full prose prose-invert">
-  <h1 className="mb-4 text-4xl font-bold tracking-tight">{frontmatter.title}</h1>
-  <p className="text-lg text-gray-400 mb-8">{frontmatter.description}</p>
+<div className='max-w-full prose prose-invert'>
+	<h1 className='mb-4 text-4xl font-bold tracking-tight'>
+		{frontmatter.title}
+	</h1>
+	<p className='text-lg text-gray-400 mb-8'>{frontmatter.description}</p>
 </div>
 
 <Important>
-  This script adds three convenient utilities to your Fish shell: `ports` to see what's running, `pkillport` to stop a process, and `backup` for quick file snapshots.
+	This script adds three convenient utilities to your Fish shell: `ports` to
+	see what's running, `pkillport` to stop a process, and `backup` for quick
+	file snapshots.
 </Important>
 
 <Warning>
-  The `ports` function requires either `lsof` or `ss` to be installed on your system. The `pkillport` function requires `fzf` (a command-line fuzzy finder) for its interactive menu.
+	The `ports` function requires either `lsof` or `ss` to be installed on your
+	system. The `pkillport` function requires `fzf` (a command-line fuzzy
+	finder) for its interactive menu.
 </Warning>
 
 ## Installation
@@ -37,11 +43,13 @@ Save the script's content to a file in your Fish functions directory, for exampl
 Run this command to get a colorized list of all processes currently listening on TCP ports. It shows the PID, process name, port number, and the full command.
 
 **Example Command:**
+
 ```fish
 ports
 ```
 
 **Example Output:**
+
 ```
 PID      PROCESS    PORT   COMMAND
 1234     sshd       22     sshd: user [priv]
@@ -54,9 +62,11 @@ PID      PROCESS    PORT   COMMAND
 This command displays an interactive `fzf` menu of listening ports. You can fuzzy-find a process, see a preview of what will be killed, and press Enter to select. It will then ask for confirmation before killing the process.
 
 **Example Command:**
+
 ```fish
 pkillport
 ```
+
 This will open a screen where you can type to filter and use arrow keys to select a process to terminate.
 
 ### `backup` - Create a Timestamped Backup
@@ -64,11 +74,13 @@ This will open a screen where you can type to filter and use arrow keys to selec
 Creates a quick backup of any file. A timestamp in `YYYYMMDD-HHMMSS` format is appended to the original filename.
 
 **Example Command:**
+
 ```fish
 backup my_important_document.txt
 ```
 
 **Example Output:**
+
 ```
 Backup created: my_important_document.txt.20250625-203000.bak
 ```
@@ -184,3 +196,4 @@ function backup
         echo (set_color red)"Failed to create backup."(set_color normal)
     end
 end
+```

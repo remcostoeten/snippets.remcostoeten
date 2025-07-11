@@ -11,27 +11,27 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
  * Docs Layout: app/docs/layout.tsx
  */
 export const baseOptions: BaseLayoutProps = {
-    nav: {
-        title: (
-            <>
-                <Logo />
-                {siteConfig.name}
-            </>
-        )
-    },
-    themeSwitch: {
-        enabled: true,
-        component: (
-            <>
-                <CodeThemeSwitch />
-            </>
-        )
-    },
-    links: [
-        {
-            text: 'Snippets',
-            url: '/docs',
-            active: 'nested-url'
-        }
-    ]
+	nav: {
+		title: (
+			<>
+				<Logo />
+				{siteConfig.name}
+			</>
+		)
+	},
+	themeSwitch: {
+		enabled: true,
+		component: (
+			<>
+				<CodeThemeSwitch />
+			</>
+		)
+	},
+	links: [
+		{
+			text: 'Snippets',
+			url: '/docs',
+			active: 'nested-url'
+		}
+	]
 }

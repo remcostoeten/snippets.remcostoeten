@@ -1,29 +1,34 @@
 ---
-title: "Clipboard Copy Commands"
-description: "A set of functions to simplify copying to the clipboard in the terminal."
-language: "shell"
-lastModified: "2025-06-24"
+title: 'Clipboard Copy Commands'
+description: 'A set of functions to simplify copying to the clipboard in the terminal.'
+language: 'shell'
+lastModified: '2025-06-24'
 ---
 
 import {
-  CodeNote,
-  Tip,
-  Important,
-  Example,
-  Warning,
-} from "@/components/ui/text/text-wrappers";
+	CodeNote,
+	Tip,
+	Important,
+	Example,
+	Warning
+} from '@/components/ui/text/text-wrappers'
 
-<div className="max-w-full prose prose-invert">
-  <h1 className="mb-4 text-4xl font-bold tracking-tight">{frontmatter.title}</h1>
-  <p className="text-lg text-gray-400 mb-8">{frontmatter.description}</p>
+<div className='max-w-full prose prose-invert'>
+	<h1 className='mb-4 text-4xl font-bold tracking-tight'>
+		{frontmatter.title}
+	</h1>
+	<p className='text-lg text-gray-400 mb-8'>{frontmatter.description}</p>
 </div>
 
 <Important>
-  This file adds `copy` and `copypwd` functions to your Fish shell. It's designed for fast CLI clipboard workflows and includes a smart help menu with colorized output.
+	This file adds `copy` and `copypwd` functions to your Fish shell. It's
+	designed for fast CLI clipboard workflows and includes a smart help menu
+	with colorized output.
 </Important>
 
 <Warning>
-  Ensure <code>xclip</code> is installed, as it's required for copying to your system clipboard.
+	Ensure <code>xclip</code> is installed, as it's required for copying to your
+	system clipboard.
 </Warning>
 
 ## Installation
@@ -31,7 +36,9 @@ import {
 Place the script in your shell config directory (e.g., `~/.config/fish/functions/clipboard`) and source it from your main config:
 
 <CodeNote>
-  {"echo 'source ~/.config/fish/functions/clipboard' >> ~/.config/fish/config.fish"}
+	{
+		"echo 'source ~/.config/fish/functions/clipboard' >> ~/.config/fish/config.fish"
+	}
 </CodeNote>
 
 It will remain silent when sourced.
@@ -43,6 +50,7 @@ It will remain silent when sourced.
 ```fish
 copypwd
 ```
+
 📋 Will copy: `/current/path/you/are/in`
 
 ---
@@ -52,6 +60,7 @@ copypwd
 ```fish
 copypwd ./myfile.ts
 ```
+
 📋 Will copy: `/full/path/to/myfile.ts`
 
 ---
@@ -61,6 +70,7 @@ copypwd ./myfile.ts
 ```fish
 copy myfile.txt
 ```
+
 📋 If the file contains "hello world", this string will be copied to the clipboard.
 
 ---
@@ -72,6 +82,7 @@ Any of the following commands will show the help menu:
 ```fish
 copy --help
 ```
+
 ⏹️ **Recognized aliases:** `copy`, `copy -h`, `copy --h`, `copy help`, `copy -help`, `copy --help`
 
 ## Full Source Code

@@ -1,16 +1,17 @@
 ---
-title: "Keybindings remap"
-description: "Some rebinds I use to make me feel more at home in neovim."
-language: "lua"
-lastModified: "2025-05-10"
+title: 'Keybindings remap'
+description: 'Some rebinds I use to make me feel more at home in neovim.'
+language: 'lua'
+lastModified: '2025-05-10'
 ---
 
-
 ### Add to either:
+
 - `~/.config/nvim/init.lua` (single file)
 - `~/.config/nvim/lua/keybindings.lua` (modular)
 
 ### Basic Operations
+
 - Delete all in file without overwriting clipboard
 - Select all
 - Copy selection
@@ -59,13 +60,14 @@ vim.keymap.set('i', '<S-Down>', '<Esc>vj', { noremap = true, silent = true })
 ```
 
 For modular setup, create keybindings.lua and add to init.lua:
+
 ```lua
 require('keybindings').setup()
 ```
 
 If Ctrl+Shift+Z doesn't work, replace with:
+
 ```lua
 vim.keymap.set('n', '<C-y>', '<C-r>', { noremap = true, silent = true })
 vim.keymap.set('i', '<C-y>', '<C-o><C-r>', { noremap = true, silent = true })
 ```
-

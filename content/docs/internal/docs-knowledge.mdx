@@ -1,33 +1,33 @@
 ---
 title: Text Formatting Components
 description: A comprehensive guide to using text formatting and documentation components.
-language: "misc"
-lastModified: "2025-04-11"
+language: 'misc'
+lastModified: '2025-04-11'
 ---
 
-import { getEmoji } from "@/core/emoji-map";
+import { getEmoji } from '@/core/emoji-map'
 import {
-  CodeNote,
-  Example,
-  Important,
-  Tip,
-  Warning,
-  DemoSection,
-} from "@/components/ui/text/text-wrappers";
+	CodeNote,
+	Example,
+	Important,
+	Tip,
+	Warning,
+	DemoSection
+} from '@/components/ui/text/text-wrappers'
 import {
-  Backend,
-  Database,
-  Frontend,
-  WithEmoji,
-  EmojiBeforeAfter,
-  B,
-  I,
-  Ping,
-  Pulse,
-  U,
-  EmojiItalic,
-  PulseBold,
-} from "@/components/ui/text/text-wrappers";
+	Backend,
+	Database,
+	Frontend,
+	WithEmoji,
+	EmojiBeforeAfter,
+	B,
+	I,
+	Ping,
+	Pulse,
+	U,
+	EmojiItalic,
+	PulseBold
+} from '@/components/ui/text/text-wrappers'
 
 <div className="max-w-full prose prose-invert">
   <h1 className="mb-4 text-4xl font-bold tracking-tight">{frontmatter.title}</h1>
@@ -36,8 +36,8 @@ import {
 {" "}
 
 <Warning>
-  These components are designed to work with the site's theme and styling. Make
-  sure you have the required dependencies installed.
+	These components are designed to work with the site's theme and styling.
+	Make sure you have the required dependencies installed.
 </Warning>
 
 ## Basic Text Formatting
@@ -51,32 +51,32 @@ The following components provide basic text formatting capabilities:
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <p className="text-gray-400">
-    <I>This text will be italicized</I> - Use for emphasis or highlighting
-  </p>
-  <CodeNote>{"<I>This text will be italicized</I>"}</CodeNote>
+<div className='space-y-4 my-4'>
+	<p className='text-gray-400'>
+		<I>This text will be italicized</I> - Use for emphasis or highlighting
+	</p>
+	<CodeNote>{'<I>This text will be italicized</I>'}</CodeNote>
 </div>
 
 ### Underlined Text
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <U>This text will be underlined</U> - Use for links or important terms
-  <p className="text-gray-400"></p>
-  <CodeNote>{"<U>This text will be underlined</U>"}</CodeNote>
+<div className='space-y-4 my-4'>
+	<U>This text will be underlined</U> - Use for links or important terms
+	<p className='text-gray-400'></p>
+	<CodeNote>{'<U>This text will be underlined</U>'}</CodeNote>
 </div>
 
 ### Bold Text
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <p className="text-gray-400">
-    <B>This text will be bold</B> - Use for strong emphasis
-  </p>
-  <CodeNote>{"<B>This text will be bold</B>"}</CodeNote>
+<div className='space-y-4 my-4'>
+	<p className='text-gray-400'>
+		<B>This text will be bold</B> - Use for strong emphasis
+	</p>
+	<CodeNote>{'<B>This text will be bold</B>'}</CodeNote>
 </div>
 
 ## Animation Components
@@ -90,22 +90,22 @@ Add dynamic effects to your text:
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <p className="text-gray-400">
-    <Pulse>This text will pulse</Pulse> - Subtle attention-grabbing effect
-  </p>
-  <CodeNote>{"<Pulse>This text will pulse</Pulse>"}</CodeNote>
+<div className='space-y-4 my-4'>
+	<p className='text-gray-400'>
+		<Pulse>This text will pulse</Pulse> - Subtle attention-grabbing effect
+	</p>
+	<CodeNote>{'<Pulse>This text will pulse</Pulse>'}</CodeNote>
 </div>
 
 ### Ping Animation
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <p className="text-gray-400">
-    <Ping>This text will ping</Ping> - More pronounced animation effect
-  </p>
-  <CodeNote>{"<Ping>This text will ping</Ping>"}</CodeNote>
+<div className='space-y-4 my-4'>
+	<p className='text-gray-400'>
+		<Ping>This text will ping</Ping> - More pronounced animation effect
+	</p>
+	<CodeNote>{'<Ping>This text will ping</Ping>'}</CodeNote>
 </div>
 
 ## Emoji Integration
@@ -119,13 +119,13 @@ Add contextual emojis to your content:
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <p className="text-gray-400">
-    <WithEmoji>Uses navigation emojis by default</WithEmoji>
-  </p>
-  <CodeNote>
-    {"<WithEmoji>Uses navigation emojis by default</WithEmoji>"}
-  </CodeNote>
+<div className='space-y-4 my-4'>
+	<p className='text-gray-400'>
+		<WithEmoji>Uses navigation emojis by default</WithEmoji>
+	</p>
+	<CodeNote>
+		{'<WithEmoji>Uses navigation emojis by default</WithEmoji>'}
+	</CodeNote>
 </div>
 
 ### Development Categories
@@ -153,59 +153,61 @@ Special components for documentation:
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <CodeNote>Highlight important code-related information</CodeNote>
-  <CodeNote>
-    {"<CodeNote>Highlight important code-related information</CodeNote>"}
-  </CodeNote>
+<div className='space-y-4 my-4'>
+	<CodeNote>Highlight important code-related information</CodeNote>
+	<CodeNote>
+		{'<CodeNote>Highlight important code-related information</CodeNote>'}
+	</CodeNote>
 </div>
 
 ### Tips
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <Tip>Provide helpful suggestions and best practices</Tip>
-  <CodeNote>
-    {"<Tip>Provide helpful suggestions and best practices</Tip>"}
-  </CodeNote>
+<div className='space-y-4 my-4'>
+	<Tip>Provide helpful suggestions and best practices</Tip>
+	<CodeNote>
+		{'<Tip>Provide helpful suggestions and best practices</Tip>'}
+	</CodeNote>
 </div>
 
 ### Warnings
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <Warning>
-    Alert users about potential issues or important considerations
-  </Warning>
-  <CodeNote>
-    {
-      "<Warning>Alert users about potential issues or important considerations</Warning>"
-    }
-  </CodeNote>
+<div className='space-y-4 my-4'>
+	<Warning>
+		Alert users about potential issues or important considerations
+	</Warning>
+	<CodeNote>
+		{
+			'<Warning>Alert users about potential issues or important considerations</Warning>'
+		}
+	</CodeNote>
 </div>
 
 ### Important Notes
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <Important>Highlight critical information that shouldn't be missed</Important>
-  <CodeNote>
-    {
-      "<Important>Highlight critical information that shouldn't be missed</Important>"
-    }
-  </CodeNote>
+<div className='space-y-4 my-4'>
+	<Important>
+		Highlight critical information that shouldn't be missed
+	</Important>
+	<CodeNote>
+		{
+			"<Important>Highlight critical information that shouldn't be missed</Important>"
+		}
+	</CodeNote>
 </div>
 
 ### Examples
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <Example>Show practical usage examples</Example>
-  <CodeNote>{"<Example>Show practical usage examples</Example>"}</CodeNote>
+<div className='space-y-4 my-4'>
+	<Example>Show practical usage examples</Example>
+	<CodeNote>{'<Example>Show practical usage examples</Example>'}</CodeNote>
 </div>
 
 ## Composite Components
@@ -219,24 +221,24 @@ Combine multiple effects:
 
 {" "}
 
-<div className="space-y-4 my-4">
-  <p className="text-gray-400">
-    <PulseBold>Combines bold text with pulse animation</PulseBold>
-  </p>
-  <CodeNote>
-    {"<PulseBold>Combines bold text with pulse animation</PulseBold>"}
-  </CodeNote>
+<div className='space-y-4 my-4'>
+	<p className='text-gray-400'>
+		<PulseBold>Combines bold text with pulse animation</PulseBold>
+	</p>
+	<CodeNote>
+		{'<PulseBold>Combines bold text with pulse animation</PulseBold>'}
+	</CodeNote>
 </div>
 
 ### Italic with Emoji
 
-<div className="space-y-4 my-4">
-  <p className="text-gray-400">
-    <EmojiItalic>Combines italic text with relevant emojis</EmojiItalic>
-  </p>
-  <CodeNote>
-    {"<EmojiItalic>Combines italic text with relevant emojis</EmojiItalic>"}
-  </CodeNote>
+<div className='space-y-4 my-4'>
+	<p className='text-gray-400'>
+		<EmojiItalic>Combines italic text with relevant emojis</EmojiItalic>
+	</p>
+	<CodeNote>
+		{'<EmojiItalic>Combines italic text with relevant emojis</EmojiItalic>'}
+	</CodeNote>
 </div>
 
 ### Interactive Emoji Animation

@@ -1,25 +1,25 @@
 ---
-title: "Webcam Tester"
-description: "Build a Webcam Testing Component in a Next.js App Router app with the following capabilities, UI behaviors, and data model. It should function independently but follow the same structure as the microphone testing feature."
-language: "TypeScript"
-lastModified: "2025-04-13"
+title: 'Webcam Tester'
+description: 'Build a Webcam Testing Component in a Next.js App Router app with the following capabilities, UI behaviors, and data model. It should function independently but follow the same structure as the microphone testing feature.'
+language: 'TypeScript'
+lastModified: '2025-04-13'
 ---
 
 ### 📷 Webcam Detection & Access
 
 - Detect and **list all connected webcams**
-  - Show their **device names** or fallback to `Unknown Webcam`
+    - Show their **device names** or fallback to `Unknown Webcam`
 - Handle all permission/access states:
-  - ❌ Empty state → no webcams detected
-  - 🚫 Denied state → user blocked camera access, show instructions
-  - ⚠️ Error state → unknown issue fallback
+    - ❌ Empty state → no webcams detected
+    - 🚫 Denied state → user blocked camera access, show instructions
+    - ⚠️ Error state → unknown issue fallback
 
 ---
 
 ### 🔴 Live Webcam Preview
 
 - Show a **live video feed** from the selected webcam
-  - Allow user to **select a different device** from a dropdown if multiple are present
+    - Allow user to **select a different device** from a dropdown if multiple are present
 - Indicate which device is **currently active**
 
 ---
@@ -27,22 +27,21 @@ lastModified: "2025-04-13"
 ### 🎥 Recording Interface
 
 - Controls:
-  - Start, Pause, Resume, Stop recording
-  - Timer works just like mic version:
-    - Starts at `0s`
-    - Pauses and resumes correctly
+    - Start, Pause, Resume, Stop recording
+    - Timer works just like mic version:
+        - Starts at `0s`
+        - Pauses and resumes correctly
 - After stopping:
-
-  - Display a **video player preview**
-  - Allow download as **MP4** or **WebM**
+    - Display a **video player preview**
+    - Allow download as **MP4** or **WebM**
 
 - Support for **multiple recordings**
-  - Each recording shows:
-    - Editable title (`Recording - <timestamp>`)
-    - Video thumbnail preview (from 1s in)
-    - Play/pause controls
-    - Seek by clicking timeline
-    - Delete and download buttons
+    - Each recording shows:
+        - Editable title (`Recording - <timestamp>`)
+        - Video thumbnail preview (from 1s in)
+        - Play/pause controls
+        - Seek by clicking timeline
+        - Delete and download buttons
 
 ---
 
@@ -50,8 +49,8 @@ lastModified: "2025-04-13"
 
 - Skip ±5s buttons (with boundaries)
 - Playback speed options:
-  - Slow: `0.25x`, `0.5x`, `0.75x`
-  - Fast: `1.25x`, `1.5x`, `1.75x`, `2x`
+    - Slow: `0.25x`, `0.5x`, `0.75x`
+    - Fast: `1.25x`, `1.5x`, `1.75x`, `2x`
 - Toggle playback loop mode
 
 ---
@@ -59,20 +58,20 @@ lastModified: "2025-04-13"
 ### ♿ Accessibility
 
 - All controls must be:
-  - Fully keyboard accessible
-  - Aria-labeled
-  - Have clear focus states
+    - Fully keyboard accessible
+    - Aria-labeled
+    - Have clear focus states
 - Hotkeys:
-  - `Space` = play/pause
-  - `R` = record
-  - `B/F` = skip 5s backward/forward
+    - `Space` = play/pause
+    - `R` = record
+    - `B/F` = skip 5s backward/forward
 
 ---
 
 ### 💾 Storage & Persistence
 
 - Data is stored in **localStorage** for now
-  - Should persist on reload
+    - Should persist on reload
 - Later stored in **PostgreSQL** via Drizzle ORM
 
 ---
@@ -81,16 +80,16 @@ lastModified: "2025-04-13"
 
 ```ts
 type WebcamRecording = {
-  id: string; // UUID
-  title: string;
-  deviceLabel: string;
-  createdAt: string; // ISO
-  updatedAt: string;
-  duration: number; // in seconds
-  videoBlobUrl: string; // Object URL
-  thumbnailUrl: string; // snapshot from video
-  playbackRate: number;
-};
+	id: string // UUID
+	title: string
+	deviceLabel: string
+	createdAt: string // ISO
+	updatedAt: string
+	duration: number // in seconds
+	videoBlobUrl: string // Object URL
+	thumbnailUrl: string // snapshot from video
+	playbackRate: number
+}
 ```
 
 ---
@@ -99,17 +98,17 @@ type WebcamRecording = {
 
 ```json
 [
-  {
-    "id": "70fdfb88-4880-49f4-b189-bcf4c354d841",
-    "title": "Recording - 2025-04-13 15:44",
-    "deviceLabel": "Logitech C920 HD",
-    "createdAt": "2025-04-13T15:44:02.000Z",
-    "updatedAt": "2025-04-13T15:44:02.000Z",
-    "duration": 19,
-    "videoBlobUrl": "blob:http://localhost:3000/video1234",
-    "thumbnailUrl": "blob:http://localhost:3000/thumb1234",
-    "playbackRate": 1.0
-  }
+	{
+		"id": "70fdfb88-4880-49f4-b189-bcf4c354d841",
+		"title": "Recording - 2025-04-13 15:44",
+		"deviceLabel": "Logitech C920 HD",
+		"createdAt": "2025-04-13T15:44:02.000Z",
+		"updatedAt": "2025-04-13T15:44:02.000Z",
+		"duration": 19,
+		"videoBlobUrl": "blob:http://localhost:3000/video1234",
+		"thumbnailUrl": "blob:http://localhost:3000/thumb1234",
+		"playbackRate": 1.0
+	}
 ]
 ```
 
@@ -118,10 +117,10 @@ type WebcamRecording = {
 ### Utility for LocalStorage
 
 ```ts
-localStorage.setItem("webcam-recordings", JSON.stringify(recordings));
+localStorage.setItem('webcam-recordings', JSON.stringify(recordings))
 const recordings = JSON.parse(
-  localStorage.getItem("webcam-recordings") ?? "[]"
-) as WebcamRecording[];
+	localStorage.getItem('webcam-recordings') ?? '[]'
+) as WebcamRecording[]
 ```
 
 ---
@@ -132,25 +131,25 @@ const recordings = JSON.parse(
 
 ```ts
 import {
-  pgTable,
-  text,
-  uuid,
-  timestamp,
-  real,
-  integer,
-} from "drizzle-orm/pg-core";
+	pgTable,
+	text,
+	uuid,
+	timestamp,
+	real,
+	integer
+} from 'drizzle-orm/pg-core'
 
-export const webcamRecordings = pgTable("webcam_recordings", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  title: text("title").notNull(),
-  deviceLabel: text("device_label"),
-  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
-  duration: integer("duration").notNull(),
-  videoUrl: text("video_url").notNull(), // base64 or public URL
-  thumbnailUrl: text("thumbnail_url").notNull(),
-  playbackRate: real("playback_rate").default(1.0),
-});
+export const webcamRecordings = pgTable('webcam_recordings', {
+	id: uuid('id').primaryKey().defaultRandom(),
+	title: text('title').notNull(),
+	deviceLabel: text('device_label'),
+	createdAt: timestamp('created_at', { mode: 'date' }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull().defaultNow(),
+	duration: integer('duration').notNull(),
+	videoUrl: text('video_url').notNull(), // base64 or public URL
+	thumbnailUrl: text('thumbnail_url').notNull(),
+	playbackRate: real('playback_rate').default(1.0)
+})
 ```
 
 ---
@@ -158,8 +157,8 @@ export const webcamRecordings = pgTable("webcam_recordings", {
 ### Notes:
 
 - `videoUrl` can be:
-  - A base64 string
-  - Or an uploaded URL (Supabase, S3, etc.)
+    - A base64 string
+    - Or an uploaded URL (Supabase, S3, etc.)
 - `thumbnailUrl` is a snapshot from the video for preview
 - This model supports hydration from localStorage
 
