@@ -1,5 +1,4 @@
 'use client'
-import { motion, useReducedMotion } from 'framer-motion'
 import {
 	Database,
 	FileCode,
@@ -9,6 +8,7 @@ import {
 	Zap
 } from 'lucide-react'
 import { FeatureCard } from './feature-card'
+import { AnimatedContainer } from './animated-container'
 
 const features = [
 	{
@@ -70,35 +70,5 @@ export function FeatureSection() {
 				</AnimatedContainer>
 			</div>
 		</section>
-	)
-}
-
-type TViewAnimationProps = {
-	delay?: number
-	className?: React.ComponentProps<typeof motion.div>['className']
-	children: React.ReactNode
-}
-
-function AnimatedContainer({
-	className,
-	delay = 0.1,
-	children
-}: TViewAnimationProps) {
-	const shouldReduceMotion = useReducedMotion()
-
-	if (shouldReduceMotion) {
-		return <div className={className}>{children}</div>
-	}
-
-	return (
-		<motion.div
-			initial={{ filter: 'blur(4px)', translateY: -8, opacity: 0 }}
-			whileInView={{ filter: 'blur(0px)', translateY: 0, opacity: 1 }}
-			viewport={{ once: true }}
-			transition={{ delay, duration: 0.8 }}
-			className={className}
-		>
-			{children}
-		</motion.div>
 	)
 }

@@ -7,9 +7,9 @@ type TProps = {
 }
 
 export async function PostMetadata({ date }: TProps) {
-	const { snippets, remainingCount } = await getRecentSnippets()
-	const wordCount = snippets[0].metrics.wordCount
-	const readingTime = snippets[0].metrics.estimatedReadTime
+	const { topSnippets } = await getRecentSnippets()
+	const wordCount = topSnippets?.[0]?.metrics?.wordCount || 0
+	const readingTime = topSnippets?.[0]?.metrics?.estimatedReadTime || 1
 	return (
 		<div className='flex flex-wrap gap-2 mb-6'>
 			<Badge

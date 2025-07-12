@@ -1,0 +1,246 @@
+---
+title: 'Complete Neovim Shortcuts Guide'
+description: 'Comprehensive guide to all custom Neovim shortcuts, keybindings, and AI completion setup'
+language: 'vim'
+lastModified: '2025-07-12'
+---
+
+# Complete Neovim Shortcuts Guide
+
+This guide covers all custom shortcuts, keybindings, and AI completion features configured in your Neovim setup.
+
+## Quick Reference Commands
+
+- **Show shortcuts cheatsheet**: `<leader>?`
+- **Frontend Dev Helper Menu**: `<leader>h`
+- **Find keymaps**: `<leader>fk`
+- **Find commands**: `<leader>fc`
+
+## AI Completion
+
+### GitHub Copilot (Enabled by Default)
+
+#### Basic Controls
+- **Accept suggestion**: `Ctrl+j`
+- **Accept word**: `Ctrl+l`
+- **Next suggestion**: `Ctrl+k`
+- **Previous suggestion**: `Ctrl+h`
+- **Dismiss suggestion**: `Ctrl+x`
+
+#### Management Commands
+- **Toggle Copilot**: `<leader>cp`
+- **Copilot status**: `<leader>cs`
+- **Copilot panel**: `<leader>cP`
+- **Authenticate**: `:Copilot auth`
+
+#### Copilot Chat
+- **Toggle Chat**: `<leader>cc` or `Ctrl+Space`
+- **Open Chat with selection**: `Ctrl+Space` (in visual mode)
+- **Reset Chat**: `<leader>cr`
+- **Explain code**: `<leader>ce` (visual mode)
+- **Fix code**: `<leader>cf` (visual mode)
+- **Optimize code**: `<leader>co` (visual mode)
+- **Write tests**: `<leader>ct` (visual mode)
+- **Document code**: `<leader>cd` (visual mode)
+- **Quick Chat**: `<leader>cq`
+
+### Codeium (Disabled by Default)
+
+To switch to Codeium:
+- **Enable Codeium**: `:UseCodeium` (automatically disables Copilot)
+- **Enable Copilot**: `:UseCopilot` (automatically disables Codeium)
+
+When Codeium is enabled:
+- **Accept suggestion**: `Tab` or `Ctrl+y`
+- **Next suggestion**: `Ctrl+n`
+- **Previous suggestion**: `Ctrl+p`
+- **Toggle Codeium**: `<leader>ai`
+
+## Basic Text Editing
+
+### Clipboard Operations
+- **Select all**: `Ctrl+a`
+- **Copy**: `Ctrl+c` (visual mode copies selection, normal mode copies line)
+- **Paste**: `Ctrl+v`
+- **Undo**: `Ctrl+z` (if not working, try `u`)
+- **Redo**: `Ctrl+Shift+z` (if not working, try `Ctrl+r`)
+
+### Text Selection
+- **Select left**: `Shift+Left`
+- **Select right**: `Shift+Right`
+- **Select up**: `Shift+Up`
+- **Select down**: `Shift+Down`
+
+## Frontend Development
+
+### Console.log Helpers
+- **Console.log current word**: `<leader>cl`
+- **Console.log with custom message**: `<leader>cL`
+- **Remove all console.log statements**: `<leader>cr`
+
+### Package Managers
+- **npm dev**: `<leader>nd`
+- **npm build**: `<leader>nb`
+- **npm test**: `<leader>nt`
+- **npm lint**: `<leader>nl`
+- **npm install**: `<leader>ni`
+- **pnpm dev**: `<leader>pd`
+- **yarn dev**: `<leader>yd`
+- **bun dev**: `<leader>bd`
+
+### Live Development
+- **Start Live Server**: `<leader>ls`
+- **Stop Live Server**: `<leader>lS`
+- **Start Bracey Server**: `<leader>bs`
+- **Stop Bracey Server**: `<leader>bS`
+- **Reload Bracey**: `<leader>br`
+
+### Utilities
+- **Sort Tailwind classes**: `<leader>ts`
+- **Emmet expand**: `<C-e>,`
+
+## Code Actions & LSP
+
+### Quick Actions
+- **Code actions menu**: `<leader>ca`
+- **Quick code actions**: `Ctrl+.`
+- **Auto import missing**: `<leader>ai`
+- **Organize imports**: `<leader>co`
+
+### TypeScript Specific
+- **Add missing imports**: `<leader>cI`
+- **Fix all issues**: `<leader>cA`
+- **Rename file**: `<leader>cR`
+
+### Navigation
+- **Show hover information**: `Ctrl+k`
+- **Go to definition**: `Ctrl+Space` or `Ctrl+,`
+- **Go to references**: `gr`
+- **Go to implementation**: `gI`
+- **Go to type definition**: `gy`
+
+## Text Manipulation
+
+### Surround Operations
+- **Surround with (motion)**: `ys`
+- **Surround entire line**: `yss`
+- **Delete surrounding**: `ds`
+- **Change surrounding**: `cs`
+- **Surround selection**: `S` (visual mode)
+
+### Text Objects
+- **Around/inside function**: `af`/`if`
+- **Around/inside class**: `ac`/`ic`
+- **Around/inside parameter**: `aa`/`ia`
+
+### Navigation
+- **Next/prev function**: `]f`/`[f`
+- **Next/prev class**: `]c`/`[c`
+- **Split/join code blocks**: `<leader>j`
+
+## File & Search Navigation
+
+### File Operations
+- **Find files (Telescope)**: `Ctrl+f` or `<leader>ff`
+- **Search text (Telescope)**: `Ctrl+Shift+f` or `<leader>fg`
+- **Find buffers**: `<leader>fb`
+- **Find help**: `<leader>fh`
+- **Recent files**: `<leader>fr`
+
+## Terminal
+
+### Terminal Operations
+- **Toggle terminal**: `Ctrl+\`
+- **Float terminal**: `<leader>tf`
+- **Horizontal terminal**: `<leader>th`
+- **Vertical terminal**: `<leader>tv`
+
+## Git Integration
+
+### Basic Git
+- **Lazygit**: `<leader>gg`
+- **Git blame**: `<leader>gb`
+- **Git diff**: `<leader>gd`
+- **Git status**: `<leader>gs`
+- **Git log**: `<leader>gl`
+- **Git push**: `<leader>gp`
+- **Git pull**: `<leader>gP`
+
+### Git Hunks
+- **Next/prev hunk**: `]h`/`[h`
+- **Stage hunk**: `<leader>ghs`
+- **Reset hunk**: `<leader>ghr`
+- **Preview hunk**: `<leader>ghp`
+
+## REST API
+
+- **Run REST request**: `<leader>rr`
+- **Run last REST request**: `<leader>rl`
+
+## Buffers & Windows
+
+### Buffer Management
+- **Delete buffer**: `<leader>bd`
+- **Delete buffer (force)**: `<leader>bD`
+- **New buffer**: `<leader>bn`
+- **Previous buffer**: `<leader>bp`
+- **Next buffer**: `<leader>bl`
+
+### Window Management
+- **Navigate windows**: `Ctrl+h/j/k/l`
+- **Other window**: `<leader>ww`
+- **Delete window**: `<leader>wd`
+- **Split below**: `<leader>w-`
+- **Split right**: `<leader>w|`
+
+## Diagnostics
+
+### Trouble & Diagnostics
+- **Toggle Trouble**: `<leader>xx`
+- **Workspace diagnostics**: `<leader>xw`
+- **Document diagnostics**: `<leader>xd`
+- **Quickfix list**: `<leader>xq`
+- **Location list**: `<leader>xl`
+
+### Navigation
+- **Next/prev diagnostic**: `]d`/`[d`
+- **Next/prev error**: `]e`/`[e`
+- **Next/prev warning**: `]w`/`[w`
+
+## Leader Key Prefixes
+
+Understanding the leader key organization:
+- `<leader>a`: AI/Auto actions
+- `<leader>b`: Buffer operations
+- `<leader>c`: Code actions
+- `<leader>f`: File/Find operations
+- `<leader>g`: Git operations
+- `<leader>h`: Help/Hydra menus
+- `<leader>l`: Live server
+- `<leader>n`: npm commands
+- `<leader>p`: pnpm commands
+- `<leader>q`: Quit/Session
+- `<leader>r`: REST/Run operations
+- `<leader>s`: Search
+- `<leader>t`: Terminal/Tailwind
+- `<leader>u`: UI
+- `<leader>w`: Windows
+- `<leader>x`: Diagnostics/Quickfix
+- `<leader>y`: Yarn commands
+
+## Tips
+
+1. **Leader key**: The leader key is typically `Space` or `\` depending on your configuration
+2. **Which-key**: Press any prefix key and wait to see available completions
+3. **Frontend Dev Helper**: Press `<leader>h` for an interactive menu of common frontend tasks
+4. **AI Assistant**: Copilot is enabled by default. Use `:UseCodeium` to switch to the free alternative
+5. **Conflicts**: Some keybindings may conflict (e.g., `Ctrl+x` for Copilot dismiss vs delete selection)
+
+## Customization
+
+All keybindings are defined in:
+- `~/.config/nvim/lua/keymaps/consolidated.lua` - Basic IDE shortcuts
+- `~/.config/nvim/lua/config/keymaps.lua` - Additional custom mappings
+- `~/.config/nvim/lua/plugins/` - Plugin-specific keybindings
+
+To add or modify shortcuts, edit these files and reload Neovim.

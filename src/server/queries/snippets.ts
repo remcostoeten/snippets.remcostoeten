@@ -246,17 +246,17 @@ export async function getRecentSnippets() {
 		const categories = await getCategories()
 
 		return {
-			snippets: sortedSnippets.slice(0, 5),
+			topSnippets: sortedSnippets.slice(0, 6),
+			remainingSnippets: sortedSnippets.slice(6),
 			totalCount: totalSnippets,
-			remainingCount: totalSnippets - 3,
 			categories: categories.slice(0, 3) // Return top 3 categories
 		}
 	} catch (error) {
 		console.error('Error fetching snippets:', error)
 		return {
-			snippets: [],
+			topSnippets: [],
+			remainingSnippets: [],
 			totalCount: 0,
-			remainingCount: 0,
 			categories: []
 		}
 	}

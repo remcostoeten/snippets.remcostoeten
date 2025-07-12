@@ -11,7 +11,7 @@ export function Providers({ children }: TProps) {
 	return (
 		<ThemeProvider
 			attribute='class'
-			defaultTheme='system'
+			defaultTheme='dark'
 			enableSystem
 			disableTransitionOnChange
 		>

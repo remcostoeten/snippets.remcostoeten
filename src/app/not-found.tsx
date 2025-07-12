@@ -1,64 +1,25 @@
 'use client'
 
-import { GradientText } from '@/components/ui/effects/gradient-text'
-import { motion } from 'framer-motion'
-import { FileQuestion } from 'lucide-react'
 import Link from 'next/link'
 
 export default function NotFound() {
 	return (
 		<div className='min-h-screen bg-zinc-950 flex items-center justify-center p-4'>
-			<motion.div
-				initial={{ opacity: 0, y: 20 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.5 }}
-				className='text-center'
-			>
-				<motion.div
-					initial={{ scale: 0.8 }}
-					animate={{ scale: 1 }}
-					transition={{
-						type: 'spring',
-						stiffness: 200,
-						damping: 20,
-						delay: 0.2
-					}}
-					className='mb-8 flex justify-center'
-				>
-					<div className='relative'>
-						<FileQuestion className='w-24 h-24 text-zinc-500' />
-						<FileQuestion className='animate-pulse w-24 blur-xl h-24 text-indigo-500 absolute top-0 left-0' />
-					</div>
-				</motion.div>
-				<h1 className='text-4xl md:text-5xl font-bold mb-4'>
-					<GradientText variant='chromatic'>
-						404 - Not Found
-					</GradientText>
-				</h1>
-				<p className='text-zinc-400 text-lg mb-8 max-w-md mx-auto'>
-					Oops! The page you're looking for seems to have vanished
-					into the digital void.
+			<div className='text-center max-w-md'>
+				<h1 className='text-8xl font-bold text-zinc-300 mb-4'>404</h1>
+				<h2 className='text-2xl font-medium text-zinc-400 mb-4'>
+					Page not found
+				</h2>
+				<p className='text-zinc-500 mb-8'>
+					The page you are looking for doesn't exist or has been moved.
 				</p>
 				<Link
 					href='/'
-					className='
-            inline-flex items-center gap-2 
-            px-6 py-3 
-            bg-zinc-800 
-            text-zinc-100 
-            rounded-full
-            font-medium
-            transition-all
-            duration-300
-            hover:bg-zinc-700
-            hover:scale-105
-            hover:shadow-lg
-            hover:shadow-zinc-900/20
-          '
+					className='inline-block px-6 py-3 bg-zinc-800 text-zinc-100 rounded-md font-medium transition-colors hover:bg-zinc-700'
 				>
-					<span>Return Home</span>
+					Go back home
 				</Link>
-			</motion.div>
+			</div>
 		</div>
 	)
 }

@@ -1,5 +1,5 @@
-import { FeatureSection } from '@/components/landing/feature-card-parent'
 import { Hero } from '@/components/landing/intro-badge'
+import { SnippetPreviewSection } from '@/components/landing/snippet-preview-section'
 import { Badge } from '@/components/ui/badge'
 import { TextAnimate } from '@/components/ui/effects/blur-in'
 import { CardSpotlight } from '@/components/ui/effects/card-spotlight/card-spotlight-demo'
@@ -26,17 +26,17 @@ function formatDescription(description: string) {
 }
 
 export default async function HomePage() {
-	const { snippets, remainingCount } = await getRecentSnippets()
+	const { remainingSnippets, totalCount } = await getRecentSnippets()
 
 	return (
-        <div className="flex flex-col bg-background text-foreground">
+		<div className='flex flex-col bg-background text-foreground'>
 			<main className='flex-1'>
 				<div className='flex flex-col gap-10'>
 					<section className='container pt-20 md:pt-32'>
 						<Hero />
 					</section>
 
-					<FeatureSection />
+					<SnippetPreviewSection />
 				</div>
 				<section className='container py-12'>
 					<div className='flex items-center justify-between mb-8'>
@@ -49,11 +49,11 @@ export default async function HomePage() {
 							delay={0.6}
 						>
 							<GradientText variant='subtle'>
-								Recent Snippets
+								More Snippets
 							</GradientText>
 						</TextAnimate>
 						<div className='flex items-center gap-4'>
-							{remainingCount > 0 && (
+							{remainingSnippets.length > 0 && (
 								<TextAnimate
 									as='span'
 									animation='fadeIn'
@@ -61,7 +61,7 @@ export default async function HomePage() {
 									className='text-sm text-muted-foreground'
 								>
 									<AnimatedNumber
-										value={remainingCount}
+										value={remainingSnippets.length}
 										suffix=' more snippets'
 									/>
 								</TextAnimate>
@@ -90,7 +90,7 @@ export default async function HomePage() {
 						</div>
 					</div>
 					<div className='grid gap-4'>
-						{snippets.map((snippet, index) => (
+						{remainingSnippets.slice(0, 3).map((snippet, index) => (
 							<TextAnimate
 								key={snippet.title}
 								as='div'
