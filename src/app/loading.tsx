@@ -4,48 +4,26 @@ import { motion } from 'framer-motion'
 
 export default function Loading() {
 	return (
-		<div className='min-h-screen bg-neutral-50 dark:bg-neutral-950 flex items-center justify-center'>
+		<div className='fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50'>
 			<motion.div
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
-				transition={{ duration: 0.5 }}
-				className='flex flex-col items-center space-y-6'
+				initial={{ opacity: 0, scale: 0.95 }}
+				animate={{ opacity: 1, scale: 1 }}
+				transition={{ duration: 0.2 }}
+				className='flex items-center justify-center'
 			>
-				{/* Minimalist spinner */}
 				<div className='relative'>
-					{/* Base circle */}
-					<div className='w-8 h-8 border border-neutral-200 dark:border-neutral-800 rounded-full' />
-					{/* Animated arc */}
-					<motion.div
-						className='absolute top-0 left-0 w-8 h-8 border border-transparent border-t-neutral-900 dark:border-t-neutral-100 rounded-full'
-						animate={{
-							rotate: 360
-						}}
-						transition={{
-							duration: 1.2,
-							ease: 'linear',
-							repeat: Number.POSITIVE_INFINITY
-						}}
-					/>
-				</div>
-
-				{/* Minimalist dots */}
-				<div className='flex space-x-1'>
-					{[0, 1, 2].map(i => (
+					<div className='h-8 w-8'>
+						<div className='absolute inset-0 rounded-full border-2 border-muted' />
 						<motion.div
-							key={i}
-							className='w-1 h-1 bg-neutral-400 dark:bg-neutral-600 rounded-full'
-							animate={{
-								opacity: [0.3, 1, 0.3]
-							}}
+							className='absolute inset-0 rounded-full border-2 border-transparent border-t-foreground'
+							animate={{ rotate: 360 }}
 							transition={{
-								duration: 1.2,
-								repeat: Number.POSITIVE_INFINITY,
-								ease: 'easeInOut',
-								delay: i * 0.15
+								duration: 1,
+								ease: 'linear',
+								repeat: Infinity
 							}}
 						/>
-					))}
+					</div>
 				</div>
 			</motion.div>
 		</div>
