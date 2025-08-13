@@ -1,0 +1,37 @@
+---
+title: "Find and replace all occurrences in Neovim"
+language: "neovim"
+lastModified: "2025-08-13"
+---
+
+## Find and Replace in Neovim
+
+### Basic command:
+
+```vim
+:%s/old_string/new_string/gc
+```
+
+### Explanation
+
+- `:%s` - command to substitute in the entire file.
+- `old_string` - the text you want to find.
+- `new_string` - the text you want to replace with.
+- `g` - global flag to replace all occurrences in each line.
+- `c` - confirm flag to ask for confirmation before each replacement.
+
+### Without confirmation
+
+You can omit the 'c' if you want to replace all without confirmation:
+
+```vim
+:%s/old_string/new_string/g
+```
+
+### Visual selection
+
+To replace only in a selected visual block, select text in visual mode and then use:
+
+```vim
+:'<,'>s/old_string/new_string/gc
+```

@@ -1,5 +1,5 @@
 import { AnimationVariant } from '@/core/types'
-import { Variants } from 'framer-motion'
+import { Variants, easeOut, easeInOut, steps } from 'framer-motion'
 
 export function useAnimationVariant(variant: AnimationVariant = 'trace') {
     // Define base variants that can be reused
@@ -13,7 +13,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
             scale: 1,
             transition: {
                 duration: 0.5,
-                ease: 'easeOut'
+                ease: easeOut
             }
         }
     }
@@ -62,7 +62,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                 hidden: { pathLength: 0 },
                 visible: {
                     pathLength: 1,
-                    transition: { duration: 1, ease: 'easeInOut' }
+                    transition: { duration: 1, ease: easeInOut }
                 }
             },
             segmentVariants: baseSegmentVariants
@@ -136,7 +136,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                 hidden: { pathLength: 0 },
                 visible: {
                     pathLength: 1,
-                    transition: { duration: 1.5, ease: 'easeInOut' }
+                    transition: { duration: 1.5, ease: easeInOut }
                 }
             },
             segmentVariants: baseSegmentVariants
@@ -209,7 +209,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
                         x: {
                             repeat: Infinity,
                             duration: 0.5,
-                            ease: 'steps(5)'
+                            ease: steps(5)
                         }
                     }
                 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, easeInOut } from 'framer-motion'
 import Link from 'next/link'
 
 const LogoIcon = () => {
@@ -10,7 +10,7 @@ const LogoIcon = () => {
 			pathLength: 1,
 			opacity: 1,
 			transition: {
-				pathLength: { duration: 1, ease: [0.76, 0, 0.24, 1] },
+				pathLength: { duration: 1, ease: easeInOut },
 				opacity: { duration: 0.5 }
 			}
 		}
@@ -23,7 +23,7 @@ const LogoIcon = () => {
 			opacity: 1,
 			transition: {
 				duration: 0.3,
-				ease: [0.76, 0, 0.24, 1]
+				ease: easeInOut
 			}
 		}
 	}
@@ -35,7 +35,7 @@ const LogoIcon = () => {
 			pathLength: 1,
 			transition: {
 				duration: 0.5,
-				ease: [0.76, 0, 0.24, 1]
+				ease: easeInOut
 			}
 		}
 	}

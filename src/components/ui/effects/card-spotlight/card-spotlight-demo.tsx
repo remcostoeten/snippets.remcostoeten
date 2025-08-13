@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { motion, PanInfo } from "framer-motion";
+import { motion, PanInfo, easeOut } from "framer-motion";
 import { cn } from "@/helpers";
 import {
   getColorScheme,
@@ -73,7 +73,7 @@ function CardSpotlight({
       transition: {
         duration: 0.5,
         delay: delay,
-        ease: "easeOut",
+        ease: easeOut,
         staggerChildren: 0.1,
         delayChildren: delay,
       },
@@ -90,7 +90,7 @@ function CardSpotlight({
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut",
+        ease: easeOut,
       },
     },
   };
