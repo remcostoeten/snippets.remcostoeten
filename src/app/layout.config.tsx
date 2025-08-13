@@ -11,28 +11,31 @@ import { ThemeSwitcher } from '@/components/ui/theme-switcher'
  * Home Layout: app/(home)/layout.tsx
  * Docs Layout: app/docs/layout.tsx
  */
-export const baseOptions: BaseLayoutProps = {
-    nav: {
-        title: (
-            <>
-                <Logo />
-                {siteConfig.name}
-            </>
-        )
-    },
-    themeSwitch: {
-        enabled: true,
-        component: (
-            <>
-                <CodeThemeSwitch />
-            </>
-        )
-    },
-    links: [
-        {
-            text: 'Snippets',
-            url: '/docs',
-            active: 'nested-url'
-        }
-    ]
+
+export function baseOptions(): BaseLayoutProps {
+    return {
+        nav: {
+            title: (
+                <>
+                    <Logo />
+                    {siteConfig.name}
+                </>
+            )
+        },
+        themeSwitch: {
+            enabled: true,
+            component: (
+                <>
+                    <CodeThemeSwitch />
+                </>
+            )
+        },
+        links: [
+            {
+                text: 'Snippets',
+                url: '/docs',
+                active: 'nested-url'
+            }
+        ]
+    }
 }

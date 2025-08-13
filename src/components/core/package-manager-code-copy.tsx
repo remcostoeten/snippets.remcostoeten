@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import { HTMLAttributes, useEffect, useState } from 'react'
 
-interface ScriptCopyBtnProps extends HTMLAttributes<HTMLDivElement> {
+interface IProps extends HTMLAttributes<HTMLDivElement> {
     showMultiplePackageOptions?: boolean
     codeLanguage: string
     lightTheme: string
@@ -23,7 +23,7 @@ export function ScriptCopyBtn({
     darkTheme,
     commandMap,
     className
-}: ScriptCopyBtnProps) {
+}: IProps) {
     const packageManagers = Object.keys(commandMap)
     const [packageManager, setPackageManager] = useState(packageManagers[0])
     const [copied, setCopied] = useState(false)

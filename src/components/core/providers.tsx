@@ -1,13 +1,12 @@
 import { ThemeProvider } from "next-themes";
-import { type ReactNode } from "react";
-import { RootProvider } from 'fumadocs-ui/provider'
-import { TooltipProvider } from '../ui'
+import { RootProvider } from 'fumadocs-ui/provider';
+import { TooltipProvider } from '../ui';
 
-interface ProvidersProps {
-    children: ReactNode;
+type TProps = {
+    children: React.ReactNode;
 }
 
-export function Providers({ children }: ProvidersProps) {
+export function Providers({ children }: TProps) {
     return (
         <ThemeProvider
             attribute="class"
