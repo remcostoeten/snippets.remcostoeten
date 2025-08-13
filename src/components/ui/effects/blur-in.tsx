@@ -8,7 +8,7 @@ type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 type ElementType = HeadingLevel | 'p' | 'span' | 'div' | 'li' | 'blockquote'
 
 type AnimationType = 'text' | 'word' | 'character' | 'line'
-type AnimationVariant =
+type TAnimationVariant =
     | 'fadeIn'
     | 'blurIn'
     | 'blurInUp'
@@ -68,7 +68,7 @@ interface TextAnimateProps extends MotionProps {
     /**
      * The animation preset to use
      */
-    animation?: AnimationVariant
+    animation?: TAnimationVariant
     /**
      * Custom font size
      */
@@ -126,7 +126,7 @@ const defaultItemVariants: Variants = {
     }
 }
 
-const defaultItemAnimationVariants: Record<AnimationVariant, { container: Variants; item: Variants }> = {
+const defaultItemTAnimationVariants: Record<TAnimationVariant, { container: Variants; item: Variants }> = {
     fadeIn: {
         container: defaultContainerVariants,
         item: {
@@ -433,23 +433,23 @@ export function TextAnimate({
         : animation
           ? {
                 container: {
-                    ...defaultItemAnimationVariants[animation].container,
+                    ...defaultItemTAnimationVariants[animation].container,
                     show: {
-                        ...defaultItemAnimationVariants[animation].container.show,
+                        ...defaultItemTAnimationVariants[animation].container.show,
                         transition: {
                             delayChildren: delay,
                             staggerChildren: duration / segments.length
                         }
                     },
                     exit: {
-                        ...defaultItemAnimationVariants[animation].container.exit,
+                        ...defaultItemTAnimationVariants[animation].container.exit,
                         transition: {
                             staggerChildren: duration / segments.length,
                             staggerDirection: -1
                         }
                     }
                 },
-                item: defaultItemAnimationVariants[animation].item
+                item: defaultItemTAnimationVariants[animation].item
             }
           : { container: defaultContainerVariants, item: defaultItemVariants }
 

@@ -1,7 +1,7 @@
-import { AnimationVariant } from '@/core/types'
+import { TAnimationVariant } from '@/core/types'
 import { Variants, easeOut, easeInOut, steps } from 'framer-motion'
 
-export function useAnimationVariant(variant: AnimationVariant = 'trace') {
+export function useTAnimationVariant(variant: TAnimationVariant = 'trace') {
     // Define base variants that can be reused
     const baseContainerVariants: Variants = {
         hidden: {
@@ -36,7 +36,7 @@ export function useAnimationVariant(variant: AnimationVariant = 'trace') {
 
     // Define all variants
     const allVariants: Record<
-        AnimationVariant,
+        TAnimationVariant,
         {
             containerVariants: Variants
             pathVariants: Variants

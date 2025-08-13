@@ -1,6 +1,6 @@
 import { cn } from '@/helpers'
 import { ReactNode } from 'react'
-import { EmojiMap, getEmoji } from '@/core/emoji-map'
+import { TEmojiMap, getEmoji } from '@/core/emoji-map'
 
 // Component Props
 type TProps = {
@@ -8,7 +8,7 @@ type TProps = {
     className?: string
     before?: string
     after?: string
-    emojiCategory?: keyof EmojiMap
+    emojiCategory?: keyof TEmojiMap
     emojiIndex?: number
 }
 
@@ -50,7 +50,7 @@ export const BeforeAfter = ({ children, before = '→', after = '←', className
 )
 
 /**
- * EmojiBeforeAfter - A BeforeAfter component that uses emojis from the EmojiMap
+ * EmojiBeforeAfter - A BeforeAfter component that uses emojis from the TEmojiMap
  */
 export const EmojiBeforeAfter = ({ children, className, emojiCategory = 'navigation', emojiIndex = 0 }: TProps) => (
     <BeforeAfter

@@ -8,10 +8,10 @@ import { Button } from '@/components/ui/button'
 import { OptimizedTextAnimate } from '../effects/blur-in-optimized'
 
 /**
- * EmojiMap - A comprehensive mapping of categories to relevant emojis
+ * TEmojiMap - A comprehensive mapping of categories to relevant emojis
  * Use this to easily access commonly used emojis by semantic category
  */
-export type EmojiMap = {
+export type TEmojiMap = {
     // Web Development Categories
     frontend: '🖥️' | '🎨' | '🖌️' | '📱' | '⚛️'
     backend: '🔌' | '⚙️' | '🗄️' | '🛠️' | '🧮'
@@ -46,12 +46,12 @@ export type EmojiMap = {
 
 /**
  * Get a specific emoji from the map
- * @param category - Category from the EmojiMap
+ * @param category - Category from the TEmojiMap
  * @param index - Index of the emoji in the array (0-4)
  * @returns A single emoji string
  */
-export const getEmoji = (category: keyof EmojiMap, index = 0): string => {
-    const emojiOptions: Record<keyof EmojiMap, string[]> = {
+export const getEmoji = (category: keyof TEmojiMap, index = 0): string => {
+    const emojiOptions: Record<keyof TEmojiMap, string[]> = {
         frontend: ['🖥️', '🎨', '🖌️', '📱', '⚛️'],
         backend: ['🔌', '⚙️', '🗄️', '🛠️', '🧮'],
         database: ['💾', '🗃️', '📊', '📁', '📋'],
@@ -89,7 +89,7 @@ type TProps = {
     className?: string
     before?: string
     after?: string
-    emojiCategory?: keyof EmojiMap
+    emojiCategory?: keyof TEmojiMap
     title?: string
     emojiIndex?: number
 }
@@ -151,7 +151,7 @@ export const BeforeAfter = ({ children, before = '→', after = '←', className
 )
 
 /**
- * EmojiBeforeAfter - A BeforeAfter component that uses emojis from the EmojiMap
+ * EmojiBeforeAfter - A BeforeAfter component that uses emojis from the TEmojiMap
  */
 export const EmojiBeforeAfter = ({ children, className, emojiCategory = 'navigation', emojiIndex = 0 }: TProps) => (
     <BeforeAfter

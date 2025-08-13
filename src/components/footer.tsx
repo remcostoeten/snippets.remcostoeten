@@ -4,7 +4,7 @@ import { GradientText } from "./ui/effects/gradient-text";
 import { AnimatedNumber } from "./ui/effects/number-flow";
 import Link from "next/link";
 
-interface FooterProps {
+type TProps = {
   stats: {
     totalPosts: number;
     totalCommits: {
@@ -29,7 +29,7 @@ interface FooterProps {
   };
 }
 
-export function Footer({ stats }: FooterProps) {
+export function Footer({ stats }: TProps) {
   return (
     <footer className="mt-auto border-t border-zinc-800 py-8 bg-zinc-950/50 backdrop-blur-sm">
       <div className="container flex flex-col gap-8 md:gap-4">

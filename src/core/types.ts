@@ -1,6 +1,5 @@
-export type LogoSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
-export type AnimationVariant =
+export type TAnimationVariant =
     | 'light'
     | 'dark'
     | 'stroke'
@@ -30,27 +29,9 @@ export type AnimationVariant =
     | 'tooltip-slide'
     | 'none'
 
-export interface ShieldLogoProps {
-    className?: string
-    size?: LogoSize
-    width?: number
-    height?: number
-    fill?: string
-    fillOutline?: string
-    fillTop?: string
-    fillLeft?: string
-    fillRight?: string
-    bgFill?: string
-    animated?: boolean
-    animationVariant?: AnimationVariant
-    hasLink?: boolean
-    linkTo?: string
-    tooltipContent?: string
-    hasTooltip?: boolean
-    onAnimationComplete?: () => void
-}
+type _TLogo = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 
-export const sizeMap: Record<LogoSize, { width: number; height: number }> = {
+export const sizeMap: Record<_TLogo, { width: number; height: number }> = {
     xs: { width: 32, height: 32 },
     sm: { width: 48, height: 48 },
     md: { width: 64, height: 64 },

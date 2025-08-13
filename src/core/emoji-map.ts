@@ -1,8 +1,8 @@
 /**
- * EmojiMap - A comprehensive mapping of categories to relevant emojis
+ * TTEmojiMap - A comprehensive mapping of categories to relevant emojis
  * Use this to easily access commonly used emojis by semantic category
  */
-export type EmojiMap = {
+export type TEmojiMap = {
     // Web Development Categories
     frontend: '🖥️' | '🎨' | '🖌️' | '📱' | '⚛️'
     backend: '🔌' | '⚙️' | '🗄️' | '🛠️' | '🧮'
@@ -10,25 +10,17 @@ export type EmojiMap = {
     deployment: '🚀' | '☁️' | '🌐' | '🔄' | '📤'
     security: '🔒' | '🛡️' | '🔐' | '🔑' | '⚠️'
     performance: '⚡' | '🏎️' | '⏱️' | '📈' | '🚄'
-
-    // UI/UX Categories
     ui: '🎯' | '👁️' | '📐' | '✨' | '🎭'
     design: '🎨' | '🖌️' | '🧩' | '🔍' | '🖼️'
     animation: '🎬' | '✨' | '💫' | '🌟' | '🎭'
-
-    // Development Process
     code: '👨‍💻' | '💻' | '📝' | '🧠' | '🔣'
     debug: '🐛' | '🔍' | '🧪' | '🔧' | '🔬'
     testing: '✅' | '🧪' | '📋' | '🔄' | '✔️'
-
-    // Documentation
     note: '📝' | '📌' | '📒' | '📑' | '🔖'
     tip: '💡' | '✨' | '📌' | '🔍' | '🎯'
     warning: '⚠️' | '🚨' | '⛔' | '🔔' | '❗'
     important: '🔑' | '💯' | '❗' | '‼️' | '📢'
     example: '🔍' | '👉' | '🧪' | '📋' | '🔎'
-
-    // General Purpose
     success: '✅' | '🎉' | '👍' | '🏆' | '💯'
     error: '❌' | '💔' | '🛑' | '🚫' | '⛔'
     info: 'ℹ️' | '📝' | '📌' | '📊' | '📢'
@@ -38,12 +30,12 @@ export type EmojiMap = {
 
 /**
  * Get a specific emoji from the map
- * @param category - Category from the EmojiMap
+ * @param category - Category from the TTEmojiMap
  * @param index - Index of the emoji in the array (0-4)
  * @returns A single emoji string
  */
-export const getEmoji = (category: keyof EmojiMap, index = 0): string => {
-    const emojiOptions: Record<keyof EmojiMap, string[]> = {
+export const getEmoji = (category: keyof TEmojiMap, index = 0): string => {
+    const emojiOptions: Record<keyof TEmojiMap, string[]> = {
         frontend: ['🖥️', '🎨', '🖌️', '📱', '⚛️'],
         backend: ['🔌', '⚙️', '🗄️', '🛠️', '🧮'],
         database: ['💾', '🗃️', '📊', '📁', '📋'],

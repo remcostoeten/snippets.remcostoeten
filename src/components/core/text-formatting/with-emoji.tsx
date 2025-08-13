@@ -1,9 +1,9 @@
-import { getEmoji, type EmojiMap } from '@/core/emoji-map'
+import { getEmoji, type TEmojiMap } from '@/core/emoji-map'
 import { ReactNode } from 'react'
 
 interface WithEmojiProps {
     children: ReactNode
-    emojiCategory?: keyof EmojiMap
+    emojiCategory?: keyof TEmojiMap
 }
 
 export const WithEmoji = ({ children, emojiCategory = 'navigation' }: WithEmojiProps) => (
