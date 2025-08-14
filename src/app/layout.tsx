@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://snippets.remcostoeten.com"),
   title: {
     template: "%s | RemcoStoeten Snippets",
-    default: "RemcoStoeten Code Snippets & Documentation",
+    default: "RemcoStoeten Code Snippets \u0026 Documentation",
   },
   description:
     "A comprehensive collection of code snippets, documentation, and programming resources by Remco Stoeten.",
@@ -33,12 +33,24 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" }
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }
+    ]
+  },
+  manifest: "/site.webmanifest",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://snippets.remcostoeten.com",
     siteName: "RemcoStoeten Snippets",
-    title: "RemcoStoeten Code Snippets & Documentation",
+    title: "RemcoStoeten Code Snippets \u0026 Documentation",
     description:
       "A comprehensive collection of code snippets, documentation, and programming resources.",
     images: [
@@ -52,7 +64,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "RemcoStoeten Code Snippets & Documentation",
+    title: "RemcoStoeten Code Snippets \u0026 Documentation",
     description:
       "A comprehensive collection of code snippets, documentation, and programming resources.",
     images: ["/og-image.png"],
