@@ -6,6 +6,7 @@ lastModified: "2025-08-13"
 
 ## Find and Replace in Neovim
 
+<FindReplaceGenerator/>
 ### Basic command:
 
 ```vim
@@ -35,3 +36,13 @@ To replace only in a selected visual block, select text in visual mode and then 
 ```vim
 :'<,'>s/old_string/new_string/gc
 ```
+
+### Explanation of the vim breakdown
+
+- `:'<,'>` - this is the range of the command. In this case, it's the visual selection.
+- `s` - the substitute command.
+- `old_string` - the text you want to find.
+- `new_string` - the text you want to replace with.
+- `g` - global flag to replace all occurrences in each line within the selection.
+- `c` - confirm flag to ask for confirmation before each replacement.
+

@@ -5,12 +5,14 @@ import type { ReactNode } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <DocsLayout
-      tree={source.pageTree}
-      {...baseOptions}
-      sidebar={{ defaultOpenLevel: 0 }}
-    >
-      {children}
-    </DocsLayout>
+    <div className="mt-6">
+      <DocsLayout
+        tree={source.pageTree}
+        {...baseOptions}
+        sidebar={{ defaultOpenLevel: 0 }}
+      >
+        {children}
+      </DocsLayout>
+    </div>
   );
 }

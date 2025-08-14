@@ -162,7 +162,7 @@ export async function getCategories() {
         name,
         description: data.description,
         count: data.count,
-        href: `/docs/${name.toLowerCase().replace(/\s+/g, "-")}`,
+        href: `/snippets/${name.toLowerCase().replace(/\s+/g, "-")}`,
       }))
       .sort((a, b) => b.count - a.count);
 

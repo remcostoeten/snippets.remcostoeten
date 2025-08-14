@@ -1,0 +1,215 @@
+---
+title: "Warp terminal - rules"
+description: "Rules for Warp terminal to adhere to"
+language: "system"
+lastModified: "2025-06-05"
+---
+
+```bash
+Practical Functional Programming
+```
+```bash
+We write predictable, functional-style code in modern TypeScript and Next.js.
+
+Follow these rules:
+
+✅ Allowed
+- Use `function` declarations only: `function doSomething() {}`
+- `for`, `for...of`, and `while` loops are allowed **if the logic is pure**
+- Prefer `map`, `filter`, `reduce`, etc. when they improve clarity
+- Use named functions — no anonymous functions
+- Use immutable data patterns (e.g., spreading objects/arrays)
+
+🚫 Not Allowed
+- ❌ No `class`, `extends`, `new`, or `this`
+- ❌ No arrow function constants: `const x = () => {}` — use `function x() {}`
+- ❌ No shared mutable state
+- ❌ No side effects outside function scope
+
+🛠 Design Principles
+- Functions must be **pure** — same input yields same output
+- Favor **composition** over inheritance — build from small, reusable parts
+- Favor **immutability** — do not mutate arguments or external state
+- Code should be **declarative** when it improves clarity
+
+```
+---
+```bash
+No code comments
+```
+```bash
+Code must be self-explanatory and readable without comments.
+
+🚫 Not Allowed
+- ❌ No inline comments (e.g., `// filter out inactive users`)
+- ❌ No block comments (e.g., `/* function to get emails */`)
+- ❌ No explanatory comments above functions or variables
+
+✅ Allowed
+- ✅ Only comment if absolutely necessary to clarify non-standard or obscure syntax (e.g., bitwise hacks, regex edge cases)
+- ✅ Use clear, descriptive function and variable names instead of comments
+
+📌 If you feel the need to comment, rewrite the code for clarity instead.
+
+```
+---
+```bash
+Component Props Typing — Mandatory `TProps` for Single Type Files
+```
+```bash
+When defining a React/Next.js component with props, if the file contains **only one non-exported type**, it **MUST** be named exactly `TProps`.
+
+Example:
+For this component:
+
+"""tsx
+function Button({ name, onClick, another }) {
+  // ...
+}
+"""
+
+You MUST define props like this:
+"""tsx
+type TProps = {
+  name: string;
+  onClick?: () => void;
+  another?: any;
+};
+
+export function Button({ name, onClick, another }: TProps) {
+  // ...
+}
+"""
+Key points:
+
+- TProps is always used if there’s only one type in the file.
+- TProps must not be exported — it is local to the component file.
+- Props must be explicitly typed — never leave props untyped or inline-typed.
+- Follow camelCase naming for properties inside TProps, but the type name itself must be TProps.
+
+This ensures consistent, clear, and easy-to-find component prop typings across the codebase.
+
+```
+---
+```
+Use Types only, no Interfaces
+```
+```
+- Use **`type`** declarations exclusively — do **not** use `interface`.
+- All type names **must** be prefixed with `T`.
+  Example: `type TUser = { ... }`
+- If a file contains exactly **one non-exported type**, name it `TProps` by default.
+  - This usually applies to component or function props types.
+  - Example:
+    ```ts
+    type TProps = {
+      title: string;
+      onClick: () => void;
+    };
+    ```
+- Exported types must use descriptive names with the `T` prefix.
+
+```
+---
+```bash
+📦Export and Page Structure
+```
+```bash
+- ❌ No default exports anywhere **except** in **pages** and **views**.
+- Use **named exports only** for all modules and components (e.g., `export function foo() {}`).
+- **Pages and views** may use default exports **only** for React components.
+
+📄 Page Files Rules:
+-  A page may  never contain logic
+- It may only return a `View`
+- And optionally Metadata
+
+Views are the render of the page which consist of all the ui components and logic comming together.
+- The naming convention for views are `*MODULE_NAME*-view.tsx`
+e.g: `login-view`, `dashboard-view`, `settings-view`.
+- Views are located over at `/views` or `src/views`
+- -The view directory  never makes use of a barrel file
+```
+---
+```bash
+Use reducers for complex or stateful logic
+```
+```bash
+- For complex state management or business logic with multiple steps or actions, **use pure reducer functions** (`(state, action) => newState`).
+- Avoid sprawling imperative code or deeply nested conditionals—prefer reducer composition and clear action types.
+- Reducers must be **pure functions** without side effects.
+- Define action types explicitly (e.g., as union string literals or enums).
+- Use reducers to encapsulate complex transformations, especially for UI state or domain logic.
+- Connect reducers via React’s `useReducer` or invoke them directly in server functions or utilities.
+- Prefer reducers over multiple useState calls when state shape or transitions become complex.
+- Keep reducer logic separate from UI code — export from dedicated files.
+- Example:
+
+"""ts
+type Action =
+  | { type: 'increment' }
+  | { type: 'decrement' }
+  | { type: 'reset'; payload: number };
+
+function counterReducer(state: number, action: Action): number {
+  switch(action.type) {
+    case 'increment': return state + 1;
+    case 'decrement': return state - 1;
+    case 'reset': return action.payload;
+    default: return state;
+  }
+}
+"""
+```
+---
+```bash
+Use Factory Functions and Functional Abstractions
+```
+
+```bash
+AI RULES: Functional Factories & Base Types for Next.js + Drizzle ORM
+
+1. Functional Factories
+- Use only named async functions inside factories; no arrow constants.
+- Factories must be pure functions returning an object with named CRUD async functions: create, read, update, destroy.
+- Factories accept Drizzle ORM schema/table as a parameter, typed generically.
+- Avoid duplicating CRUD logic; reuse factories across server actions.
+- Factories handle only DB access and mapping; business logic stays outside.
+- Use strong TypeScript generics for input/output types.
+- Factories must return full entities after create or update.
+- Export factory functions and server actions as named exports only.
+- No default exports for factory or server action functions.
+- No raw SQL or string interpolations inside factories; use Drizzle ORM query builder.
+
+2. Base Types
+- Define extensible `TTimestamps` type for `createdAt` and `updatedAt` as `Date` or compatible.
+- Define generic base entity type `TBaseEntity` with:
+  - `id: number`
+  - timestamps via `TTimestamps`
+- Entity-specific types extend from `TBaseEntity` by intersection or extension.
+- Use only `type` aliases (never interfaces).
+- Prefix all types with capital `T` (e.g., `TProps`, `TTimestamps`).
+- For single type per file not exported, use `TProps` by default.
+
+3. General Code Style
+- No classes.
+- No arrow function constants anywhere.
+- Use named async functions only.
+- No default exports except Next.js pages and views.
+- Keep business logic outside factories.
+- Use clear, descriptive type names.
+
+Summary:
+Use strongly typed, reusable functional factories for CRUD operations on typed base entities with timestamps. Maintain separation of concerns, modularity, and strict functional style across the codebase.
+```
+---
+```bash
+
+```
+```bash
+No testing needed except if requested
+
+```shell
+For normal code we never write tests, except if mentioned that we need tests.
+If you feel like there's a need for tests, discuss the thoughts first and only execute if confirmed
+```

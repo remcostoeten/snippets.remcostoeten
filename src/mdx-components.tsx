@@ -3,6 +3,7 @@ import type { MDXComponents } from "mdx/types";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { PostMetadata } from "@/components/ui/post-metadata";
 import matter from "gray-matter";
+import { FindReplaceGenerator } from "@/components/find-and-replace-generator";
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -10,6 +11,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     ...components,
     Tab,
     Tabs,
+    FindReplaceGenerator,
     wrapper: ({ children }) => {
       const content = children?.toString() || "";
       const { data: frontmatter, content: mdxContent } = matter(content);

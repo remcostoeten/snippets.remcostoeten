@@ -4,7 +4,7 @@ import { Footer } from "@/components/footer";
 import { getGitAndDeploymentInfo } from "@/server/queries/get-statistics";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
+import { Toaster } from "sonner";
 const inter = Inter({
   subsets: ["latin"],
 });
@@ -82,15 +82,12 @@ export default async function RootLayout({
   const stats = await getGitAndDeploymentInfo();
 
   return (
-    <html
-      lang="en"
-      className={inter.className}
-      suppressHydrationWarning
-    >
+    <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <Providers>
           <main className="flex-1">{children}</main>
-          <Footer stats={stats} />
+          <Toaster />
+           <Footer stats={stats} />
         </Providers>
       </body>
     </html>

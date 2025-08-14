@@ -62,7 +62,9 @@ export function Search({ placeholder = 'Search snippets...', className = '', var
     }
 
     useEffect(() => {
-        const handleClickOutside = (event: globalThis.MouseEvent) => {
+        if (typeof document === 'undefined') return
+
+        function handleClickOutside(event: globalThis.MouseEvent) {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
                 setIsOpen(false)
             }
@@ -85,8 +87,9 @@ export function Search({ placeholder = 'Search snippets...', className = '', var
 
     // Add keyboard shortcut for focusing the search input
     useEffect(() => {
-        const handleKeyDown = (event: KeyboardEvent) => {
-            // Only trigger if no input or textarea is currently focused
+        if (typeof document === 'undefined') return
+
+        function handleKeyDown(event: KeyboardEvent) {
             const activeElement = document.activeElement
             const isInputFocused =
                 activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement

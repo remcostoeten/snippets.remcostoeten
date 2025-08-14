@@ -56,7 +56,7 @@ export default defineConfig({
 });
 ```
 
-The paths can be any you want, `out` will be generrated, `schema` and `client` must exist. I prefer to have these files. Typically you want to validate enviorment variables with zod, or a custom implementation which you can find in the guide I wrote here [here](/docs/databases/validate-env-variables).ß
+The paths can be any you want, `out` will be generrated, `schema` and `client` must exist. I prefer to have these files. Typically you want to validate enviorment variables with zod, or a custom implementation which you can find in the guide I wrote here [here](/snippets/databases/validate-env-variables).ß
 
 ## The enviorment variables
 
@@ -70,7 +70,7 @@ It must be prefiex w ith `file:` as per SQLite convention. `./dev.db` is a file 
 
 ## Creating the schema
 
-I will show you the most basic version. I perrsonally tend to use a way more comprehensive implementation which is way more modular and is heavy on seperration of concerns. Read more about it in the [guide](/docs/nextjs-snippets/databases/drizzle-orm/modular-scalable-schema-design).
+I will show you the most basic version. I perrsonally tend to use a way more comprehensive implementation which is way more modular and is heavy on seperration of concerns. Read more about it in the [guide](/snippets/nextjs-snippets/databases/drizzle-orm/modular-scalable-schema-design).
 
 Then we can create tables. This is a example of a userrs table.
 

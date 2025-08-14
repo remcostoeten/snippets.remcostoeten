@@ -30,6 +30,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex  flex-col bg-zinc-950 text-zinc-100">
+ 
       <main className="flex-1">
         <section className="container py-20 md:py-32">
           <Hero />
@@ -70,7 +71,7 @@ export default async function HomePage() {
                 /
               </TextAnimate>
               <Link
-                href="/docs"
+                href="/snippets"
                 className="text-sm text-zinc-400 hover:text-zinc-300 hover:underline inline-flex items-center gap-1"
               >
                 <TextAnimate as="span" animation="fadeIn" delay={0.9}>
@@ -105,7 +106,10 @@ export default async function HomePage() {
                             delay={0.6 + 0.1 * index + 0.1}
                             className="group-hover:text-zinc-300"
                           >
-                            <GradientText variant="subtle">
+                            <GradientText
+                              variant="subtle"
+                              className="bg-gradient-to-r from-zinc-200 via-zinc-300 to-zinc-400"
+                            >
                               {snippet.title}
                             </GradientText>
                           </TextAnimate>

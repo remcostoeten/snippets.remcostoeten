@@ -10,8 +10,8 @@ export async function GET() {
         <language>en</language>
         <item>
           <title>Documentation</title>
-          <link>${baseUrl}/docs</link>
-          <guid>${baseUrl}/docs</guid>
+          <link>${baseUrl}/snippets</link>
+          <guid>${baseUrl}/snippets</guid>
           <description>Browse all documentation and code snippets</description>
           <pubDate>${new Date().toUTCString()}</pubDate>
         </item>

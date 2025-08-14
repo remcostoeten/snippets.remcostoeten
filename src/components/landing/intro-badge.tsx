@@ -66,7 +66,7 @@ export function Hero() {
         transition={{ duration: 0.3, delay: 0.5 }}
         className="flex flex-col sm:flex-row items-center justify-center gap-4"
       >
-        <Link href="/docs">
+        <Link href="/snippets">
           <Button className="bg-zinc-800 hover:bg-zinc-700 text-zinc-100">
             Browse Documentation
           </Button>
