@@ -13,6 +13,8 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
   const page = source.getPage(params.slug) || [] as any;
+  console.log(page);
+  console.log(page);
   if (!page) notFound();
 
   const MDX = page.data.body;

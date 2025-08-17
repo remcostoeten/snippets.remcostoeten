@@ -37,8 +37,8 @@ export function baseOptions(): BaseLayoutProps {
                 active: 'nested-url'
             },
             {
-                text: 'snippts',
-                url: '/snippets',
+                text: 'Documentation',
+                url: '/docs',
                 active: 'nested-url'
             }
         ]

@@ -7,7 +7,7 @@ interface GradientTextProps extends React.HTMLAttributes<HTMLHeadingElement> {
 }
 
 const gradientVariants = {
-  default: "bg-gradient-to-r from-zinc-400 via-zinc-600 to-zinc-800",
+  default: "bg-gradient-to-r from-zinc-500 via-zinc-600 to-zinc-700",
   subtle: "bg-gradient-to-r from-zinc-300 via-zinc-400 to-zinc-500",
   silver: "bg-gradient-to-r from-[#919191] via-[#747474] to-[#919191]",
   chromatic:

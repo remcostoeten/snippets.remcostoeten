@@ -108,7 +108,7 @@ export default async function HomePage() {
                           >
                             <GradientText
                               variant="subtle"
-                              className="bg-gradient-to-r from-zinc-200 via-zinc-300 to-zinc-400"
+                              className="bg-gradient-to-r from-zinc-300 via-zinc-400 to-zinc-500"
                             >
                               {snippet.title}
                             </GradientText>
