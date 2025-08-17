@@ -3,12 +3,12 @@ import {toast} from 'sonner'
 
 import { useState, useEffect, useRef } from "react";
 import { Copy, Check, Terminal, FileText, Zap, Eye, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
+import { Badge } from "@/shared/ui/badge";
+import { Label } from "@/shared/ui/label";
 import { scrollSectionIntoView, focusSection } from "@/helpers/scroll";
 
 type TCommand = {

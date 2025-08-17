@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { SearchIcon, FileCode, ChevronRight } from 'lucide-react'
-import { Input } from '@/components/ui/input'
+import { Input } from '@/shared/ui/input'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import Link from 'next/link'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@radix-ui/react-tooltip'

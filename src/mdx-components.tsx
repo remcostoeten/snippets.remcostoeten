@@ -1,7 +1,7 @@
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import type { MDXComponents } from "mdx/types";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
-import { PostMetadata } from "@/components/ui/post-metadata";
+import { PostMetadata } from "@/shared/ui/post-metadata";
 import matter from "gray-matter";
 import { FindReplaceGenerator } from "@/components/find-and-replace-generator";
 import { CopyLLMVersion } from "@/components/core/copy-llm-version";

@@ -1,5 +1,5 @@
 import { FileCode, GitCommit, Rocket } from "lucide-react";
-import { Badge } from "./ui/badge";
+import { Badge } from "../shared/ui/badge";
 import { GradientText } from "./ui/effects/gradient-text";
 import { AnimatedNumber } from "./ui/effects/number-flow";
 import Link from "next/link";

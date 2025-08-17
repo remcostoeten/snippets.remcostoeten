@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/helpers";
 import { OptimizedTextAnimate } from "@/components/ui/effects/blur-in-optimized";
 import { ShinyBadge } from "@/components/ui/effects/animated-badge";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/shared/ui/button";
 import Link from "next/link";
 import { Search } from "./search";
 import { GradientText } from "../ui/effects/gradient-text";

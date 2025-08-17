@@ -19,7 +19,7 @@
         "paths": {
             "@/.source": ["./.source/index.ts"],
             "@/*": ["./src/*"],
-            "ui":["src/components/ui/index.ts"]
+            "ui":["src/shared/ui/index.ts"]
         },
         "plugins": [
             {

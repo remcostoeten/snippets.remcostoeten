@@ -1,5 +1,5 @@
 import { Hero } from "@/components/landing/intro-badge";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/shared/ui/badge";
 import { TextAnimate } from "@/components/ui/effects/blur-in";
 import { CardSpotlight } from "@/components/ui/effects/card-spotlight/card-spotlight-demo";
 import { ExternalLink } from "lucide-react";

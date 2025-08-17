@@ -4,7 +4,7 @@ import { cn } from '@/helpers'
 import type { ReactNode } from 'react'
 import { Copy, Check, SeparatorHorizontal } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/shared/ui/button'
 import { OptimizedTextAnimate } from '../effects/blur-in-optimized'
 
 /**

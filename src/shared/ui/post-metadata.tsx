@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/shared/ui/badge";
 import { getRecentSnippets } from "@/server/queries/snippets";
 import { Clock, Calendar, Book } from "lucide-react";
 

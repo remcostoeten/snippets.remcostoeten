@@ -2,7 +2,7 @@
 
 import { Moon, Sun, Laptop } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Button } from "../../shared/ui/button";
+import { Button } from "./button";
 import {
     DropdownMenu,
     DropdownMenuContent,

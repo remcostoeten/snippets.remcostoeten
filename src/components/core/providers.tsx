@@ -1,6 +1,6 @@
 import { ThemeProvider } from "next-themes";
 import { RootProvider } from 'fumadocs-ui/provider';
-import { TooltipProvider } from '../ui';
+import { TooltipProvider } from '../../shared/ui';
 
 type TProps = {
     children: React.ReactNode;
