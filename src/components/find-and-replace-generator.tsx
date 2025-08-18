@@ -1,15 +1,24 @@
 'use client'
 import {toast} from 'sonner'
-
 import { useState, useEffect, useRef } from "react";
 import { Copy, Check, Terminal, FileText, Zap, Eye, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
 import { scrollSectionIntoView, focusSection } from "@/helpers/scroll";
+
+import {
+    Button,
+    Input,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
+    Badge,
+    Label,
+} from "ui";
 
 type TCommand = {
   title: string;
@@ -18,12 +27,10 @@ type TCommand = {
   type?: 'primary' | 'secondary' | 'danger';
   vimExplanation?: string;
 }
-
 type TSyntaxToken = {
   text: string;
   type: 'keyword' | 'string' | 'function' | 'comment' | 'operator' | 'number' | 'text';
 }
-
 export function FindReplaceGenerator() {
   const [findText, setFindText] = useState("");
   const [replaceText, setReplaceText] = useState("");
@@ -36,20 +43,16 @@ export function FindReplaceGenerator() {
   const [activeIndicator, setActiveIndicator] = useState<null | 'inputs' | 'neovim' | 'cli'>(null);
   const [autoJumpToInputs, setAutoJumpToInputs] = useState(false);
   const [highlightedSection, setHighlightedSection] = useState<TJumpTarget | null>(null);
-
   const findInputRef = useRef<HTMLInputElement>(null);
   const replaceInputRef = useRef<HTMLInputElement>(null);
   const filePathInputRef = useRef<HTMLInputElement>(null);
-
   const inputsSectionRef = useRef<HTMLDivElement>(null);
   const tabsTopRef = useRef<HTMLDivElement>(null);
   const nvimSectionRef = useRef<HTMLDivElement>(null);
   const cliSectionRef = useRef<HTMLDivElement>(null);
-  
   type TTabId = 'neovim' | 'cli';
   type TJumpTarget = 'inputs' | 'activeTab';
   const lastJumpTargetRef = useRef<TJumpTarget>('activeTab');
-  
   function getActiveTabSectionRef(
       currentTab: TTabId,
       nvimRef: React.RefObject<HTMLDivElement | null>,
@@ -58,25 +61,21 @@ export function FindReplaceGenerator() {
       if (currentTab === 'neovim') return nvimRef;
       return cliRef;
     }
-  
   const copyModeRef = useRef(false);
   const copyModeTimerRef = useRef<number | null>(null);
   const copyModeTabRef = useRef<'neovim' | 'cli'>('neovim');
-
   function isEditableElement(target: EventTarget | null): boolean {
     if (!(target instanceof HTMLElement)) return false;
     if (target.isContentEditable) return true;
     const tag = target.tagName.toLowerCase();
     return tag === 'input' || tag === 'textarea' || tag === 'select';
   }
-
   function highlightSectionOnce(target: TJumpTarget): void {
     setHighlightedSection(target);
     window.setTimeout(function clear() {
       setHighlightedSection(null);
     }, 800);
   }
-
   function getNumberFromCode(code: string): number | null {
     const map: Record<string, number> = {
       Digit1: 1, Digit2: 2, Digit3: 3, Digit4: 4, Digit5: 5, Digit6: 6,
@@ -84,41 +83,32 @@ export function FindReplaceGenerator() {
     };
     return Object.prototype.hasOwnProperty.call(map, code) ? map[code] : null;
   }
-
   useEffect(() => {
     if (!highlightedField) return;
     const t = window.setTimeout(function clear() { setHighlightedField(null); }, 600);
     return function cleanup() { window.clearTimeout(t); };
   }, [highlightedField]);
-
   useEffect(() => {
     if (!activeIndicator) return;
     const t = window.setTimeout(function clear() { setActiveIndicator(null); }, 600);
     return function cleanup() { window.clearTimeout(t); };
   }, [activeIndicator]);
-
-
   function scrollToEl(el: HTMLElement | null) {
     if (!el) return;
     scrollSectionIntoView(el);
   }
-
   function enterCopyMode(sourceTab: 'neovim' | 'cli') {
     copyModeRef.current = true;
     copyModeTabRef.current = sourceTab;
-    
     if (copyModeTimerRef.current) {
       window.clearTimeout(copyModeTimerRef.current);
     }
-    
     copyModeTimerRef.current = window.setTimeout(() => {
       exitCopyMode();
     }, 1200);
-    
     toast('Copy mode: press 1–6', { duration: 1200 });
     setActiveIndicator(sourceTab);
   }
-  
   function exitCopyMode() {
     if (copyModeTimerRef.current) {
       window.clearTimeout(copyModeTimerRef.current);
@@ -126,18 +116,15 @@ export function FindReplaceGenerator() {
     }
     copyModeRef.current = false;
   }
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
     findInputRef.current?.focus();
   }, []);
-
   useEffect(() => {
     if (typeof window === 'undefined') return;
     function handleKeyDown(event: KeyboardEvent) {
       if (event.repeat) return;
       if (event.ctrlKey || event.metaKey) return;
-
       if (copyModeRef.current) {
         const n = getNumberFromCode(event.code);
         if (n !== null) {
@@ -145,7 +132,6 @@ export function FindReplaceGenerator() {
           const index = n - 1;
           const sourceTab = copyModeTabRef.current;
           const commands = sourceTab === 'neovim' ? generateNeovimCommands() : generateCliCommands();
-
           if (commands[index]) {
             const animationIndex = sourceTab === 'cli' ? index + 100 : index;
             copyToClipboard(commands[index].command, animationIndex);
@@ -155,20 +141,17 @@ export function FindReplaceGenerator() {
           exitCopyMode();
           return;
         }
-        
         if (event.key === 'Escape') {
           event.preventDefault();
           exitCopyMode();
           return;
         }
       }
-      
       if (event.key.toLowerCase() === 'c' && event.shiftKey && !event.ctrlKey && !event.metaKey) {
         event.preventDefault();
         enterCopyMode(activeTab as 'neovim' | 'cli');
         return;
       }
-      
       if (event.shiftKey) {
         switch (event.code) {
           case 'Digit1':
@@ -212,7 +195,6 @@ export function FindReplaceGenerator() {
             return;
         }
       }
-      
       if (event.key === 'Enter') {
         event.preventDefault();
         if (!findText) {
@@ -225,7 +207,6 @@ export function FindReplaceGenerator() {
         return;
       }
     }
-
     window.addEventListener('keydown', handleKeyDown);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -235,11 +216,9 @@ export function FindReplaceGenerator() {
       }
     };
   }, [activeTab, findText]);
-
   useEffect(function syncActiveTabRef() {
     activeTabRef.current = activeTab as 'neovim' | 'cli';
   }, [activeTab]);
-
   useEffect(function bindShiftT() {
     if (typeof document === 'undefined') return;
     function onKeydown(e: KeyboardEvent): void {
@@ -247,32 +226,24 @@ export function FindReplaceGenerator() {
       if (e.code !== 'KeyT' || !e.shiftKey) return;
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (isEditableElement(e.target)) return;
-
       e.preventDefault();
-
       const nextTarget: TJumpTarget = lastJumpTargetRef.current === 'inputs' ? 'activeTab' : 'inputs';
       const targetEl = nextTarget === 'inputs'
         ? inputsSectionRef.current
         : getActiveTabSectionRef(activeTabRef.current as TTabId, nvimSectionRef, cliSectionRef).current;
-
       if (!targetEl) return;
-
       scrollSectionIntoView(targetEl);
       window.requestAnimationFrame(function afterScroll() {
         focusSection(targetEl);
       });
-
       highlightSectionOnce(nextTarget);
       lastJumpTargetRef.current = nextTarget;
     }
-
     document.addEventListener('keydown', onKeydown);
     return function cleanup() {
       document.removeEventListener('keydown', onKeydown);
     };
   }, []);
-
-
   function tokenizeCommand(command: string): TSyntaxToken[] {
     const tokens: TSyntaxToken[] = [];
     const patterns = [
@@ -284,17 +255,13 @@ export function FindReplaceGenerator() {
       { regex: /\+|\||&/g, type: 'operator' as const },
       { regex: /#.*$/gm, type: 'comment' as const }
     ];
-
     let remaining = command;
     let currentIndex = 0;
-
     while (currentIndex < command.length) {
       let matched = false;
-      
       for (const pattern of patterns) {
         pattern.regex.lastIndex = 0;
         const match = pattern.regex.exec(remaining.slice(currentIndex));
-        
         if (match && match.index === 0) {
           if (currentIndex > 0) {
             tokens.push({
@@ -302,40 +269,32 @@ export function FindReplaceGenerator() {
               type: 'text'
             });
           }
-          
           tokens.push({
             text: match[0],
             type: pattern.type
           });
-          
           currentIndex += match[0].length;
           remaining = command.slice(currentIndex);
           matched = true;
           break;
         }
       }
-      
       if (!matched) {
         currentIndex++;
       }
     }
-    
     if (currentIndex < command.length) {
       tokens.push({
         text: command.slice(currentIndex),
         type: 'text'
       });
     }
-    
     return tokens;
   };
-
 type TSyntaxHighlighterProps = { command: string; variant?: 'vim' | 'cli' };
-
   function SyntaxHighlighter({ command, variant }: TSyntaxHighlighterProps) {
     const tokens = tokenizeCommand(command);
     const variantClass = variant === 'vim' ? 'vim-command' : variant === 'cli' ? 'cli-command' : '';
-    
     return (
       <div className={`font-mono text-sm break-all ${variantClass}`}>
         {tokens.map((token, index) => (
@@ -357,13 +316,10 @@ type TSyntaxHighlighterProps = { command: string; variant?: 'vim' | 'cli' };
       </div>
     );
   };
-
   function escapeForSed(text: string) {
     return text.replace(/[\/\u0026\\]/g, '\\$&');
   };
-
   type TToken = { text: string; type: 'operator' | 'number' | 'string' | 'text' };
-
   function tokenizeText(input: string): TToken[] {
     const tokens: TToken[] = [];
     if (!input) return tokens;
@@ -378,9 +334,7 @@ type TSyntaxHighlighterProps = { command: string; variant?: 'vim' | 'cli' };
     if (lastIndex < input.length) tokens.push({ text: input.slice(lastIndex), type: 'text' });
     return tokens;
   }
-
   type TInlineHighlighterProps = { value: string };
-
   function InlineHighlighter({ value }: TInlineHighlighterProps) {
     const tokens = tokenizeText(value);
     return (
@@ -392,17 +346,13 @@ type TSyntaxHighlighterProps = { command: string; variant?: 'vim' | 'cli' };
       </div>
     );
   }
-
   function escapeForVim(text: string) {
     return text.replace(/\//g, '\\/');
   };
-
   function generateNeovimCommands(): TCommand[] {
     if (!findText) return [];
-    
     const escapedFind = escapeForVim(findText);
     const escapedReplace = escapeForVim(replaceText);
-    
     return [
       {
         title: "Interactive Replace",
@@ -438,14 +388,11 @@ type TSyntaxHighlighterProps = { command: string; variant?: 'vim' | 'cli' };
       }
     ];
   };
-
   function generateCliCommands(): TCommand[] {
     if (!findText) return [];
-    
     const escapedFind = escapeForSed(findText);
     const escapedReplace = escapeForSed(replaceText);
     const file = filePath || "filename.txt";
-    
     return [
       {
         title: "sed - In-place",
@@ -477,21 +424,18 @@ type TSyntaxHighlighterProps = { command: string; variant?: 'vim' | 'cli' };
       }
     ];
   };
-
 async function copyToClipboard(command: string, index: number) {
     try {
       await navigator.clipboard.writeText(command);
       setCopiedCommand(command);
       setAnimatingCards(prev => new Set(prev).add(index));
       toast('Copied to clipboard')
-
       if (autoJumpToInputs) {
         setActiveIndicator('inputs');
         scrollToEl(inputsSectionRef.current);
         highlightSectionOnce('inputs');
         setTimeout(function focusFind() { findInputRef.current?.focus(); }, 0);
       }
-      
       setTimeout(() => {
         setCopiedCommand(null);
         setAnimatingCards(prev => {
@@ -504,15 +448,12 @@ async function copyToClipboard(command: string, index: number) {
       toast.error('Could not copy')
     }
   };
-
 type TCommandCardProps = { command: TCommand; animationIndex: number; displayIndex: number; variant: 'vim' | 'cli' };
-
   function CommandCard({ command, animationIndex, displayIndex, variant }: TCommandCardProps) {
     const isAnimating = animatingCards.has(animationIndex);
     const isCopied = copiedCommand === command.command;
     const variantBadge = variant === 'vim' ? 'VIM' : 'CLI';
     const badgeClass = variant === 'vim' ? 'bg-vim-accent text-vim-foreground' : 'bg-cli-accent text-cli-foreground';
-    
     return (
       <Card className={`mb-4 transition-all duration-300  hover:shadow-lg border-2 ${
         isAnimating ? 'animate-glow' : 'hover:border-accent/50'
@@ -566,13 +507,11 @@ type TCommandCardProps = { command: TCommand; animationIndex: number; displayInd
       </Card>
     );
   };
-
   useEffect(() => {
     if (findText) {
       setAnimatingCards(new Set());
     }
   }, [findText, replaceText]);
-
   return (
     <div className="w-full mx-auto  space-y animate-fade-in">
       <Card className="animate-scale-in data-[highlighted=true]:ring-2 data-[highlighted=true]:ring-accent data-[highlighted=true]:ring-offset-2" ref={inputsSectionRef} data-section="inputs" id="section-inputs" data-highlighted={highlightedSection === 'inputs'}>
@@ -641,7 +580,6 @@ type TCommandCardProps = { command: TCommand; animationIndex: number; displayInd
           </div>
         </CardContent>
       </Card>
-
       {findText && (
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full" ref={tabsTopRef}>
             <TabsList className={`grid w-full grid-cols-2 bg-card`}>
@@ -662,7 +600,6 @@ type TCommandCardProps = { command: TCommand; animationIndex: number; displayInd
                 CLI Tools
               </TabsTrigger>
             </TabsList>
-            
           <TabsContent value="neovim" className="mt-6">
             <div className="space-y-4 rounded-md data-[highlighted=true]:ring-2 data-[highlighted=true]:ring-accent data-[highlighted=true]:ring-offset-2" ref={nvimSectionRef} data-section="nvim" id="section-nvim" data-highlighted={highlightedSection === 'activeTab'}>
               <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -674,7 +611,6 @@ type TCommandCardProps = { command: TCommand; animationIndex: number; displayInd
               ))}
             </div>
           </TabsContent>
-          
           <TabsContent value="cli" className="mt-6">
             <div className="space-y-4 rounded-md data-[highlighted=true]:ring-2 data-[highlighted=true]:ring-accent data-[highlighted=true]:ring-offset-2" ref={cliSectionRef} data-section="cli" id="section-cli" data-highlighted={highlightedSection === 'activeTab'}>
               <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -688,7 +624,6 @@ type TCommandCardProps = { command: TCommand; animationIndex: number; displayInd
           </TabsContent>
         </Tabs>
       )}
-
       {!findText && (
         <Card className="border-dashed border-2 hover:border-accent/50 transition-colors duration-300 animate-fade-in">
           <CardContent className="flex items-center justify-center h-32">
@@ -699,7 +634,6 @@ type TCommandCardProps = { command: TCommand; animationIndex: number; displayInd
           </CardContent>
         </Card>
       )}
-
       <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2">
         <Button
           variant={autoJumpToInputs ? 'default' : 'outline'}

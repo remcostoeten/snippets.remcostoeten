@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favicon Preview - Choose Your R</title>
+    <style>
+        body {
+            background: #0B1020;
+            color: #e0e0e0;
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            background: linear-gradient(135deg, #6EE7F9 0%, #3B82F6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 3rem;
+        }
+        .favicon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .favicon-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .favicon-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #3B82F6;
+            transform: translateY(-4px);
+        }
+        .favicon-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .size-preview {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .size-label {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+        h3 {
+            color: #60A5FA;
+            margin-bottom: 1rem;
+        }
+        .description {
+            opacity: 0.8;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Choose Your Favicon</h1>
+    
+    <div class="favicon-grid">
+        <div class="favicon-card">
+            <h3>Simple Text R</h3>
+            <div class="favicon-preview">
+                <div class="size-preview">
+                    <img src="favicon-new.svg" width="32" height="32" alt="Simple R 32px">
+                    <span class="size-label">32px</span>
+                </div>
+                <div class="size-preview">
+                    <img src="favicon-new.svg" width="64" height="64" alt="Simple R 64px">
+                    <span class="size-label">64px</span>
+                </div>
+                <div class="size-preview">
+                    <img src="favicon-new.svg" width="128" height="128" alt="Simple R 128px">
+                    <span class="size-label">128px</span>
+                </div>
+            </div>
+            <p class="description">Clean and simple text-based R with gradient fill. Most readable at all sizes.</p>
+            <code>favicon-new.svg</code>
+        </div>
+
+        <div class="favicon-card">
+            <h3>Modern Path R</h3>
+            <div class="favicon-preview">
+                <div class="size-preview">
+                    <img src="favicon-modern.svg" width="32" height="32" alt="Modern R 32px">
+                    <span class="size-label">32px</span>
+                </div>
+                <div class="size-preview">
+                    <img src="favicon-modern.svg" width="64" height="64" alt="Modern R 64px">
+                    <span class="size-label">64px</span>
+                </div>
+                <div class="size-preview">
+                    <img src="favicon-modern.svg" width="128" height="128" alt="Modern R 128px">
+                    <span class="size-label">128px</span>
+                </div>
+            </div>
+            <p class="description">Custom-drawn R using SVG paths for precise control. Professional look.</p>
+            <code>favicon-modern.svg</code>
+        </div>
+
+        <div class="favicon-card">
+            <h3>Outline R</h3>
+            <div class="favicon-preview">
+                <div class="size-preview">
+                    <img src="favicon-outline.svg" width="32" height="32" alt="Outline R 32px">
+                    <span class="size-label">32px</span>
+                </div>
+                <div class="size-preview">
+                    <img src="favicon-outline.svg" width="64" height="64" alt="Outline R 64px">
+                    <span class="size-label">64px</span>
+                </div>
+                <div class="size-preview">
+                    <img src="favicon-outline.svg" width="128" height="128" alt="Outline R 128px">
+                    <span class="size-label">128px</span>
+                </div>
+            </div>
+            <p class="description">Minimalist outline version with gradient stroke. Modern and elegant.</p>
+            <code>favicon-outline.svg</code>
+        </div>
+
+        <div class="favicon-card">
+            <h3>Bold R with Glow</h3>
+            <div class="favicon-preview">
+                <div class="size-preview">
+                    <img src="favicon-bold.svg" width="32" height="32" alt="Bold R 32px">
+                    <span class="size-label">32px</span>
+                </div>
+                <div class="size-preview">
+                    <img src="favicon-bold.svg" width="64" height="64" alt="Bold R 64px">
+                    <span class="size-label">64px</span>
+                </div>
+                <div class="size-preview">
+                    <img src="favicon-bold.svg" width="128" height="128" alt="Bold R 128px">
+                    <span class="size-label">128px</span>
+                </div>
+            </div>
+            <p class="description">Bold weight with subtle glow effect. Eye-catching and modern.</p>
+            <code>favicon-bold.svg</code>
+        </div>
+
+        <div class="favicon-card">
+            <h3>Current (Original)</h3>
+            <div class="favicon-preview">
+                <div class="size-preview">
+                    <img src="favicon.svg" width="32" height="32" alt="Current favicon 32px">
+                    <span class="size-label">32px</span>
+                </div>
+                <div class="size-preview">
+                    <img src="favicon.svg" width="64" height="64" alt="Current favicon 64px">
+                    <span class="size-label">64px</span>
+                </div>
+                <div class="size-preview">
+                    <img src="favicon.svg" width="128" height="128" alt="Current favicon 128px">
+                    <span class="size-label">128px</span>
+                </div>
+            </div>
+            <p class="description">Your current geometric design favicon for comparison.</p>
+            <code>favicon.svg</code>
+        </div>
+    </div>
+
+    <div style="margin-top: 3rem; text-align: center;">
+        <p>To use any of these favicons, run:</p>
+        <code style="display: block; margin-top: 1rem; padding: 1rem;">./generate-favicons.sh favicon-[chosen].svg</code>
+    </div>
+</body>
+</html>

@@ -1,8 +1,11 @@
 import { FileCode, GitCommit, Rocket } from "lucide-react";
-import { Badge } from "./ui/badge";
 import { GradientText } from "./ui/effects/gradient-text";
 import { AnimatedNumber } from "./ui/effects/number-flow";
 import Link from "next/link";
+
+import {
+    Badge,
+} from "ui";
 
 type TProps = {
   stats: {
@@ -28,7 +31,6 @@ type TProps = {
     };
   };
 }
-
 export function Footer({ stats }: TProps) {
   return (
     <footer className="mt-auto border-t border-zinc-800 py-8 bg-zinc-950/50 backdrop-blur-sm">
@@ -45,7 +47,6 @@ export function Footer({ stats }: TProps) {
               </p>
             </div>
           </div>
-
           <section className="flex items-center gap-3 p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
             <GitCommit className="w-5 h-5 text-zinc-400" />
             <div>
@@ -63,7 +64,6 @@ export function Footer({ stats }: TProps) {
               </div>
             </div>
           </section>
-
           <div className="flex items-center gap-3 p-4 rounded-lg bg-zinc-900/50 border border-zinc-800">
             <Rocket className="w-5 h-5 text-zinc-400" />
             <div>
@@ -76,7 +76,6 @@ export function Footer({ stats }: TProps) {
             </div>
           </div>
         </div>
-
         <section className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-sm">
           <div className="flex items-center gap-2">
             <GitCommit className="w-4 h-4 text-zinc-400" />
@@ -86,7 +85,6 @@ export function Footer({ stats }: TProps) {
               {new Date(stats.lastCommit.date).toLocaleDateString()}
             </Badge>
           </div>
-
           <div className="flex items-center gap-2">
             <Rocket className="w-4 h-4 text-zinc-400" />
             <span className="text-zinc-400">Latest deployment:</span>
@@ -109,7 +107,6 @@ export function Footer({ stats }: TProps) {
             </Badge>
           </div>
         </section>
-
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm border-t border-zinc-800/50 pt-4">
           <div className="flex items-center gap-2">
             <Badge className="bg-indigo-500/10 text-indigo-500 border-indigo-500/20">

@@ -18,7 +18,8 @@
         "types": ["node"],
         "paths": {
             "@/.source": ["./.source/index.ts"],
-            "@/*": ["./src/*"]
+            "@/*": ["./src/*"],
+            "ui":["./src/shared/ui/index.ts"]
         },
         "plugins": [
             {

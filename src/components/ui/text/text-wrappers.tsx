@@ -1,11 +1,13 @@
 'use client'
-
 import { cn } from '@/helpers'
 import type { ReactNode } from 'react'
 import { Copy, Check, SeparatorHorizontal } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { OptimizedTextAnimate } from '../effects/blur-in-optimized'
+
+import {
+    Button,
+} from "ui";
 
 /**
  * TEmojiMap - A comprehensive mapping of categories to relevant emojis
@@ -19,23 +21,19 @@ export type TEmojiMap = {
     deployment: '🚀' | '☁️' | '🌐' | '🔄' | '📤'
     security: '🔒' | '🛡️' | '🔐' | '🔑' | '⚠️'
     performance: '⚡' | '🏎️' | '⏱️' | '📈' | '🚄'
-
     // UI/UX Categories
     ui: '🎯' | '👁️' | '📐' | '✨' | '🎭'
     design: '🎨' | '🖌️' | '🧩' | '🔍' | '🖼️'
     animation: '🎬' | '✨' | '💫' | '🌟' | '🎭'
-
     code: '👨‍💻' | '💻' | '📝' | '🧠' | '🔣'
     debug: '🐛' | '🔍' | '🧪' | '🔧' | '🔬'
     testing: '✅' | '🧪' | '📋' | '🔄' | '✔️'
-
     // Documentation
     note: '📝' | '📌' | '📒' | '📑' | '🔖'
     tip: '💡' | '✨' | '📌' | '🔍' | '🎯'
     warning: '⚠️' | '🚨' | '⛔' | '🔔' | '❗'
     important: '🔑' | '💯' | '❗' | '‼️' | '📢'
     example: '🔍' | '👉' | '🧪' | '📋' | '🔎'
-
     // General Purpose
     success: '✅' | '🎉' | '👍' | '🏆' | '💯'
     error: '❌' | '💔' | '🛑' | '🚫' | '⛔'
@@ -43,7 +41,6 @@ export type TEmojiMap = {
     progress: '🔄' | '⏳' | '📊' | '📈' | '🚧'
     navigation: '👉' | '👈' | '👆' | '👇' | '🔍'
 }
-
 /**
  * Get a specific emoji from the map
  * @param category - Category from the TEmojiMap
@@ -58,31 +55,25 @@ export const getEmoji = (category: keyof TEmojiMap, index = 0): string => {
         deployment: ['🚀', '☁️', '🌐', '🔄', '📤'],
         security: ['🔒', '🛡️', '🔐', '🔑', '⚠️'],
         performance: ['⚡', '🏎️', '⏱️', '📈', '🚄'],
-
         ui: ['🎯', '👁️', '📐', '✨', '🎭'],
         design: ['🎨', '🖌️', '🧩', '🔍', '🖼️'],
         animation: ['🎬', '✨', '💫', '🌟', '🎭'],
-
         code: ['👨‍💻', '💻', '📝', '🧠', '🔣'],
         debug: ['🐛', '🔍', '🧪', '🔧', '🔬'],
         testing: ['✅', '🧪', '📋', '🔄', '✔️'],
-
         note: ['📝', '📌', '📒', '📑', '🔖'],
         tip: ['💡', '✨', '📌', '🔍', '🎯'],
         warning: ['⚠️', '🚨', '⛔', '🔔', '❗'],
         important: ['🔑', '💯', '❗', '‼️', '📢'],
         example: ['🔍', '👉', '🧪', '📋', '🔎'],
-
         success: ['✅', '🎉', '👍', '🏆', '💯'],
         error: ['❌', '💔', '🛑', '🚫', '⛔'],
         info: ['ℹ️', '📝', '📌', '📊', '📢'],
         progress: ['🔄', '⏳', '📊', '📈', '🚧'],
         navigation: ['👉', '👈', '👆', '👇', '🔍']
     }
-
     return emojiOptions[category][index % emojiOptions[category].length]
 }
-
 // Component Props
 type TProps = {
     children: ReactNode
@@ -93,26 +84,20 @@ type TProps = {
     title?: string
     emojiIndex?: number
 }
-
 /**
  * Basic text formatting components
  */
 export const I = ({ children, className }: TProps) => <span className={cn('italic', className)}>{children}</span>
-
 export const U = ({ children, className }: TProps) => (
     <span className={cn('underline underline-offset-4', className)}>{children}</span>
 )
-
 export const B = ({ children, className }: TProps) => <span className={cn('font-bold', className)}>{children}</span>
-
 export const Pulse = ({ children, className }: TProps) => (
     <span className={cn('animate-pulse', className)}>{children}</span>
 )
-
 export const Ping = ({ children, className }: TProps) => (
     <span className={cn('animate-ping', className)}>{children}</span>
 )
-
 /**
  * WithEmoji - Wraps content with emojis that appear on hover
  */
@@ -134,7 +119,6 @@ export const WithEmoji = ({
         </span>
     </span>
 )
-
 /**
  * BeforeAfter - Shows text/emojis before and after content on hover with animation
  */
@@ -149,7 +133,6 @@ export const BeforeAfter = ({ children, before = '→', after = '←', className
         </span>
     </span>
 )
-
 /**
  * EmojiBeforeAfter - A BeforeAfter component that uses emojis from the TEmojiMap
  */
@@ -162,14 +145,12 @@ export const EmojiBeforeAfter = ({ children, className, emojiCategory = 'navigat
         {children}
     </BeforeAfter>
 )
-
 /**
  * Documentation-specific components for your web dev site
  */
 export const CodeNote = ({ children, className, emojiIndex = 0 }: TProps) => {
     const [copied, setCopied] = useState(false)
     const text = typeof children === 'string' ? children : ''
-
     const copyToClipboard = () => {
         if (text) {
             navigator.clipboard.writeText(text)
@@ -177,7 +158,6 @@ export const CodeNote = ({ children, className, emojiIndex = 0 }: TProps) => {
             setTimeout(() => setCopied(false), 2000)
         }
     }
-
     return (
         <div
             className={cn(
@@ -212,11 +192,9 @@ export const CodeNote = ({ children, className, emojiIndex = 0 }: TProps) => {
         </div>
     )
 }
-
 export const Tip = ({ children, className, emojiIndex = 0 }: TProps) => {
     const [copied, setCopied] = useState(false)
     const text = typeof children === 'string' ? children : ''
-
     const copyToClipboard = () => {
         if (text) {
             navigator.clipboard.writeText(text)
@@ -224,7 +202,6 @@ export const Tip = ({ children, className, emojiIndex = 0 }: TProps) => {
             setTimeout(() => setCopied(false), 2000)
         }
     }
-
     return (
         <div
             className={cn(
@@ -259,11 +236,9 @@ export const Tip = ({ children, className, emojiIndex = 0 }: TProps) => {
         </div>
     )
 }
-
 export const Warning = ({ children, className, emojiIndex = 0 }: TProps) => {
     const [copied, setCopied] = useState(false)
     const text = typeof children === 'string' ? children : ''
-
     const copyToClipboard = () => {
         if (text) {
             navigator.clipboard.writeText(text)
@@ -271,7 +246,6 @@ export const Warning = ({ children, className, emojiIndex = 0 }: TProps) => {
             setTimeout(() => setCopied(false), 2000)
         }
     }
-
     return (
         <div
             className={cn(
@@ -308,11 +282,9 @@ export const Warning = ({ children, className, emojiIndex = 0 }: TProps) => {
         </div>
     )
 }
-
 export const Important = ({ children, className, emojiIndex = 0 }: TProps) => {
     const [copied, setCopied] = useState(false)
     const text = typeof children === 'string' ? children : ''
-
     const copyToClipboard = () => {
         if (text) {
             navigator.clipboard.writeText(text)
@@ -320,7 +292,6 @@ export const Important = ({ children, className, emojiIndex = 0 }: TProps) => {
             setTimeout(() => setCopied(false), 2000)
         }
     }
-
     return (
         <div
             className={cn(
@@ -357,11 +328,9 @@ export const Important = ({ children, className, emojiIndex = 0 }: TProps) => {
         </div>
     )
 }
-
 export const Example = ({ children, className, emojiIndex = 0 }: TProps) => {
     const [copied, setCopied] = useState(false)
     const text = typeof children === 'string' ? children : ''
-
     const copyToClipboard = () => {
         if (text) {
             navigator.clipboard.writeText(text)
@@ -369,7 +338,6 @@ export const Example = ({ children, className, emojiIndex = 0 }: TProps) => {
             setTimeout(() => setCopied(false), 2000)
         }
     }
-
     return (
         <div
             className={cn(
@@ -404,45 +372,38 @@ export const Example = ({ children, className, emojiIndex = 0 }: TProps) => {
         </div>
     )
 }
-
 export const Frontend = ({ children, className, emojiIndex = 0 }: TProps) => (
     <WithEmoji emojiCategory="frontend" emojiIndex={emojiIndex} className={cn('text-indigo-600', className)}>
         {children}
     </WithEmoji>
 )
-
 export const Backend = ({ children, className, emojiIndex = 0 }: TProps) => (
     <WithEmoji emojiCategory="backend" emojiIndex={emojiIndex} className={cn('text-emerald-600', className)}>
         {children}
     </WithEmoji>
 )
-
 export const Database = ({ children, className, emojiIndex = 0 }: TProps) => (
     <WithEmoji emojiCategory="database" emojiIndex={emojiIndex} className={cn('text-cyan-600', className)}>
         {children}
     </WithEmoji>
 )
-
 // Composite components
 export const PulseBold = ({ children, className }: TProps) => (
     <Pulse>
         <B className={className}>{children}</B>
     </Pulse>
 )
-
 export const EmojiItalic = ({ children, className, emojiCategory = 'code', emojiIndex = 0 }: TProps) => (
     <WithEmoji emojiCategory={emojiCategory} emojiIndex={emojiIndex}>
         <I className={className}>{children}</I>
     </WithEmoji>
 )
-
 /**
  * Demo component for documentation
  */
 export const TextWrappersDemo = () => (
     <div className="space-y-6 p-4 bg-gray-50 rounded-lg">
         <h2 className="text-xl font-bold mb-4">Text Formatting Components</h2>
-
         <section className="space-y-2">
             <h3 className="font-medium text-gray-700">Basic Formatting</h3>
             <p>
@@ -455,7 +416,6 @@ export const TextWrappersDemo = () => (
                 <B>Bold text</B> - Use for important terms
             </p>
         </section>
-
         <section className="space-y-2">
             <h3 className="font-medium text-gray-700">Animations</h3>
             <p>
@@ -465,7 +425,6 @@ export const TextWrappersDemo = () => (
                 <Ping>Pinging text</Ping> - Creates a more pronounced effect
             </p>
         </section>
-
         <section className="space-y-2">
             <h3 className="font-medium text-gray-700">Emoji Components</h3>
             <p>
@@ -481,7 +440,6 @@ export const TextWrappersDemo = () => (
                 <WithEmoji emojiCategory="database">Database concepts</WithEmoji>
             </p>
         </section>
-
         <section className="space-y-2">
             <h3 className="font-medium text-gray-700">Documentation Elements</h3>
             <p>
@@ -500,7 +458,6 @@ export const TextWrappersDemo = () => (
                 <Example>Examples help illustrate concepts</Example>
             </p>
         </section>
-
         <section className="space-y-2">
             <h3 className="font-medium text-gray-700">Composite Components</h3>
             <p>
@@ -515,7 +472,6 @@ export const TextWrappersDemo = () => (
         </section>
     </div>
 )
-
 export const DemoSection = ({ title, children, className }: TProps) => {
     return (
         <section className={className}>

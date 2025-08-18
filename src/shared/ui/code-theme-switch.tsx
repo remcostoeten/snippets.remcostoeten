@@ -1,19 +1,19 @@
 'use client'
+
 import { useTheme } from 'next-themes';
+import { Button } from './button';
 import { Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
-
-import {
-    Button,
-} from "ui";
 
 export function CodeThemeSwitch() {
     const { theme, setTheme } = useTheme();
     const [isAnimating, setIsAnimating] = useState(false);
     const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; delay: number }>>([]);
+
     const handleToggle = () => {
         setIsAnimating(true);
         setTheme(theme === 'light' ? 'dark' : 'light');
+
         // Generate particles for the animation
         const newParticles = Array.from({ length: 8 }, (_, i) => ({
             id: i,
@@ -22,11 +22,13 @@ export function CodeThemeSwitch() {
             delay: Math.random() * 0.5
         }));
         setParticles(newParticles);
+
         setTimeout(() => {
             setIsAnimating(false);
             setParticles([]);
         }, 1200);
     };
+
     return (
         <div className="relative">
         <div className={`
@@ -37,6 +39,7 @@ export function CodeThemeSwitch() {
                 }
                 ${isAnimating ? 'scale-150 opacity-50' : 'scale-100 opacity-100'}
             `} />
+
             <div className={`
                 relative overflow-hidden rounded-full transition-all duration-500 ease-out
                 ${isAnimating ? 'animate-pulse' : ''}
@@ -63,6 +66,7 @@ export function CodeThemeSwitch() {
                         }
                         ${isAnimating ? 'animate-spin-slow' : ''}
                     `} />
+
                     <div className={`
                         absolute inset-1 rounded-full transition-all duration-500 ease-out
                         ${theme === 'dark'
@@ -71,6 +75,7 @@ export function CodeThemeSwitch() {
                         }
                         ${isAnimating ? 'animate-pulse-glow scale-110' : 'scale-100'}
                     `} />
+
                     <div className="relative z-20 flex items-center justify-center">
                         <Sun className={`
                             h-[1.2rem] w-[1.2rem] absolute transition-all duration-500 ease-out
@@ -91,6 +96,7 @@ export function CodeThemeSwitch() {
                             text-purple-400 dark:text-purple-300
                         `} />
                     </div>
+
                     <span className="sr-only">Toggle theme</span>
                 </Button>
             </div>
@@ -122,6 +128,7 @@ export function CodeThemeSwitch() {
                     }
                 `} />
             )}
+
                 <div className={`
                 absolute inset-0 rounded-full blur-xl transition-all duration-700 ease-out -z-10
                 ${theme === 'dark'

@@ -1,0 +1,151 @@
+---
+title: "SolidStart - Data Fetching Strategies"
+description: "Reference for different ways to fetch and handle data in SolidStart"
+language: "system"
+lastModified: "2025-08-15"
+---
+
+```bash
+API Routes
+```
+```bash
+- Similar to Next.js API routes (`pages/api` or `app/api`).
+- Defined in `src/routes/api/*`.
+- Always run on the server.
+- Return a `Response` object (JSON, HTML, binary, etc.).
+- Fetch from client with `fetch("/api/endpoint")`.
+- Good for exposing public/private endpoints for your app or external use.
+
+Example:
+"""ts
+// src/routes/api/hello.ts
+export async function GET() {
+  return new Response(JSON.stringify({ msg: "Hello" }), {
+    headers: { "Content-Type": "application/json" }
+  });
+}
+"""
+```
+---
+```bash
+Server Functions (`server$`)
+```
+```bash
+- Unique to SolidStart.
+- Write server-only code directly in a component file.
+- Called like a normal function from the client.
+- Code never ships to browser — only results are sent.
+- Great for secure DB queries, private API calls.
+
+Example:
+"""ts
+import { server$ } from "solid-start/server";
+
+const getMessage = server$(async (name: string) => {
+  return `Hello ${name} from the server`;
+});
+
+export default function Page() {
+  const handleClick = async () => {
+    alert(await getMessage("Remco"));
+  };
+  return <button onClick={handleClick}>Click</button>;
+}
+"""
+```
+---
+```bash
+Load Functions (`routeData`)
+```
+```bash
+- Similar to Next.js `getServerSideProps` / `getStaticProps`.
+- Runs on server for SSR, can also run client-side in SPA mode.
+- Returns data via `useRouteData` in the component.
+- Perfect for initial page data loading with SEO benefits.
+
+Example:
+"""ts
+import { createResource } from "solid-js";
+import { useRouteData } from "solid-start";
+
+export function routeData() {
+  const [data] = createResource(async () => {
+    const res = await fetch("https://api.example.com/data");
+    return res.json();
+  });
+  return data;
+}
+
+export default function Page() {
+  const data = useRouteData<typeof routeData>();
+  return <div>{data()?.message}</div>;
+}
+"""
+```
+---
+```bash
+Actions (form-based server calls)
+```
+```bash
+- Similar to Next.js Server Actions or Remix actions.
+- Defined with `export const action = ...` in a route file.
+- Executed on the server.
+- Designed for mutations triggered by `<form>` submissions.
+- Handles redirects automatically.
+
+Example:
+"""ts
+import { action } from "solid-start/server";
+
+export const submitForm = action(async (formData: FormData) => {
+  return { success: true };
+});
+
+export default function Page() {
+  return (
+    <form method="post">
+      <input name="name" />
+      <button type="submit">Send</button>
+    </form>
+  );
+}
+"""
+```
+---
+```bash
+Client Fetch in Components
+```
+```bash
+- Standard `fetch()` usage inside `createResource` or `onMount`.
+- Runs entirely in the browser.
+- Not secure for private data or secrets.
+- Useful for public APIs or browser-only data.
+
+Example:
+"""ts
+import { createResource } from "solid-js";
+
+export default function Page() {
+  const [data] = createResource(async () => {
+    const res = await fetch("https://api.example.com");
+    return res.json();
+  });
+
+  return <div>{JSON.stringify(data())}</div>;
+}
+"""
+```
+---
+```bash
+When to Use Each
+```
+```bash
+| Strategy               | Server? | Client? | Good for |
+|------------------------|---------|---------|----------|
+| API Routes             | ✅       | via fetch | General endpoints, public/private APIs |
+| Server Functions       | ✅       | ❌       | Secure DB queries, private logic |
+| Load Functions         | ✅       | ✅       | Initial SSR data, SEO-friendly pages |
+| Actions                | ✅       | ❌       | Secure form submissions/mutations |
+| Client Fetch           | ❌       | ✅       | Public browser-only API calls |
+```
+

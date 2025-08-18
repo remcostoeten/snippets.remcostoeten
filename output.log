@@ -1,0 +1,6 @@
+nohup: ignoring input
+[1757244:0817/225655.219079:ERROR:node_bindings.cc(380)] Most NODE_OPTIONs are not supported in packaged apps. See documentation for more details.
+[90m[main 2025-08-17T20:56:56.599Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/0.50.4/854924ca6d27a278f2266a937d5d932f96882fa24a51e270c7cd81c11846f85a/stable
+[90m[main 2025-08-17T20:56:56.600Z][0m update#setState idle
+[91m[main 2025-08-17T20:57:03.351Z][0m [UtilityProcess id: 1, type: fileWatcher, pid: 1758514]: crashed with code 15 and reason 'killed'
+[90m[main 2025-08-17T20:57:03.653Z][0m Extension host with pid 1758533 exited with code: 0, signal: unknown.

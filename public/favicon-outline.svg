@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="outlineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6EE7F9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Dark background -->
+  <rect width="256" height="256" rx="48" fill="#0B1020"/>
+  <!-- R outline -->
+  <g fill="none" stroke="url(#outlineGrad)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 70 180 L 70 76 L 120 76 C 150 76 170 92 170 116 C 170 140 150 156 120 156 L 100 156 M 110 156 L 170 180"/>
+  </g>
+</svg>

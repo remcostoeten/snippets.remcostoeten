@@ -1,14 +1,16 @@
 "use client";
-
 import { ArrowRightIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/helpers";
 import { OptimizedTextAnimate } from "@/components/ui/effects/blur-in-optimized";
 import { ShinyBadge } from "@/components/ui/effects/animated-badge";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Search } from "./search";
 import { GradientText } from "../ui/effects/gradient-text";
+
+import {
+    Button,
+} from "ui";
 
 export function Hero() {
   return (
@@ -33,7 +35,6 @@ export function Hero() {
           </ShinyBadge>
         </motion.div>
       </motion.div>
-
       <OptimizedTextAnimate
         animation="blurInUp"
         className="mb-6"
@@ -43,11 +44,9 @@ export function Hero() {
         delay={0.1}
       >
         <GradientText variant='subtle'>
-          
         Nothing really to see here
         </GradientText>
       </OptimizedTextAnimate>
-
       <OptimizedTextAnimate
         animation="blurInUp"
         className="mb-8"

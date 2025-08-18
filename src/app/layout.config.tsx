@@ -1,8 +1,11 @@
 import { siteConfig } from '@/core/site-config'
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 import { Logo } from '@/components/logo'
-import { CodeThemeSwitch } from '@/components/ui/code-theme-switch'
-import { ThemeSwitcher } from '@/components/ui/theme-switcher'
+import { CodeThemeSwitch } from '@/shared/ui/code-theme-switch'
+
+import {
+    ThemeSwitcher,
+} from "ui";
 
 /**
  * Shared layout configurations
@@ -11,7 +14,6 @@ import { ThemeSwitcher } from '@/components/ui/theme-switcher'
  * Home Layout: app/(home)/layout.tsx
  * Docs Layout: app/docs/layout.tsx
  */
-
 export function baseOptions(): BaseLayoutProps {
     return {
         nav: {
@@ -37,8 +39,8 @@ export function baseOptions(): BaseLayoutProps {
                 active: 'nested-url'
             },
             {
-                text: 'snippts',
-                url: '/snippets',
+                text: 'Documentation',
+                url: '/docs',
                 active: 'nested-url'
             }
         ]

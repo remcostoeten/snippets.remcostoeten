@@ -1,13 +1,14 @@
 'use client'
+
 import { Moon, Sun, Laptop } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import {
-    Button,
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
+    Button
 } from "ui";
 
 export function ThemeSwitcher() {
