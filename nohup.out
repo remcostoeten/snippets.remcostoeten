@@ -1,0 +1,17 @@
+[1749579:0817/225627.342150:ERROR:node_bindings.cc(380)] Most NODE_OPTIONs are not supported in packaged apps. See documentation for more details.
+[90m[main 2025-08-17T20:56:28.795Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/0.50.4/854924ca6d27a278f2266a937d5d932f96882fa24a51e270c7cd81c11846f85a/stable
+[90m[main 2025-08-17T20:56:28.796Z][0m update#setState idle
+[91m[main 2025-08-17T20:56:47.978Z][0m [UtilityProcess type: shared-process, pid: 1750917]: crashed with code 2 and reason 'killed'
+[91m[main 2025-08-17T20:56:47.996Z][0m [UtilityProcessWorker]: terminated unexpectedly with code 2, signal: unknown
+[91m[main 2025-08-17T20:56:47.997Z][0m [UtilityProcess id: 1, type: fileWatcher, pid: 1750918]: crashed with code 2 and reason 'killed'
+[90m[main 2025-08-17T20:56:48.045Z][0m Extension host with pid 1750885 exited with code: 2, signal: unknown.
+[91m[main 2025-08-17T20:56:48.045Z][0m [UtilityProcess id: 1, type: extensionHost, pid: 1750885]: crashed with code 2 and reason 'killed'
+[1763779:0817/225718.629453:ERROR:node_bindings.cc(380)] Most NODE_OPTIONs are not supported in packaged apps. See documentation for more details.
+[90m[main 2025-08-17T20:57:20.006Z][0m updateURL https://api2.cursor.sh/updates/api/update/linux-x64/cursor/0.50.4/854924ca6d27a278f2266a937d5d932f96882fa24a51e270c7cd81c11846f85a/stable
+[90m[main 2025-08-17T20:57:20.006Z][0m update#setState idle
+[1763779:0817/225740.850461:ERROR:atom_cache.cc(229)] Add chromium/from-privileged to kAtomsToCache
+[1763779:0817/225746.807863:ERROR:browser_main_loop.cc(278)] Gdk: gdk_window_get_window_type: assertion 'GDK_IS_WINDOW (window)' failed
+[90m[main 2025-08-17T20:57:50.008Z][0m update#setState checking for updates
+[90m[main 2025-08-17T20:57:50.111Z][0m update#setState ready
+[90m[main 2025-08-17T21:00:31.238Z][0m Extension host with pid 1764996 exited with code: 0, signal: unknown.
+[91m[main 2025-08-17T21:00:31.301Z][0m [UtilityProcess id: 1, type: fileWatcher, pid: 1764928]: crashed with code 15 and reason 'killed'

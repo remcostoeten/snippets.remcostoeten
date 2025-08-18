@@ -1,11 +1,13 @@
-import { Badge } from "@/shared/ui/badge";
 import { getRecentSnippets } from "@/server/queries/snippets";
 import { Clock, Calendar, Book } from "lucide-react";
+
+import {
+    Badge,
+} from "ui";
 
 type TProps = {
   date: string;
 };
-
 export async function PostMetadata({ date }: TProps) {
   const { snippets, remainingCount } = await getRecentSnippets();
   const wordCount = snippets[0].metrics.wordCount;
@@ -35,7 +37,6 @@ export async function PostMetadata({ date }: TProps) {
           })}
         </span>
       </Badge>
-
       <Badge
         className="
           bg-purple-500/10 text-purple-500 border-purple-500/20
@@ -55,7 +56,6 @@ export async function PostMetadata({ date }: TProps) {
           {readingTime} min read
         </span>
       </Badge>
-
       <Badge
         className="
           bg-green-500/10 text-green-500 border-green-500/20

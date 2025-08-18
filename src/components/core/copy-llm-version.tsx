@@ -1,26 +1,28 @@
 "use client";
-
-import { Button } from "@/shared/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
 import { buildDownloadFilename } from "@/lib/copy-llm-config";
 import { useState } from "react";
+
+import {
+    Button,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "ui";
 
 type TProps = {
   mdxPath: string;
   label?: string;
   filenameOverride?: string;
 };
-
 export function CopyLLMVersion(props: TProps) {
   const [busy, setBusy] = useState(false);
   const label = props.label || "Copy LLM version";
-
   async function fetchJson() {
     const res = await fetch(`/api/raw-mdx?path=${encodeURIComponent(props.mdxPath)}&format=json`);
     if (!res.ok) throw new Error("failed");
     return (await res.json()) as { title: string; content: string };
   }
-
   async function handleCopy() {
     setBusy(true);
     try {
@@ -30,12 +32,10 @@ export function CopyLLMVersion(props: TProps) {
       setBusy(false);
     }
   }
-
   function handleOpen() {
     const url = `/api/raw-mdx?path=${encodeURIComponent(props.mdxPath)}&format=txt`;
     window.open(url, "_blank", "noopener,noreferrer");
-  }
-
+  } 
   async function handleDownload() {
     setBusy(true);
     try {
@@ -54,7 +54,6 @@ export function CopyLLMVersion(props: TProps) {
       setBusy(false);
     }
   }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

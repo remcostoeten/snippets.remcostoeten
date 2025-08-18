@@ -2,17 +2,17 @@
 
 import { Moon, Sun, Laptop } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Button } from "./button";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/shared/ui/dropdown-menu";
+    Button
+} from "ui";
 
 export function ThemeSwitcher() {
     const { setTheme, theme } = useTheme();
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>

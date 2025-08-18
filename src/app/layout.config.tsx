@@ -2,7 +2,10 @@ import { siteConfig } from '@/core/site-config'
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared'
 import { Logo } from '@/components/logo'
 import { CodeThemeSwitch } from '@/shared/ui/code-theme-switch'
-import { ThemeSwitcher } from '@/shared/ui/theme-switcher'
+
+import {
+    ThemeSwitcher,
+} from "ui";
 
 /**
  * Shared layout configurations
@@ -11,7 +14,6 @@ import { ThemeSwitcher } from '@/shared/ui/theme-switcher'
  * Home Layout: app/(home)/layout.tsx
  * Docs Layout: app/docs/layout.tsx
  */
-
 export function baseOptions(): BaseLayoutProps {
     return {
         nav: {

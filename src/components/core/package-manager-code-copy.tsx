@@ -1,11 +1,13 @@
 'use client'
-
-import { Button } from '@/shared/ui/button'
 import { cn } from '@/helpers'
 import { Check, Copy } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTheme } from 'next-themes'
 import { HTMLAttributes, useEffect, useState } from 'react'
+
+import {
+    Button,
+} from "ui";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
     showMultiplePackageOptions?: boolean
@@ -15,7 +17,6 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
     commandMap: Record<string, string>
     className?: string
 }
-
 export function ScriptCopyBtn({
     showMultiplePackageOptions = true,
     codeLanguage,
@@ -30,7 +31,6 @@ export function ScriptCopyBtn({
     const [highlightedCode, setHighlightedCode] = useState('')
     const { theme } = useTheme()
     const command = commandMap[packageManager]
-
     useEffect(() => {
         async function loadHighlightedCode() {
             try {
@@ -49,16 +49,13 @@ export function ScriptCopyBtn({
                 setHighlightedCode(`<pre>${command}</pre>`)
             }
         }
-
         loadHighlightedCode()
     }, [command, theme, codeLanguage, lightTheme, darkTheme])
-
     const copyToClipboard = () => {
         navigator.clipboard.writeText(command)
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
     }
-
     return (
         <div className={cn('mx-auto flex max-w-md items-center justify-center', className)}>
             <div className="w-full space-y-2">

@@ -14,7 +14,10 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const processed = await readAndProcessMdx(path, {
+    // Remove 'content/' prefix if present since readAndProcessMdx expects relative path from content dir
+    const cleanPath = path.startsWith('content/') ? path.slice(8) : path;
+    
+    const processed = await readAndProcessMdx(cleanPath, {
       stripFrontmatter: stripFrontmatter !== "0",
       stripHtmlComments: stripHtmlComments !== "0",
       stripModuleLines: stripModuleLines !== "0",
@@ -35,6 +38,8 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (e) {
-    return NextResponse.json({ error: "Not found or invalid path" }, { status: 404 });
+    console.error('Error in raw-mdx API:', e);
+    const errorMessage = e instanceof Error ? e.message : "Not found or invalid path";
+    return NextResponse.json({ error: errorMessage }, { status: 404 });
   }
 }

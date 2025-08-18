@@ -7,8 +7,8 @@ interface GradientTextProps extends React.HTMLAttributes<HTMLHeadingElement> {
 }
 
 const gradientVariants = {
-  default: "bg-gradient-to-r from-zinc-500 via-zinc-600 to-zinc-700",
-  subtle: "bg-gradient-to-r from-zinc-300 via-zinc-400 to-zinc-500",
+  default: "bg-gradient-to-r from-neutral-500 via-neutral-600 to-neutral-700",
+  subtle: "bg-gradient-to-r from-neutral-300 via-neutral-400 to-white/80",
   silver: "bg-gradient-to-r from-[#919191] via-[#747474] to-[#919191]",
   chromatic:
     "bg-[linear-gradient(90deg,rgb(240,240,240)_0%,rgb(180,180,180)_25%,rgb(220,220,220)_50%,rgb(180,180,180)_75%,rgb(240,240,240)_100%)]",
@@ -18,7 +18,7 @@ export function GradientText({
   children,
   as = "span",
   className,
-  variant = "chromatic",
+  variant = "subtle",
   ...props
 }: GradientTextProps) {
   const Component = as;

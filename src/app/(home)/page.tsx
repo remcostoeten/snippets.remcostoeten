@@ -1,5 +1,4 @@
 import { Hero } from "@/components/landing/intro-badge";
-import { Badge } from "@/shared/ui/badge";
 import { TextAnimate } from "@/components/ui/effects/blur-in";
 import { CardSpotlight } from "@/components/ui/effects/card-spotlight/card-spotlight-demo";
 import { ExternalLink } from "lucide-react";
@@ -8,6 +7,10 @@ import { getRecentSnippets } from "@/server/queries/snippets";
 import { GradientText } from "@/components/ui/effects/gradient-text";
 import { AnimatedNumber } from "@/components/ui/effects/number-flow";
 import FeatureCards from "@/components/landing/feature-card-parent";
+
+import {
+    Badge,
+} from "ui";
 
 function formatDescription(description: string) {
   return description.split(/(`[^`]+`)/).map((part, index) => {
@@ -24,18 +27,14 @@ function formatDescription(description: string) {
     return part;
   });
 }
-
 export default async function HomePage() {
   const { snippets, remainingCount } = await getRecentSnippets();
-
   return (
     <div className="flex  flex-col bg-zinc-950 text-zinc-100">
- 
       <main className="flex-1">
         <section className="container py-20 md:py-32">
           <Hero />
         </section>
-
         <section className="container py-12">
           <div className="flex items-center justify-between mb-8">
             <TextAnimate
