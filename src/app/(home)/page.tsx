@@ -188,9 +188,12 @@ export default async function HomePage() {
               as="div"
               animation="fadeIn"
               delay={1.0}
-              className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-blue-600/10 border border-blue-500/20 p-8"
             >
-                              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-purple-600/5 to-blue-600/5" />
+              <CardSpotlight
+                className="p-8 bg-zinc-900/50"
+                radius={600}
+                color="rgba(59, 130, 246, 0.05)"
+              >
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
@@ -246,6 +249,7 @@ export default async function HomePage() {
                   </Link>
                 </TextAnimate>
               </div>
+              </CardSpotlight>
             </TextAnimate>
           </div>
           
