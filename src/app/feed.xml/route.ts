@@ -15,6 +15,13 @@ export async function GET() {
           <description>Browse all documentation and code snippets</description>
           <pubDate>${new Date().toUTCString()}</pubDate>
         </item>
+        <item>
+          <title>CRUD Query Builder - Interactive Drizzle ORM Playground</title>
+          <link>${baseUrl}/query-builder</link>
+          <guid>${baseUrl}/query-builder</guid>
+          <description>Build and test CRUD operations with our interactive playground. Paste your Drizzle schema, use the visual builder, and generate production-ready TypeScript code instantly.</description>
+          <pubDate>${new Date().toUTCString()}</pubDate>
+        </item>
       </channel>
     </rss>`
 

@@ -1,62 +1,38 @@
-"use client";
+import Image from "next/image"
+import Link from "next/link"
 
-import Link from "next/link";
-import { GradientText } from "@/components/ui/effects/gradient-text";
-import { FileQuestion } from "lucide-react";
-import { motion } from "framer-motion";
+const assetBg = "https://cdn.flyonui.com/fy-assets/blocks/marketing-ui/404/error-5.png"
+const assetIllustration = "https://cdn.flyonui.com/fy-assets/blocks/marketing-ui/404/error-6.png"
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center"
-      >
-        <motion.div
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{
-            type: "spring",
-            stiffness: 200,
-            damping: 20,
-            delay: 0.2,
-          }}
-          className="mb-8 flex justify-center"
-        >
-          <div className="relative">
-            <FileQuestion className="w-24 h-24 text-zinc-500" />
-            <FileQuestion className="animate-pulse w-24 blur-xl h-24 text-indigo-500 absolute top-0 left-0" />
-          </div>
-        </motion.div>
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          <GradientText variant="chromatic">404 - Not Found</GradientText>
-        </h1>
-        <p className="text-zinc-400 text-lg mb-8 max-w-md mx-auto">
-          Oops! The page you're looking for seems to have vanished into the
-          digital void.
+    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
+      <div className="px-4 py-8 flex flex-col items-center justify-center justify-self-center text-center">
+        <h2 className="text-base-content mb-6 text-5xl font-semibold">Whoops!</h2>
+        <h3 className="text-base-content mb-1.5 text-3xl font-semibold">Something went wrong</h3>
+        <p className="text-base-content mb-6 max-w-sm">
+          The page you're looking for isn't found, we suggest you back to home.
         </p>
-        <Link
-          href="/"
-          className="
-            inline-flex items-center gap-2 
-            px-6 py-3 
-            bg-zinc-800 
-            text-zinc-100 
-            rounded-full
-            font-medium
-            transition-all
-            duration-300
-            hover:bg-zinc-700
-            hover:scale-105
-            hover:shadow-lg
-            hover:shadow-zinc-900/20
-          "
-        >
-          <span>Return Home</span>
+        <Link href="/" className="btn btn-primary btn-gradient">
+          Back to home page
         </Link>
-      </motion.div>
+      </div>
+
+      <div className="relative max-h-screen w-full p-2 max-lg:hidden">
+        <Image
+          src={assetBg}
+          alt="404 background"
+          fill
+          className="rounded-2xl object-cover"
+        />
+        <Image
+          src={assetIllustration}
+          alt="404 illustration"
+          width={477}
+          height={477}
+          className="absolute top-1/2 left-1/2 h-[clamp(300px,40vw,477px)] -translate-x-[42%] -translate-y-1/2"
+        />
+      </div>
     </div>
-  );
+  )
 }

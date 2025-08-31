@@ -24,6 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             lastModified: today,
             changeFrequency: 'monthly' as const,
             priority: 0.5
+        },
+        {
+            url: `${baseUrl}/query-builder`,
+            lastModified: today,
+            changeFrequency: 'weekly' as const,
+            priority: 0.9
         }
     ]
 
