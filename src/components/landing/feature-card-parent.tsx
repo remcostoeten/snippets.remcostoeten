@@ -1,38 +1,40 @@
 'use client';
-import { Zap, Cpu, Fingerprint, Pencil, Settings2, Sparkles } from 'lucide-react';
+import { Zap, Cpu, Fingerprint, Pencil, Settings2, Sparkles, Database, Code } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { FeatureCard } from './feature-card';
 
 const features = [
 	{
-		title: 'Faaast',
+		title: 'Query Builder',
+		icon: Database,
+		description: 'Interactive playground for building CRUD operations with visual schema parsing and code generation.',
+		href: '/query-builder',
+		highlight: true,
+	},
+	{
+		title: 'Fast',
 		icon: Zap,
-		description: 'It supports an entire helping developers and innovate.',
+		description: 'Lightning-fast snippets with instant search and optimized performance.',
 	},
 	{
-		title: 'Powerful',
+		title: 'Type Safe',
 		icon: Cpu,
-		description: 'It supports an entire helping developers and businesses.',
+		description: 'Full TypeScript support with strong typing and intelligent autocomplete.',
 	},
 	{
-		title: 'Security',
+		title: 'Secure',
 		icon: Fingerprint,
-		description: 'It supports an helping developers businesses.',
+		description: 'Built with security best practices and modern authentication.',
 	},
 	{
-		title: 'Customization',
+		title: 'Customizable',
 		icon: Pencil,
-		description: 'It supports helping developers and businesses innovate.',
+		description: 'Tailor the experience with themes, layouts, and personal preferences.',
 	},
 	{
-		title: 'Control',
-		icon: Settings2,
-		description: 'It supports helping developers and businesses innovate.',
-	},
-	{
-		title: 'Built for AI',
+		title: 'AI Ready',
 		icon: Sparkles,
-		description: 'It supports helping developers and businesses innovate.',
+		description: 'Optimized for AI assistance with structured data and clear documentation.',
 	},
 ];
 
@@ -53,8 +55,8 @@ export default function FeatureSection() {
 					delay={0.4}
 					className="grid grid-cols-1 divide-x divide-y divide-dashed border border-dashed sm:grid-cols-2 md:grid-cols-3"
 				>
-					{features.map((feature, i) => (
-						<FeatureCard key={i} feature={feature} />
+					{features.map((feature) => (
+						<FeatureCard key={feature.title} feature={feature} />
 					))}
 				</AnimatedContainer>
 			</div>

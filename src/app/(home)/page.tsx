@@ -1,7 +1,7 @@
 import { Hero } from "@/components/landing/intro-badge";
 import { TextAnimate } from "@/components/ui/effects/blur-in";
 import { CardSpotlight } from "@/components/ui/effects/card-spotlight/card-spotlight-demo";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Database, Code } from "lucide-react";
 import Link from "next/link";
 import { getRecentSnippets } from "@/server/queries/snippets";
 import { GradientText } from "@/components/ui/effects/gradient-text";
@@ -83,7 +83,7 @@ export default async function HomePage() {
           <div className="grid gap-4">
             {snippets.map((snippet, index) => (
               <TextAnimate
-                key={snippet.title}
+                key={`snippet-${index}`}
                 as="div"
                 animation="fadeIn"
                 delay={0.6 + 0.1 * index}
@@ -181,6 +181,74 @@ export default async function HomePage() {
               </TextAnimate>
             ))}
           </div>
+          
+          {/* Query Builder CTA */}
+          <div className="mt-16 mb-8">
+            <TextAnimate
+              as="div"
+              animation="fadeIn"
+              delay={1.0}
+              className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600/10 via-purple-600/10 to-blue-600/10 border border-blue-500/20 p-8"
+            >
+                              <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-purple-600/5 to-blue-600/5" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                  <TextAnimate
+                    as="span"
+                    animation="fadeIn"
+                    delay={1.1}
+                    className="text-sm font-medium text-blue-400"
+                  >
+                    New Interactive Tool
+                  </TextAnimate>
+                </div>
+                <TextAnimate
+                  as="h2"
+                  fontSize="2xl"
+                  fontWeight="bold"
+                  animation="blurInUp"
+                  delay={1.2}
+                  className="mb-3"
+                >
+                  <GradientText variant="subtle">CRUD Query Builder</GradientText>
+                </TextAnimate>
+                <TextAnimate
+                  as="p"
+                  fontSize="base"
+                  textColor="zinc-300"
+                  animation="fadeIn"
+                  delay={1.3}
+                  className="mb-6 max-w-2xl"
+                >
+                  Build and test CRUD operations with our interactive playground. Paste your Drizzle schema, 
+                  use the visual builder, and generate production-ready TypeScript code instantly.
+                </TextAnimate>
+                <TextAnimate
+                  as="div"
+                  animation="fadeIn"
+                  delay={1.4}
+                  className="flex flex-col sm:flex-row gap-4"
+                >
+                  <Link
+                    href="/query-builder"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
+                  >
+                    <Database className="w-4 h-4" />
+                    Open Query Builder
+                  </Link>
+                  <Link
+                    href="/snippets/databases/drizzle-orm/server-function-abstractions"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg font-medium transition-colors"
+                  >
+                    <Code className="w-4 h-4" />
+                    View Documentation
+                  </Link>
+                </TextAnimate>
+              </div>
+            </TextAnimate>
+          </div>
+          
           <FeatureCards/>
         </section>
       </main>

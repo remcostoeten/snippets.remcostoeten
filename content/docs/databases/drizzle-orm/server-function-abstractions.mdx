@@ -37,7 +37,7 @@ Server functions only, no API routes. Clear separation of concerns.
 
 ### schema.ts
 
-$$$ts
+```ts
 import { pgTable, serial, text, integer, timestamp } from "drizzle-orm/pg-core"
 
 export const categories = pgTable("categories", {
@@ -58,7 +58,7 @@ export const finances = pgTable("finances", {
 
 ### index.ts
 
-$$$ts
+```ts
 import { drizzle } from "drizzle-orm/node-postgres"
 import { Pool } from "pg"
 
@@ -72,23 +72,24 @@ export const db = drizzle(pool)
 
 ### crud.ts
 
-$$$ts
+```ts
 import { db } from "@/api/db"
 import { eq, asc, desc, SQL } from "drizzle-orm"
 
 type Order = "Asc" | "Desc"
 type Quantity = "One" | "All"
 
-type SchemaRow<T> = T extends { $inferSelect: infer R } ? R : never
-type SchemaColumn<T> = keyof SchemaRow<T>
+// Simplified type definitions to avoid MDX parsing issues
+type SchemaRow<T> = any
+type SchemaColumn<T> = string
 
-export function CrudAbstractions<TSchema>(schema: TSchema) {
-  type Row = SchemaRow<TSchema>
-  type Column = keyof Row
+export function CrudAbstractions(schema: any) {
+  type Row = any
+  type Column = string
 
   return {
     create: () => ({
-      run: async (values: Partial<Row>) => {
+      run: async (values: any) => {
         const result = await db.insert(schema).values(values).returning()
         return result[0]
       },
@@ -103,7 +104,7 @@ export function CrudAbstractions<TSchema>(schema: TSchema) {
       let limit: number | null = null
 
       const api = {
-        Where: <K extends Column>(col: K, val: Row[K]) => {
+        Where: (col: Column, val: any) => {
           filters.push(eq((schema as any)[col], val))
           return api
         },
@@ -115,9 +116,7 @@ export function CrudAbstractions<TSchema>(schema: TSchema) {
           limit = n
           return api
         },
-        run: async (): Promise<
-          Quantity extends "One" ? Row | undefined : Row[]
-        > => {
+        run: async (): Promise<any> => {
           let query = db.select().from(schema)
 
           if (filters.length) {
@@ -144,14 +143,14 @@ export function CrudAbstractions<TSchema>(schema: TSchema) {
 
     update: () => {
       let filter: { col: Column; val: any } | null = null
-      let data: Partial<Row> = {}
+      let data: any = {}
 
       const api = {
-        Where: <K extends Column>(col: K, val: Row[K]) => {
+        Where: (col: Column, val: any) => {
           filter = { col, val }
           return api
         },
-        Set: (values: Partial<Row>) => {
+        Set: (values: any) => {
           data = values
           return api
         },
@@ -172,7 +171,7 @@ export function CrudAbstractions<TSchema>(schema: TSchema) {
       let filter: { col: Column; val: any } | null = null
 
       const api = {
-        Where: <K extends Column>(col: K, val: Row[K]) => {
+        Where: (col: Column, val: any) => {
           filter = { col, val }
           return api
         },
@@ -197,7 +196,7 @@ export function CrudAbstractions<TSchema>(schema: TSchema) {
 
 ### queries/finances.ts
 
-$$$ts
+```ts
 "use server"
 import { CrudAbstractions } from "@/api/abstractions/crud"
 import { finances } from "@/api/db/schema"
@@ -215,7 +214,7 @@ export const getFinance = async (id: number) => {
 
 ### mutations/finances.ts
 
-$$$ts
+```ts
 "use server"
 import { CrudAbstractions } from "@/api/abstractions/crud"
 import { finances } from "@/api/db/schema"
@@ -241,7 +240,7 @@ export const deleteFinance = async (id: number) => {
 
 ### finance-form.tsx
 
-$$$tsx
+```tsx
 "use client"
 import { createFinance, deleteFinance } from "@/api/mutations/finances"
 
@@ -270,7 +269,7 @@ export function FinanceDeleteForm({ id }: { id: number }) {
 
 ### finance-update-form.tsx
 
-$$$tsx
+```tsx
 "use client"
 import { updateFinance } from "@/api/mutations/finances"
 
@@ -291,7 +290,7 @@ export function FinanceUpdateForm({ id }: { id: number }) {
 
 ### finance-list.tsx
 
-$$$tsx
+```tsx
 import { getFinances } from "@/api/queries/finances"
 import { FinanceDeleteForm } from "./finance-form"
 import { FinanceUpdateForm } from "./finance-update-form"
@@ -318,7 +317,7 @@ export async function FinanceList() {
 
 ### page.tsx
 
-$$$tsx
+```tsx
 import { FinanceForm } from "@/components/finance-form"
 import { FinanceList } from "@/components/finance-list"
 
@@ -335,6 +334,45 @@ export default function Page() {
 
 ---
 
+## Interactive Query Builder
+
+Try out the CRUD abstractions with our interactive playground! Build queries visually and see the generated code in real-time.
+
+<div className="my-8 p-4 bg-zinc-900/50 rounded-lg border border-zinc-800">
+  <div className="flex items-center gap-2 mb-4">
+    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+    <span className="text-sm text-zinc-400">Live Playground</span>
+  </div>
+  <p className="text-sm text-zinc-300 mb-4">
+    Paste your Drizzle schema, build queries with the visual builder, and generate production-ready CRUD code.
+  </p>
+  <a 
+    href="/query-builder" 
+    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium transition-colors"
+  >
+    Open Query Builder
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+    </svg>
+  </a>
+</div>
+
+### Features
+
+- **Schema Parser**: Paste your Drizzle schema and see it visualized
+- **Visual Query Builder**: Build CRUD operations with a drag-and-drop interface  
+- **Code Generator**: Get production-ready TypeScript code instantly
+- **Real-time Preview**: See your queries execute against a mock database
+
+### Example Workflow
+
+1. **Parse Schema**: Paste your Drizzle table definitions
+2. **Browse Tables**: Explore your schema structure and relationships
+3. **Build Queries**: Use the visual builder to create CRUD operations
+4. **Generate Code**: Copy the generated TypeScript code for your project
+
+---
+
 ## API Surface
 
 <TypeTable
@@ -348,4 +386,3 @@ export default function Page() {
     { name: "destroy", type: "destroy().Where(...).run()" }
   ]}
 />
-[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]

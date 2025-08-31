@@ -1,11 +1,14 @@
 import { cn } from '@/lib/utils';
 import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 type FeatureType = {
 	title: string;
 	icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 	description: string;
+	href?: string;
+	highlight?: boolean;
 };
 
 type FeatureCardProps = React.ComponentProps<'div'> & {
@@ -15,7 +18,7 @@ type FeatureCardProps = React.ComponentProps<'div'> & {
 export function FeatureCard({ feature, className, ...props }: FeatureCardProps) {
 	const p = genRandomPattern();
 
-	return (
+	const CardContent = () => (
 		<div className={cn('relative overflow-hidden p-6', className)} {...props}>
 			<div className="pointer-events-none absolute top-0 left-1/2 -mt-2 -ml-20 h-full w-full [mask-image:linear-gradient(white,transparent)]">
 				<div className="from-foreground/5 to-foreground/1 absolute inset-0 bg-gradient-to-r [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] opacity-100">
@@ -29,11 +32,26 @@ export function FeatureCard({ feature, className, ...props }: FeatureCardProps) 
 					/>
 				</div>
 			</div>
-			<feature.icon className="text-foreground/75 size-6" strokeWidth={1} aria-hidden />
+			<feature.icon className="text-foreground/75 size-6" strokeWidth={1} aria-hidden="true" />
 			<h3 className="mt-10 text-sm md:text-base">{feature.title}</h3>
 			<p className="text-muted-foreground relative z-20 mt-2 text-xs font-light">{feature.description}</p>
+			{feature.highlight && (
+				<div className="absolute top-2 right-2">
+					<div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+				</div>
+			)}
 		</div>
 	);
+
+	if (feature.href) {
+		return (
+			<Link href={feature.href} className="group block">
+				<CardContent />
+			</Link>
+		);
+	}
+
+	return <CardContent />;
 }
 
 function GridPattern({
@@ -107,7 +125,7 @@ function GridPattern({
 								transition={{
 									duration,
 									delay,
-									repeat: Infinity,
+									repeat: Number.POSITIVE_INFINITY,
 									ease: "easeInOut",
 									repeatDelay: Math.random() * 2, // Random pause between cycles
 								}}
@@ -121,9 +139,9 @@ function GridPattern({
 	);
 }
 
-function genRandomPattern(length?: number): number[][] {
-	length = length ?? 8; // Increased from 5 to 8 for more squares
-	return Array.from({ length }, () => [
+function genRandomPattern(patternLength?: number): number[][] {
+	const finalLength = patternLength ?? 8; // Increased from 5 to 8 for more squares
+	return Array.from({ length: finalLength }, () => [
 		Math.floor(Math.random() * 6) + 5, // random x between 5 and 10
 		Math.floor(Math.random() * 8) + 1, // random y between 1 and 8
 	]);
