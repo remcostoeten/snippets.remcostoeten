@@ -1,0 +1,351 @@
+---
+title: CRUD Abstractions
+description: Minimal but functional CRUD abstraction layer with strong typing and fluent DX
+language: "TypeScript"
+lastModified: "31-08-2025"
+---
+
+import { Files } from "fumadocs-ui/components/files"
+import { TypeTable } from "fumadocs-ui/components/type-table"
+
+# CRUD Abstractions
+
+A schema-agnostic CRUD abstraction layer that works with **Next.js 15** and **Drizzle ORM**.  
+Server functions only, no API routes. Clear separation of concerns.  
+
+---
+
+## Project Setup
+
+<Files
+  files={{
+    "src/app/page.tsx": "Root page that displays finance entries",
+    "src/components/finance-list.tsx": "List of finance entries",
+    "src/components/finance-form.tsx": "Form to create and destroy finance entries",
+    "src/components/finance-update-form.tsx": "Form to update finance entries",
+    "src/api/db/index.ts": "Database connection",
+    "src/api/db/schema.ts": "Drizzle schema definitions",
+    "src/api/abstractions/crud.ts": "CRUD abstraction factory",
+    "src/api/queries/finances.ts": "Read server functions",
+    "src/api/mutations/finances.ts": "Write server functions"
+  }}
+/>
+
+---
+
+## Database
+
+### schema.ts
+
+$$$ts
+import { pgTable, serial, text, integer, timestamp } from "drizzle-orm/pg-core"
+
+export const categories = pgTable("categories", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+})
+
+export const finances = pgTable("finances", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  amount: integer("amount").notNull(),
+  categoryId: integer("category_id").references(() => categories.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+})
+``` 
+
+### index.ts
+
+$$$ts
+import { drizzle } from "drizzle-orm/node-postgres"
+import { Pool } from "pg"
+
+export const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+export const db = drizzle(pool)
+``` 
+
+---
+
+## CRUD Abstraction
+
+### crud.ts
+
+$$$ts
+import { db } from "@/api/db"
+import { eq, asc, desc, SQL } from "drizzle-orm"
+
+type Order = "Asc" | "Desc"
+type Quantity = "One" | "All"
+
+type SchemaRow<T> = T extends { $inferSelect: infer R } ? R : never
+type SchemaColumn<T> = keyof SchemaRow<T>
+
+export function CrudAbstractions<TSchema>(schema: TSchema) {
+  type Row = SchemaRow<TSchema>
+  type Column = keyof Row
+
+  return {
+    create: () => ({
+      run: async (values: Partial<Row>) => {
+        const result = await db.insert(schema).values(values).returning()
+        return result[0]
+      },
+    }),
+
+    get: (quantity: Quantity = "All") => {
+      let filters: SQL[] = []
+      let orderBy: { column: Column; dir: Order } | null = {
+        column: "id" as Column,
+        dir: "Asc",
+      }
+      let limit: number | null = null
+
+      const api = {
+        Where: <K extends Column>(col: K, val: Row[K]) => {
+          filters.push(eq((schema as any)[col], val))
+          return api
+        },
+        Order: (col: Column, dir: Order) => {
+          orderBy = { column: col, dir }
+          return api
+        },
+        Limit: (n: number) => {
+          limit = n
+          return api
+        },
+        run: async (): Promise<
+          Quantity extends "One" ? Row | undefined : Row[]
+        > => {
+          let query = db.select().from(schema)
+
+          if (filters.length) {
+            query = query.where(filters.reduce((a, b) => (a as any).and(b)))
+          }
+          if (orderBy) {
+            query = query.orderBy(
+              orderBy.dir === "Asc"
+                ? asc((schema as any)[orderBy.column])
+                : desc((schema as any)[orderBy.column])
+            )
+          }
+          if (limit) {
+            query = query.limit(limit)
+          }
+
+          const results = await query
+          return quantity === "One" ? results[0] : results
+        },
+      }
+
+      return api
+    },
+
+    update: () => {
+      let filter: { col: Column; val: any } | null = null
+      let data: Partial<Row> = {}
+
+      const api = {
+        Where: <K extends Column>(col: K, val: Row[K]) => {
+          filter = { col, val }
+          return api
+        },
+        Set: (values: Partial<Row>) => {
+          data = values
+          return api
+        },
+        run: async () => {
+          if (!filter) throw new Error("Update requires a Where clause")
+          return await db
+            .update(schema)
+            .set(data)
+            .where(eq((schema as any)[filter.col], filter.val))
+            .returning()
+        },
+      }
+
+      return api
+    },
+
+    destroy: () => {
+      let filter: { col: Column; val: any } | null = null
+
+      const api = {
+        Where: <K extends Column>(col: K, val: Row[K]) => {
+          filter = { col, val }
+          return api
+        },
+        run: async () => {
+          if (!filter) throw new Error("Delete requires a Where clause")
+          return await db
+            .delete(schema)
+            .where(eq((schema as any)[filter.col], filter.val))
+            .returning()
+        },
+      }
+
+      return api
+    },
+  }
+}
+``` 
+
+---
+
+## Queries and Mutations
+
+### queries/finances.ts
+
+$$$ts
+"use server"
+import { CrudAbstractions } from "@/api/abstractions/crud"
+import { finances } from "@/api/db/schema"
+
+const Finance = CrudAbstractions(finances)
+
+export const getFinances = async () => {
+  return await Finance.get().Order("createdAt", "Desc").run()
+}
+
+export const getFinance = async (id: number) => {
+  return await Finance.get("One").Where("id", id).run()
+}
+``` 
+
+### mutations/finances.ts
+
+$$$ts
+"use server"
+import { CrudAbstractions } from "@/api/abstractions/crud"
+import { finances } from "@/api/db/schema"
+
+const Finance = CrudAbstractions(finances)
+
+export const createFinance = async (data: { title: string; amount: number; categoryId?: number }) => {
+  return await Finance.create().run(data)
+}
+
+export const updateFinance = async (id: number, data: { title?: string; amount?: number }) => {
+  return await Finance.update().Where("id", id).Set(data).run()
+}
+
+export const deleteFinance = async (id: number) => {
+  return await Finance.destroy().Where("id", id).run()
+}
+``` 
+
+---
+
+## UI Components
+
+### finance-form.tsx
+
+$$$tsx
+"use client"
+import { createFinance, deleteFinance } from "@/api/mutations/finances"
+
+export function FinanceForm() {
+  return (
+    <form action={async (formData: FormData) => {
+      const title = formData.get("title") as string
+      const amount = Number(formData.get("amount"))
+      await createFinance({ title, amount })
+    }}>
+      <input type="text" name="title" placeholder="Title" />
+      <input type="number" name="amount" placeholder="Amount" />
+      <button type="submit">Create</button>
+    </form>
+  )
+}
+
+export function FinanceDeleteForm({ id }: { id: number }) {
+  return (
+    <form action={async () => { await deleteFinance(id) }}>
+      <button type="submit">Delete</button>
+    </form>
+  )
+}
+``` 
+
+### finance-update-form.tsx
+
+$$$tsx
+"use client"
+import { updateFinance } from "@/api/mutations/finances"
+
+export function FinanceUpdateForm({ id }: { id: number }) {
+  return (
+    <form action={async (formData: FormData) => {
+      const title = formData.get("title") as string
+      const amount = Number(formData.get("amount"))
+      await updateFinance(id, { title, amount })
+    }}>
+      <input type="text" name="title" placeholder="New Title" />
+      <input type="number" name="amount" placeholder="New Amount" />
+      <button type="submit">Update</button>
+    </form>
+  )
+}
+``` 
+
+### finance-list.tsx
+
+$$$tsx
+import { getFinances } from "@/api/queries/finances"
+import { FinanceDeleteForm } from "./finance-form"
+import { FinanceUpdateForm } from "./finance-update-form"
+
+export async function FinanceList() {
+  const items = await getFinances()
+  return (
+    <ul>
+      {items.map((f) => (
+        <li key={f.id}>
+          {f.title} - ${f.amount}
+          <FinanceUpdateForm id={f.id} />
+          <FinanceDeleteForm id={f.id} />
+        </li>
+      ))}
+    </ul>
+  )
+}
+``` 
+
+---
+
+## Page
+
+### page.tsx
+
+$$$tsx
+import { FinanceForm } from "@/components/finance-form"
+import { FinanceList } from "@/components/finance-list"
+
+export default function Page() {
+  return (
+    <div>
+      <h1>Finances</h1>
+      <FinanceForm />
+      <FinanceList />
+    </div>
+  )
+}
+``` 
+
+---
+
+## API Surface
+
+<TypeTable
+  types={[
+    { name: "create", type: "create().run(values: Partial<Row>): Promise<Row>" },
+    { name: "get", type: "get(quantity?: 'One' | 'All')" },
+    { name: "Where", type: "Where<K extends keyof Row>(col: K, val: Row[K])" },
+    { name: "Order", type: "Order(col: keyof Row, dir: 'Asc' | 'Desc')" },
+    { name: "Limit", type: "Limit(n: number)" },
+    { name: "update", type: "update().Where(...).Set(...).run()" },
+    { name: "destroy", type: "destroy().Where(...).run()" }
+  ]}
+/>
+[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]
