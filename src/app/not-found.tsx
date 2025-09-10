@@ -1,38 +1,5 @@
-import Image from "next/image"
-import Link from "next/link"
-
-const assetBg = "https://cdn.flyonui.com/fy-assets/blocks/marketing-ui/404/error-5.png"
-const assetIllustration = "https://cdn.flyonui.com/fy-assets/blocks/marketing-ui/404/error-6.png"
-
 export default function NotFound() {
   return (
-    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
-      <div className="px-4 py-8 flex flex-col items-center justify-center justify-self-center text-center">
-        <h2 className="text-base-content mb-6 text-5xl font-semibold">Whoops!</h2>
-        <h3 className="text-base-content mb-1.5 text-3xl font-semibold">Something went wrong</h3>
-        <p className="text-base-content mb-6 max-w-sm">
-          The page you're looking for isn't found, we suggest you back to home.
-        </p>
-        <Link href="/" className="btn btn-primary btn-gradient">
-          Back to home page
-        </Link>
-      </div>
-
-      <div className="relative max-h-screen w-full p-2 max-lg:hidden">
-        <Image
-          src={assetBg}
-          alt="404 background"
-          fill
-          className="rounded-2xl object-cover"
-        />
-        <Image
-          src={assetIllustration}
-          alt="404 illustration"
-          width={477}
-          height={477}
-          className="absolute top-1/2 left-1/2 h-[clamp(300px,40vw,477px)] -translate-x-[42%] -translate-y-1/2"
-        />
-      </div>
-    </div>
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground"><div className="container flex max-w-md flex-col items-center justify-center gap-4 text-center"><div className="text-9xl font-bold">4😵4</div><h1 className="text-3xl font-bold">Oops! Page not found</h1><p className="text-muted-foreground">Looks like you've wandered into uncharted territory.</p><a className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 mt-4" href="/snippets ">Back to Docs</a></div></div>
   )
 }

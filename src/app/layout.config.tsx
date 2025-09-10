@@ -34,14 +34,19 @@ export function baseOptions(): BaseLayoutProps {
         },
         links: [
             {
+                text: 'Home',
+                url: '/',
+                active: 'url'
+            },
+            {
                 text: 'Snippets',
                 url: '/snippets',
                 active: 'nested-url'
             },
             {
-                text: 'Work',
-                url: '/work',
-                active: 'nested-url'
+                text: 'Query Builder',
+                url: '/query-builder',
+                active: 'url'
             },
             {
                 text: 'Documentation',

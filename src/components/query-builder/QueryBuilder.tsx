@@ -134,14 +134,14 @@ export function QueryBuilder() {
   
   if (!selectedTableSchema) {
     return (
-      <Card className="h-full bg-card border-border">
+      <Card className="h-full bg-zinc-100 dark:bg-zinc-900/50 border-zinc-300 dark:border-zinc-800">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Settings className="w-4 h-4" />
-            <CardTitle>Query Builder</CardTitle>
+            <Settings className="w-4 h-4 text-zinc-300" />
+            <CardTitle className="text-zinc-900 dark:text-zinc-100">Query Builder</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="flex items-center justify-center text-muted-foreground">
+        <CardContent className="flex items-center justify-center text-zinc-400">
           <div className="text-center">
             <Settings className="w-8 h-8 mx-auto mb-2 opacity-50" />
             <p>Select a table to build queries</p>
@@ -153,16 +153,16 @@ export function QueryBuilder() {
   
   return (
     <TooltipProvider>
-      <Card className="h-full bg-card border-border">
-        <CardHeader className="flex-shrink-0">
-          <div className="flex items-center justify-between">
+      <Card className="h-full bg-zinc-100 dark:bg-zinc-900/50 border-zinc-300 dark:border-zinc-800">
+        <CardHeader className="flex-shrink-0 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Settings className="w-4 h-4" />
-              <CardTitle>Query Builder</CardTitle>
+              <Settings className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+              <CardTitle className="text-zinc-900 dark:text-zinc-100 text-lg">Query Builder</CardTitle>
             </div>
             <Tooltip>
               <TooltipTrigger>
-                <Info className="w-4 h-4 text-muted-foreground" />
+                <Info className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
               </TooltipTrigger>
               <TooltipContent>
                 <p>Configure your CRUD operations using the abstraction layer</p>
@@ -170,8 +170,14 @@ export function QueryBuilder() {
             </Tooltip>
           </div>
           <div className="flex items-center gap-2 mt-2">
-            <Badge variant="outline" className="font-mono">
-              {selectedTable}
+            <Badge variant="outline" className="font-mono bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 border-zinc-300 dark:border-zinc-700">
+              📊 {selectedTable}
+            </Badge>
+            <Badge variant="secondary" className="text-xs">
+              {selectedTableSchema.fields.length} fields
+            </Badge>
+            <Badge variant="outline" className="text-xs text-green-700 dark:text-green-400 border-green-300 dark:border-green-700">
+              ✓ Schema loaded
             </Badge>
           </div>
         </CardHeader>
@@ -179,7 +185,7 @@ export function QueryBuilder() {
         {/* Operation Type */}
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <Label>Operation Type</Label>
+            <Label className="text-base font-semibold text-zinc-800 dark:text-zinc-200">🔧 Operation Type</Label>
             <Tooltip>
               <TooltipTrigger>
                 <HelpCircle className="w-3 h-3 text-muted-foreground" />
@@ -189,23 +195,73 @@ export function QueryBuilder() {
               </TooltipContent>
             </Tooltip>
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             {[
-              { op: 'create', icon: Plus, label: 'Create', tooltip: 'Insert new records' },
-              { op: 'get', icon: Search, label: 'Read', tooltip: 'Query existing records' },
-              { op: 'update', icon: Edit, label: 'Update', tooltip: 'Modify existing records' },
-              { op: 'destroy', icon: Trash, label: 'Delete', tooltip: 'Remove records' }
-            ].map(({ op, icon: Icon, label, tooltip }) => (
+              { 
+                op: 'create', 
+                icon: Plus, 
+                label: 'Create', 
+                tooltip: 'Insert new records',
+                gradient: 'from-emerald-500 to-green-600',
+                hoverGradient: 'from-emerald-600 to-green-700',
+                iconColor: 'text-emerald-600 dark:text-emerald-400'
+              },
+              { 
+                op: 'get', 
+                icon: Search, 
+                label: 'Read', 
+                tooltip: 'Query existing records',
+                gradient: 'from-blue-500 to-indigo-600',
+                hoverGradient: 'from-blue-600 to-indigo-700',
+                iconColor: 'text-blue-600 dark:text-blue-400'
+              },
+              { 
+                op: 'update', 
+                icon: Edit, 
+                label: 'Update', 
+                tooltip: 'Modify existing records',
+                gradient: 'from-amber-500 to-orange-600',
+                hoverGradient: 'from-amber-600 to-orange-700',
+                iconColor: 'text-amber-600 dark:text-amber-400'
+              },
+              { 
+                op: 'destroy', 
+                icon: Trash, 
+                label: 'Delete', 
+                tooltip: 'Remove records',
+                gradient: 'from-red-500 to-rose-600',
+                hoverGradient: 'from-red-600 to-rose-700',
+                iconColor: 'text-red-600 dark:text-red-400'
+              }
+            ].map(({ op, icon: Icon, label, tooltip, gradient, hoverGradient, iconColor }) => (
               <Tooltip key={op}>
                 <TooltipTrigger asChild>
                   <Button
-                    variant={queryConfig.operation === op ? "default" : "outline"}
+                    variant="outline"
                     size="sm"
                     onClick={() => updateQueryConfig({ operation: op as CRUDOperation })}
-                    className="flex items-center gap-2"
+                    className={`group relative flex items-center gap-2 transition-all duration-300 overflow-hidden ${
+                      queryConfig.operation === op 
+                        ? `bg-gradient-to-r ${gradient} text-white border-transparent shadow-lg shadow-${gradient.split('-')[1]}-500/25 hover:shadow-xl hover:shadow-${gradient.split('-')[1]}-500/30` 
+                        : `bg-zinc-50 dark:bg-zinc-800/50 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-600`
+                    }`}
                   >
-                    <Icon className="w-4 h-4" />
-                    {label}
+                    {/* Subtle gradient overlay for inactive state */}
+                    {queryConfig.operation !== op && (
+                      <div className={`absolute inset-0 bg-gradient-to-r ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
+                    )}
+                    
+                    <Icon className={`w-4 h-4 relative z-10 ${
+                      queryConfig.operation === op 
+                        ? 'text-white' 
+                        : iconColor
+                    }`} />
+                    <span className="relative z-10 font-medium">{label}</span>
+                    
+                    {/* Active state indicator */}
+                    {queryConfig.operation === op && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent" />
+                    )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -222,7 +278,7 @@ export function QueryBuilder() {
         {queryConfig.operation === 'get' && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Label>Quantity</Label>
+              <Label className="text-base font-semibold text-zinc-800 dark:text-zinc-200">📊 Quantity</Label>
               <Tooltip>
                 <TooltipTrigger>
                   <HelpCircle className="w-3 h-3 text-muted-foreground" />
@@ -251,7 +307,7 @@ export function QueryBuilder() {
         {(queryConfig.operation === 'get' || queryConfig.operation === 'update' || queryConfig.operation === 'destroy') && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Label>Where Clause</Label>
+              <Label className="text-base font-semibold text-zinc-800 dark:text-zinc-200">🔍 Where Clause</Label>
               <Tooltip>
                 <TooltipTrigger>
                   <HelpCircle className="w-3 h-3 text-muted-foreground" />
@@ -276,10 +332,29 @@ export function QueryBuilder() {
                         {selectedTableSchema.fields.map(field => (
                           <SelectItem key={field.name} value={field.name}>
                             <div className="flex items-center gap-2">
-                              <span>{field.name}</span>
-                              <Badge variant="secondary" className="text-xs">
+                              <span className="font-medium">{field.name}</span>
+                              <Badge 
+                                variant="secondary" 
+                                className={`text-xs font-mono ${
+                                  field.type.toLowerCase().includes('int') ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
+                                  field.type.toLowerCase().includes('text') || field.type.toLowerCase().includes('varchar') ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                                  field.type.toLowerCase().includes('bool') ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' :
+                                  field.type.toLowerCase().includes('timestamp') || field.type.toLowerCase().includes('date') ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' :
+                                  'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                                }`}
+                              >
                                 {field.type}
                               </Badge>
+                              {field.isPrimary && (
+                                <Badge variant="destructive" className="text-xs">
+                                  PK
+                                </Badge>
+                              )}
+                              {field.isNotNull && !field.isPrimary && (
+                                <Badge variant="outline" className="text-xs border-red-300 text-red-700 dark:border-red-700 dark:text-red-300">
+                                  Required
+                                </Badge>
+                              )}
                             </div>
                           </SelectItem>
                         ))}
@@ -311,7 +386,7 @@ export function QueryBuilder() {
         {queryConfig.operation === 'get' && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Label>Order By</Label>
+              <Label className="text-base font-semibold text-zinc-800 dark:text-zinc-200">📈 Order By</Label>
               <Tooltip>
                 <TooltipTrigger>
                   <HelpCircle className="w-3 h-3 text-muted-foreground" />
@@ -336,10 +411,29 @@ export function QueryBuilder() {
                         {selectedTableSchema.fields.map(field => (
                           <SelectItem key={field.name} value={field.name}>
                             <div className="flex items-center gap-2">
-                              <span>{field.name}</span>
-                              <Badge variant="secondary" className="text-xs">
+                              <span className="font-medium">{field.name}</span>
+                              <Badge 
+                                variant="secondary" 
+                                className={`text-xs font-mono ${
+                                  field.type.toLowerCase().includes('int') ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
+                                  field.type.toLowerCase().includes('text') || field.type.toLowerCase().includes('varchar') ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                                  field.type.toLowerCase().includes('bool') ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' :
+                                  field.type.toLowerCase().includes('timestamp') || field.type.toLowerCase().includes('date') ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' :
+                                  'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                                }`}
+                              >
                                 {field.type}
                               </Badge>
+                              {field.isPrimary && (
+                                <Badge variant="destructive" className="text-xs">
+                                  PK
+                                </Badge>
+                              )}
+                              {field.isNotNull && !field.isPrimary && (
+                                <Badge variant="outline" className="text-xs border-red-300 text-red-700 dark:border-red-700 dark:text-red-300">
+                                  Required
+                                </Badge>
+                              )}
                             </div>
                           </SelectItem>
                         ))}
@@ -378,7 +472,7 @@ export function QueryBuilder() {
         {queryConfig.operation === 'get' && (
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Label>Limit</Label>
+              <Label className="text-base font-semibold text-zinc-800 dark:text-zinc-200">🔢 Limit</Label>
               <Tooltip>
                 <TooltipTrigger>
                   <HelpCircle className="w-3 h-3 text-muted-foreground" />
@@ -411,7 +505,7 @@ export function QueryBuilder() {
             <Separator />
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <Label>Create Data</Label>
+                <Label className="text-base font-semibold text-zinc-800 dark:text-zinc-200">✨ Create Data</Label>
                 <Tooltip>
                   <TooltipTrigger>
                     <HelpCircle className="w-3 h-3 text-muted-foreground" />
@@ -425,12 +519,26 @@ export function QueryBuilder() {
                 {selectedTableSchema.fields.filter(f => !f.isPrimary).map(field => (
                   <div key={field.name} className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <Label className="font-mono text-sm">{field.name}</Label>
-                      <Badge variant="secondary" className="text-xs">
+                      <Label className="font-mono text-sm font-semibold text-zinc-800 dark:text-zinc-200">{field.name}</Label>
+                      <Badge 
+                        variant="secondary" 
+                        className={`text-xs font-mono ${
+                          field.type.toLowerCase().includes('int') ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
+                          field.type.toLowerCase().includes('text') || field.type.toLowerCase().includes('varchar') ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                          field.type.toLowerCase().includes('bool') ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200' :
+                          field.type.toLowerCase().includes('timestamp') || field.type.toLowerCase().includes('date') ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' :
+                          'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                        }`}
+                      >
                         {field.type}
                       </Badge>
-                      {field.isNotNull && (
+                      {field.isPrimary && (
                         <Badge variant="destructive" className="text-xs">
+                          PK
+                        </Badge>
+                      )}
+                      {field.isNotNull && !field.isPrimary && (
+                        <Badge variant="outline" className="text-xs border-red-300 text-red-700 dark:border-red-700 dark:text-red-300">
                           Required
                         </Badge>
                       )}
@@ -463,7 +571,7 @@ export function QueryBuilder() {
             <Separator />
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <Label>Update Data</Label>
+                <Label className="text-base font-semibold text-zinc-800 dark:text-zinc-200">✏️ Update Data</Label>
                 <Tooltip>
                   <TooltipTrigger>
                     <HelpCircle className="w-3 h-3 text-muted-foreground" />

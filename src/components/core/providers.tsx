@@ -13,7 +13,6 @@ export function Providers({ children }: TProps) {
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
-            forcedTheme="dark"
         >
             <TooltipProvider>
                 <RootProvider>{children}</RootProvider>

@@ -2,6 +2,7 @@
 import { Zap, Cpu, Fingerprint, Pencil, Settings2, Sparkles, Database, Code } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { FeatureCard } from './feature-card';
+import React, { useMemo } from 'react';
 
 const features = [
 	{
@@ -36,9 +37,16 @@ const features = [
 		icon: Sparkles,
 		description: 'Optimized for AI assistance with structured data and clear documentation.',
 	},
-];
+] as const;
 
 export default function FeatureSection() {
+	// Memoize the feature cards to prevent unnecessary re-renders
+	const featureCards = useMemo(() => 
+		features.map((feature) => (
+			<FeatureCard key={feature.title} feature={feature} />
+		)), []
+	);
+
 	return (
 		<section className="py-16 md:py-32">
 			<div className="mx-auto w-full max-w-5xl space-y-8 px-4">
@@ -55,9 +63,7 @@ export default function FeatureSection() {
 					delay={0.4}
 					className="grid grid-cols-1 divide-x divide-y divide-dashed border border-dashed sm:grid-cols-2 md:grid-cols-3"
 				>
-					{features.map((feature) => (
-						<FeatureCard key={feature.title} feature={feature} />
-					))}
+					{featureCards}
 				</AnimatedContainer>
 			</div>
 		</section>
@@ -70,8 +76,15 @@ type ViewAnimationProps = {
 	children: React.ReactNode;
 };
 
-function AnimatedContainer({ className, delay = 0.1, children }: ViewAnimationProps) {
+const AnimatedContainer = React.memo<ViewAnimationProps>(({ className, delay = 0.1, children }) => {
 	const shouldReduceMotion = useReducedMotion();
+
+	// Memoize animation variants to prevent recreation
+	const animationVariants = useMemo(() => ({
+		initial: { filter: 'blur(4px)', translateY: -8, opacity: 0 },
+		animate: { filter: 'blur(0px)', translateY: 0, opacity: 1 },
+		transition: { delay, duration: 0.8 }
+	}), [delay]);
 
 	if (shouldReduceMotion) {
 		return <div className={className}>{children}</div>;
@@ -79,13 +92,13 @@ function AnimatedContainer({ className, delay = 0.1, children }: ViewAnimationPr
 
 	return (
 		<motion.div
-			initial={{ filter: 'blur(4px)', translateY: -8, opacity: 0 }}
-			whileInView={{ filter: 'blur(0px)', translateY: 0, opacity: 1 }}
+			initial={animationVariants.initial}
+			whileInView={animationVariants.animate}
 			viewport={{ once: true }}
-			transition={{ delay, duration: 0.8 }}
+			transition={animationVariants.transition}
 			className={className}
 		>
 			{children}
 		</motion.div>
 	);
-}
+});

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 import { Button } from '@/shared/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs'
+import { CodeBlock } from '@/components/code-block'
 import { useSchema } from './SchemaContext'
-import { Code, Copy, Check, FileText, Download, Braces, Layout, Server, Maximize2, Minimize2 } from 'lucide-react'
+import { Code, FileText, Download, Braces, Layout, Server, Maximize2, Minimize2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { codeToHtml } from 'shiki'
 
 interface CodeGeneratorProps {
   isExpanded?: boolean
@@ -14,10 +14,7 @@ interface CodeGeneratorProps {
 
 export function CodeGenerator({ isExpanded = false, onExpandToggle }: CodeGeneratorProps) {
   const { generatedCode, setGeneratedCode, selectedTable, queryConfig, parsedTables } = useSchema()
-  const [copied, setCopied] = useState('')
   const [activeTab, setActiveTab] = useState('function')
-  const [highlightedCode, setHighlightedCode] = useState<{[key: string]: string}>({})
-  const [isHighlighting, setIsHighlighting] = useState(false)
   
   const selectedTableSchema = parsedTables.find(t => t.name === selectedTable)
   
@@ -25,42 +22,6 @@ export function CodeGenerator({ isExpanded = false, onExpandToggle }: CodeGenera
     generateAllCode()
   }, [queryConfig, selectedTableSchema])
 
-  // Highlight code with Shiki when it changes
-  useEffect(() => {
-    const highlightAllCode = async () => {
-      if (!selectedTableSchema || !queryConfig.table) return
-
-      setIsHighlighting(true)
-      const functionCode = generateFunctionCode()
-      const serverCode = generateServerActionCode()
-      const pageCode = generatePageCode()
-
-      try {
-        const [functionHtml, serverHtml, pageHtml] = await Promise.all([
-          codeToHtml(functionCode, { lang: 'typescript', theme: 'dark-plus' }),
-          codeToHtml(serverCode, { lang: 'typescript', theme: 'dark-plus' }),
-          codeToHtml(pageCode, { lang: 'typescript', theme: 'dark-plus' })
-        ])
-
-        setHighlightedCode({
-          function: functionHtml,
-          server: serverHtml,
-          page: pageHtml
-        })
-      } catch (error) {
-        console.error('Shiki highlighting error:', error)
-        // Fallback to plain text
-        setHighlightedCode({
-          function: `<pre><code>${functionCode}</code></pre>`,
-          server: `<pre><code>${serverCode}</code></pre>`,
-          page: `<pre><code>${pageCode}</code></pre>`
-        })
-      }
-      setIsHighlighting(false)
-    }
-
-    highlightAllCode()
-  }, [queryConfig, selectedTableSchema])
   
   const generateAllCode = () => {
     if (!selectedTableSchema || !queryConfig.table) {
@@ -309,17 +270,6 @@ type ${selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}Type = typ
   
 
   
-  const copyToClipboard = async (code: string, type: string) => {
-    try {
-      await navigator.clipboard.writeText(code)
-      setCopied(type)
-      toast.success(`${type} code copied to clipboard!`)
-      setTimeout(() => setCopied(''), 2000)
-    } catch (err) {
-      toast.error('Failed to copy code')
-    }
-  }
-  
   const downloadCode = (code: string, filename: string) => {
     const blob = new Blob([code], { type: 'text/typescript' })
     const url = URL.createObjectURL(blob)
@@ -341,14 +291,14 @@ type ${selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}Type = typ
   
   if (!selectedTableSchema || !queryConfig.table) {
     return (
-      <Card className="h-full bg-card border-border">
+      <Card className="h-full bg-zinc-100 dark:bg-zinc-900/50 border-zinc-300 dark:border-zinc-800">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Code className="w-4 h-4" />
-            <CardTitle>Generated Code</CardTitle>
+            <Code className="w-4 h-4 text-zinc-700 dark:text-zinc-300" />
+            <CardTitle className="text-zinc-900 dark:text-zinc-100">Generated Code</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="flex items-center justify-center text-muted-foreground">
+        <CardContent className="flex items-center justify-center text-zinc-600 dark:text-zinc-400">
           <div className="text-center">
             <FileText className="w-8 h-8 mx-auto mb-2 opacity-50" />
             <p>Configure a query to see generated code</p>
@@ -363,52 +313,58 @@ type ${selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}Type = typ
   const pageCode = generatePageCode()
   
   return (
-    <Card className="h-full bg-card border-border">
-      <CardHeader className="flex-shrink-0">
-        <div className="flex items-center justify-between">
+    <Card className="h-full bg-zinc-100 dark:bg-zinc-900/50 border-zinc-300 dark:border-zinc-800">
+      <CardHeader className="flex-shrink-0 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Code className="w-4 h-4" />
-            <CardTitle>Generated Code</CardTitle>
+            <Code className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+            <CardTitle className="text-zinc-900 dark:text-zinc-100 text-lg">Generated Code</CardTitle>
           </div>
-          {onExpandToggle && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleExpandToggle}
-              className="h-8 w-8 p-0"
-            >
-              {isExpanded ? (
-                <Minimize2 className="w-4 h-4" />
-              ) : (
-                <Maximize2 className="w-4 h-4" />
-              )}
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {onExpandToggle && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleExpandToggle}
+                className="h-8 w-8 p-0"
+                aria-label={isExpanded ? "Minimize code view" : "Maximize code view"}
+              >
+                {isExpanded ? (
+                  <Minimize2 className="w-4 h-4" />
+                ) : (
+                  <Maximize2 className="w-4 h-4" />
+                )}
+              </Button>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col min-h-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
-          <TabsList className="w-full bg-muted text-muted-foreground flex h-9 items-center justify-center rounded-lg p-1 flex-shrink-0">
+          <TabsList className="w-full bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-400 flex h-10 items-center justify-center rounded-lg p-1 flex-shrink-0 mb-4">
             <TabsTrigger 
               value="function" 
-              className="flex items-center gap-2 flex-1 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md px-3 py-1.5 text-sm font-medium transition-all"
+              className="flex items-center gap-1 sm:gap-2 flex-1 data-[state=active]:bg-zinc-300 dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-zinc-900 dark:data-[state=active]:text-zinc-100 data-[state=active]:shadow-sm rounded-md px-2 sm:px-3 py-2 text-sm font-medium transition-all"
             >
               <Braces className="w-4 h-4" />
-              Function
+              <span className="hidden sm:inline">Function</span>
+              <span className="sm:hidden">Func</span>
             </TabsTrigger>
             <TabsTrigger 
               value="server" 
-              className="flex items-center gap-2 flex-1 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md px-3 py-1.5 text-sm font-medium transition-all"
+              className="flex items-center gap-1 sm:gap-2 flex-1 data-[state=active]:bg-zinc-300 dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-zinc-900 dark:data-[state=active]:text-zinc-100 data-[state=active]:shadow-sm rounded-md px-2 sm:px-3 py-2 text-sm font-medium transition-all"
             >
               <Server className="w-4 h-4" />
-              Server Action
+              <span className="hidden sm:inline">Server Action</span>
+              <span className="sm:hidden">Server</span>
             </TabsTrigger>
             <TabsTrigger 
               value="page" 
-              className="flex items-center gap-2 flex-1 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md px-3 py-1.5 text-sm font-medium transition-all"
+              className="flex items-center gap-1 sm:gap-2 flex-1 data-[state=active]:bg-zinc-300 dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-zinc-900 dark:data-[state=active]:text-zinc-100 data-[state=active]:shadow-sm rounded-md px-2 sm:px-3 py-2 text-sm font-medium transition-all"
             >
               <Layout className="w-4 h-4" />
-              Page Component
+              <span className="hidden sm:inline">Page Component</span>
+              <span className="sm:hidden">Page</span>
             </TabsTrigger>
           </TabsList>
           
@@ -423,32 +379,25 @@ type ${selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}Type = typ
                 >
                   <Download className="w-4 h-4" />
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => copyToClipboard(functionCode, 'Function')}
-                >
-                  {copied === 'Function' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                </Button>
               </div>
             </div>
             <div className="flex-1 min-h-0">
-              <div className="bg-muted/20 rounded-md overflow-auto border border-muted h-full">
-                {isHighlighting ? (
-                  <div className="flex items-center justify-center h-32">
-                    <div className="w-6 h-6 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin"></div>
-                  </div>
-                ) : highlightedCode.function ? (
-                  <div 
-                    className="text-sm leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: highlightedCode.function }}
-                  />
-                ) : (
-                  <pre className="p-4 font-mono text-sm leading-relaxed h-full whitespace-pre-wrap break-words">
-                    <code>{functionCode}</code>
-                  </pre>
-                )}
-              </div>
+              <CodeBlock
+                code={functionCode}
+                language="typescript"
+                fileName={`${queryConfig.operation}-${selectedTable}.ts`}
+                badges={[
+                  { text: 'TypeScript', variant: 'primary' },
+                  { text: 'Function', variant: 'secondary' }
+                ]}
+                showLineNumbers={true}
+                showMetaInfo={true}
+                maxHeight="100%"
+                className="h-full"
+                showIcon={true}
+                enableLineHover={true}
+                onCopy={(code) => toast.success('Function code copied to clipboard!')}
+              />
             </div>
           </TabsContent>
           
@@ -463,32 +412,25 @@ type ${selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}Type = typ
                 >
                   <Download className="w-4 h-4" />
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => copyToClipboard(serverCode, 'Server')}
-                >
-                  {copied === 'Server' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                </Button>
               </div>
             </div>
             <div className="flex-1 min-h-0">
-              <div className="bg-muted/20 rounded-md overflow-auto border border-muted h-full">
-                {isHighlighting ? (
-                  <div className="flex items-center justify-center h-32">
-                    <div className="w-6 h-6 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin"></div>
-                  </div>
-                ) : highlightedCode.server ? (
-                  <div 
-                    className="text-sm leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: highlightedCode.server }}
-                  />
-                ) : (
-                  <pre className="p-4 font-mono text-sm leading-relaxed h-full whitespace-pre-wrap break-words">
-                    <code>{serverCode}</code>
-                  </pre>
-                )}
-              </div>
+              <CodeBlock
+                code={serverCode}
+                language="typescript"
+                fileName={`${queryConfig.operation}-${selectedTable}-action.ts`}
+                badges={[
+                  { text: 'Server Action', variant: 'warning' },
+                  { text: 'Next.js', variant: 'success' }
+                ]}
+                showLineNumbers={true}
+                showMetaInfo={true}
+                maxHeight="100%"
+                className="h-full"
+                showIcon={true}
+                enableLineHover={true}
+                onCopy={(code) => toast.success('Server action code copied to clipboard!')}
+              />
             </div>
           </TabsContent>
           
@@ -503,32 +445,25 @@ type ${selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}Type = typ
                 >
                   <Download className="w-4 h-4" />
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => copyToClipboard(pageCode, 'Page')}
-                >
-                  {copied === 'Page' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                </Button>
               </div>
             </div>
             <div className="flex-1 min-h-0">
-              <div className="bg-muted/20 rounded-md overflow-auto border border-muted h-full">
-                {isHighlighting ? (
-                  <div className="flex items-center justify-center h-32">
-                    <div className="w-6 h-6 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin"></div>
-                  </div>
-                ) : highlightedCode.page ? (
-                  <div 
-                    className="text-sm leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: highlightedCode.page }}
-                  />
-                ) : (
-                  <pre className="p-4 font-mono text-sm leading-relaxed h-full whitespace-pre-wrap break-words">
-                    <code>{pageCode}</code>
-                  </pre>
-                )}
-              </div>
+              <CodeBlock
+                code={pageCode}
+                language="tsx"
+                fileName={`${queryConfig.operation}-${selectedTable}-page.tsx`}
+                badges={[
+                  { text: 'React', variant: 'danger' },
+                  { text: 'Component', variant: 'primary' }
+                ]}
+                showLineNumbers={true}
+                showMetaInfo={true}
+                maxHeight="100%"
+                className="h-full"
+                showIcon={true}
+                enableLineHover={true}
+                onCopy={(code) => toast.success('Page component code copied to clipboard!')}
+              />
             </div>
           </TabsContent>
         </Tabs>

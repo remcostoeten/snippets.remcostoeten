@@ -4,10 +4,45 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import matter from "gray-matter";
 import { FindReplaceGenerator } from "@/components/find-and-replace-generator";
 import { CopyLLMVersion } from "@/components/core/copy-llm-version";
+import React, { useMemo } from "react";
 
 import {
     PostMetadata,
 } from "ui";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/tooltip";
+
+const SmallText = ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div 
+    className="text-xs text-muted-foreground flex items-center gap-2"
+    {...props}
+  >
+
+    <span className="text-sm animate-pulse">💡 </span>{children}
+  </div>
+);
+
+// Tooltip component for MDX
+const MDXTooltip = ({ 
+  children, 
+  content, 
+  ...props 
+}: { 
+  children: React.ReactNode; 
+  content: string; 
+}) => (
+  <TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <span className="underline decoration-dotted cursor-help" {...props}>
+          {children}
+        </span>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{content}</p>
+      </TooltipContent>
+    </Tooltip>
+  </TooltipProvider>
+);
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -17,11 +52,19 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Tabs,
     FindReplaceGenerator,
     CopyLLMVersion,
-    wrapper: ({ children }) => {
+    SmallText,
+    MDXTooltip,
+    wrapper: React.memo(({ children }) => {
       const content = children?.toString() || "";
-      const { data: frontmatter, content: mdxContent } = matter(content);
-      const wordCount = mdxContent.trim().split(/\s+/).length;
-      const readingTime = Math.ceil(wordCount / 200);
+      
+      // Memoize expensive calculations
+      const { frontmatter, readingTime } = useMemo(() => {
+        const { data: frontmatter, content: mdxContent } = matter(content);
+        const wordCount = mdxContent.trim().split(/\s+/).length;
+        const readingTime = Math.ceil(wordCount / 200);
+        return { frontmatter, readingTime };
+      }, [content]);
+      
       return (
         <div>
           <PostMetadata
@@ -30,6 +73,6 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
           {children}
         </div>
       );
-    },
+    }),
   };
 }

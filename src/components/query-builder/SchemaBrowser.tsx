@@ -19,14 +19,14 @@ export function SchemaBrowser() {
   
   if (parsedTables.length === 0) {
     return (
-      <Card className="h-full bg-card border-border">
+      <Card className="h-full bg-zinc-100 dark:bg-zinc-900/50 border-zinc-300 dark:border-zinc-800">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Database className="w-4 h-4" />
-            <CardTitle>Schema Browser</CardTitle>
+            <Database className="w-4 h-4 text-zinc-700 dark:text-zinc-300" />
+            <CardTitle className="text-zinc-900 dark:text-zinc-100">Schema Browser</CardTitle>
           </div>
         </CardHeader>
-        <CardContent className="flex items-center justify-center text-muted-foreground">
+        <CardContent className="flex items-center justify-center text-zinc-600 dark:text-zinc-400">
           <div className="text-center">
             <Database className="w-8 h-8 mx-auto mb-2 opacity-50" />
             <p>No schemas parsed yet</p>
@@ -38,11 +38,11 @@ export function SchemaBrowser() {
   }
   
   return (
-    <Card className="h-full bg-card border-border">
-      <CardHeader className="flex-shrink-0">
+    <Card className="h-full bg-zinc-100 dark:bg-zinc-900/50 border-zinc-300 dark:border-zinc-800">
+      <CardHeader className="flex-shrink-0 pb-4">
         <div className="flex items-center gap-2">
-          <Database className="w-4 h-4" />
-          <CardTitle>Schema Browser</CardTitle>
+          <Database className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+          <CardTitle className="text-zinc-900 dark:text-zinc-100 text-lg">Schema Browser</CardTitle>
         </div>
       </CardHeader>
       <CardContent className="flex-1 overflow-auto">

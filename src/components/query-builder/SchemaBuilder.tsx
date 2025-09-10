@@ -8,6 +8,7 @@ import { Checkbox } from '@/shared/ui/checkbox'
 import { Plus, Trash2, Database } from 'lucide-react'
 import { useSchema } from './SchemaContext'
 import { codeToHtml } from 'shiki'
+import { SyntaxHighlightingSkeleton } from './QueryBuilderSkeleton'
 
 export type DatabaseDialect = 'postgresql' | 'mysql' | 'sqlite' | 'turso'
 
@@ -466,7 +467,7 @@ ${columnsCode}
           <div className="flex items-center gap-2">
             <Label>Preview</Label>
             {isHighlighting && (
-              <div className="w-3 h-3 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin"></div>
+              <SyntaxHighlightingSkeleton />
             )}
           </div>
           <div className="bg-muted/20 rounded-md overflow-auto border border-muted max-h-32">

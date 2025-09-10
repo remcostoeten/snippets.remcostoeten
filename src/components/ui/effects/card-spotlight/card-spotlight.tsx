@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo, useCallback } from "react";
 import { motion, PanInfo, easeOut } from "framer-motion";
 import { cn } from "@/helpers";
 import {
@@ -10,6 +10,25 @@ import {
 } from "./config";
 import React from "react";
 
+interface SimpleDotPatternProps {
+  colors: number[][];
+  dotSize?: number;
+}
+
+function SimpleDotPattern({ colors, dotSize = 2 }: SimpleDotPatternProps) {
+  return (
+    <div
+      className="absolute inset-0 opacity-30"
+      style={{
+        backgroundImage: `radial-gradient(circle, rgba(${colors[0][0]}, ${colors[0][1]}, ${colors[0][2]}, ${colors[0][3]}) 1px, transparent 1px), 
+                          radial-gradient(circle, rgba(${colors[1][0]}, ${colors[1][1]}, ${colors[1][2]}, ${colors[1][3]}) 1px, transparent 1px)`,
+        backgroundSize: `${dotSize * 4}px ${dotSize * 4}px, ${dotSize * 6}px ${dotSize * 6}px`,
+        backgroundPosition: "0 0, 10px 10px",
+      }}
+    />
+  );
+}
+
 interface CardSpotlightProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   radius?: number;
@@ -18,7 +37,7 @@ interface CardSpotlightProps extends React.HTMLAttributes<HTMLDivElement> {
   delay?: number;
 }
 
-function CardSpotlight({
+const CardSpotlight = React.memo<CardSpotlightProps>(({
   children,
   radius = 350,
   color,
@@ -26,29 +45,25 @@ function CardSpotlight({
   colorSchemeIdentifier,
   delay = 0,
   ...props
-}: CardSpotlightProps) {
+}) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const divRef = useRef<HTMLDivElement | null>(null);
 
-  const colorScheme: TColorScheme =
+  const colorScheme: TColorScheme = useMemo(() =>
     colorSchemeIdentifier === "random"
       ? getRandomColorScheme()
-      : getColorScheme(colorSchemeIdentifier || 0);
-
-  const [spotlightColor, setSpotlightColor] = useState(
-    color ||
-      `rgba(${colorScheme.colors[0][0]}, ${colorScheme.colors[0][1]}, ${colorScheme.colors[0][2]}, 0.7)`
+      : getColorScheme(colorSchemeIdentifier || 0),
+    [colorSchemeIdentifier]
   );
 
-  useEffect(() => {
-    setSpotlightColor(
-      color ||
-        `rgba(${colorScheme.colors[0][0]}, ${colorScheme.colors[0][1]}, ${colorScheme.colors[0][2]}, 0.7)`
-    );
-  }, [color, colorScheme]);
+  const spotlightColor = useMemo(() =>
+    color ||
+      `rgba(${colorScheme.colors[0][0]}, ${colorScheme.colors[0][1]}, ${colorScheme.colors[0][2]}, 0.7)`,
+    [color, colorScheme]
+  );
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const div = divRef.current;
     if (div) {
       const rect = div.getBoundingClientRect();
@@ -57,12 +72,12 @@ function CardSpotlight({
         y: e.clientY - rect.top,
       });
     }
-  };
+  }, []);
 
-  const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => setIsHovering(false);
+  const handleMouseEnter = useCallback(() => setIsHovering(true), []);
+  const handleMouseLeave = useCallback(() => setIsHovering(false), []);
 
-  const fadeInVariants = {
+  const fadeInVariants = useMemo(() => ({
     hidden: {
       opacity: 0,
       y: 20,
@@ -78,9 +93,9 @@ function CardSpotlight({
         delayChildren: delay,
       },
     },
-  };
+  }), [delay]);
 
-  const childVariants = {
+  const childVariants = useMemo(() => ({
     hidden: {
       opacity: 0,
       y: 20,
@@ -93,7 +108,7 @@ function CardSpotlight({
         ease: easeOut,
       },
     },
-  };
+  }), []);
 
   const handlePan = (event: any, info: PanInfo) => {
     console.log(info.offset.x, info.offset.y)
@@ -139,25 +154,6 @@ function CardSpotlight({
       <motion.div variants={childVariants}>{children}</motion.div>
     </motion.div>
   );
-}
-
-interface SimpleDotPatternProps {
-  colors: number[][];
-  dotSize?: number;
-}
-
-function SimpleDotPattern({ colors, dotSize = 2 }: SimpleDotPatternProps) {
-  return (
-    <div
-      className="absolute inset-0 opacity-30"
-      style={{
-        backgroundImage: `radial-gradient(circle, rgba(${colors[0][0]}, ${colors[0][1]}, ${colors[0][2]}, ${colors[0][3]}) 1px, transparent 1px), 
-                          radial-gradient(circle, rgba(${colors[1][0]}, ${colors[1][1]}, ${colors[1][2]}, ${colors[1][3]}) 1px, transparent 1px)`,
-        backgroundSize: `${dotSize * 4}px ${dotSize * 4}px, ${dotSize * 6}px ${dotSize * 6}px`,
-        backgroundPosition: "0 0, 10px 10px",
-      }}
-    />
-  );
-}
+});
 
 export { CardSpotlight };

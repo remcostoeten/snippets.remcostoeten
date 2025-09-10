@@ -2,10 +2,10 @@
 
 import { cn } from "@/helpers";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useCallback } from "react";
 import * as THREE from "three";
 
-export const CanvasRevealEffect = ({
+export const CanvasRevealEffect = React.memo(({
   animationSpeed = 0.4,
   opacities = [0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 1],
   colors = [[0, 255, 255]],
@@ -24,6 +24,13 @@ export const CanvasRevealEffect = ({
   dotSize?: number;
   showGradient?: boolean;
 }) => {
+  const memoizedShader = useMemo(() => `
+    float animation_speed_factor = ${animationSpeed.toFixed(1)};
+    float intro_offset = distance(u_resolution / 2.0 / u_total_size, st2) * 0.01 + (random(st2) * 0.15);
+    opacity *= step(intro_offset, u_time * animation_speed_factor);
+    opacity *= clamp((1.0 - step(intro_offset + 0.1, u_time * animation_speed_factor)) * 1.25, 1.0, 1.25);
+  `, [animationSpeed]);
+
   return (
     <div className={cn("h-full relative bg-white w-full", containerClassName)}>
       <div className="h-full w-full">
@@ -33,12 +40,7 @@ export const CanvasRevealEffect = ({
           opacities={
             opacities ?? [0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 1]
           }
-          shader={`
-              float animation_speed_factor = ${animationSpeed.toFixed(1)};
-              float intro_offset = distance(u_resolution / 2.0 / u_total_size, st2) * 0.01 + (random(st2) * 0.15);
-              opacity *= step(intro_offset, u_time * animation_speed_factor);
-              opacity *= clamp((1.0 - step(intro_offset + 0.1, u_time * animation_speed_factor)) * 1.25, 1.0, 1.25);
-            `}
+          shader={memoizedShader}
           center={["x", "y"]}
         />
       </div>
@@ -47,7 +49,7 @@ export const CanvasRevealEffect = ({
       )}
     </div>
   );
-};
+});
 
 interface DotMatrixProps {
   colors?: number[][];
@@ -183,29 +185,31 @@ type Uniforms = {
   };
 };
 
-const ShaderMaterial: React.FC<{
+const ShaderMaterial = React.memo<{
   source: string;
   uniforms: Uniforms;
   maxFps?: number;
-}> = ({ source, uniforms, maxFps = 60 }) => {
+}>(({ source, uniforms, maxFps = 60 }) => {
   const { size } = useThree();
   const ref = useRef<THREE.Mesh>(null);
-  let lastFrameTime = 0;
+  const lastFrameTimeRef = useRef(0);
 
-  useFrame(({ clock }) => {
+  const frameCallback = useCallback(({ clock }: { clock: THREE.Clock }) => {
     if (!ref.current) return;
     const timestamp = clock.getElapsedTime();
-    if (timestamp - lastFrameTime < 1 / maxFps) {
+    if (timestamp - lastFrameTimeRef.current < 1 / maxFps) {
       return;
     }
-    lastFrameTime = timestamp;
+    lastFrameTimeRef.current = timestamp;
 
     const material: any = ref.current.material;
     const timeLocation = material.uniforms.u_time;
     timeLocation.value = timestamp;
-  });
+  }, [maxFps]);
 
-  const getUniforms = () => {
+  useFrame(frameCallback);
+
+  const getUniforms = useCallback(() => {
     const preparedUniforms: any = {};
 
     for (const uniformName in uniforms) {
@@ -249,7 +253,7 @@ const ShaderMaterial: React.FC<{
       value: new THREE.Vector2(size.width * 2, size.height * 2),
     };
     return preparedUniforms;
-  };
+  }, [uniforms, size]);
 
   const material = useMemo(() => {
     const materialObject = new THREE.ShaderMaterial({
@@ -283,7 +287,7 @@ const ShaderMaterial: React.FC<{
       <primitive object={material} attach="material" />
     </mesh>
   );
-};
+});
 
 const Shader: React.FC<{
   source: string;

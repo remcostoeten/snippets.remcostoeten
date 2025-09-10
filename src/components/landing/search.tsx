@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { SearchIcon, FileCode, ChevronRight } from 'lucide-react'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import Link from 'next/link'
@@ -26,7 +26,7 @@ type TProps = {
     className?: string
     variant?: 'header' | 'main'
 }
-export function Search({ placeholder = 'Search snippets...', className = '', variant = 'main' }: TProps) {
+export const Search = React.memo<TProps>(({ placeholder = 'Search snippets...', className = '', variant = 'main' }) => {
     const [isOpen, setIsOpen] = useState(false)
     const containerRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
@@ -35,8 +35,9 @@ export function Search({ placeholder = 'Search snippets...', className = '', var
         type: 'fetch',
         api: '/api/search'
     })
-    // Group results by URL
-    const groupResults = (results: SearchResult[]): GroupedResult[] => {
+    
+    // Memoize the groupResults function to prevent unnecessary recalculations
+    const groupResults = useCallback((results: SearchResult[]): GroupedResult[] => {
         const groupedMap = new Map<string, SearchResult[]>()
         results.forEach((result) => {
             // Extract the base path by removing query parameters and anchors
@@ -53,19 +54,31 @@ export function Search({ placeholder = 'Search snippets...', className = '', var
             items,
             primaryItem: items[0]
         }))
-    }
+    }, [])
+    const handleClickOutside = useCallback((event: globalThis.MouseEvent) => {
+        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+            setIsOpen(false)
+        }
+    }, [])
+
+    const handleKeyDown = useCallback((event: KeyboardEvent) => {
+        const activeElement = document.activeElement
+        const isInputFocused =
+            activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement
+        if (event.key === '/' && !isInputFocused) {
+            event.preventDefault()
+            inputRef.current?.focus()
+        }
+    }, [])
+
     useEffect(() => {
         if (typeof document === 'undefined') return
-        function handleClickOutside(event: globalThis.MouseEvent) {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                setIsOpen(false)
-            }
-        }
         document.addEventListener('mousedown', handleClickOutside)
         return () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
-    }, [])
+    }, [handleClickOutside])
+
     useEffect(() => {
         if (search.trim()) {
             setIsOpen(true)
@@ -73,23 +86,15 @@ export function Search({ placeholder = 'Search snippets...', className = '', var
             setIsOpen(false)
         }
     }, [search])
+
     // Add keyboard shortcut for focusing the search input
     useEffect(() => {
         if (typeof document === 'undefined') return
-        function handleKeyDown(event: KeyboardEvent) {
-            const activeElement = document.activeElement
-            const isInputFocused =
-                activeElement instanceof HTMLInputElement || activeElement instanceof HTMLTextAreaElement
-            if (event.key === '/' && !isInputFocused) {
-                event.preventDefault()
-                inputRef.current?.focus()
-            }
-        }
         document.addEventListener('keydown', handleKeyDown)
         return () => {
             document.removeEventListener('keydown', handleKeyDown)
         }
-    }, [])
+    }, [handleKeyDown])
     // Function to highlight matching text
     const highlightMatch = (text: string, query: string) => {
         if (!query.trim() || !text) return text
@@ -219,4 +224,4 @@ export function Search({ placeholder = 'Search snippets...', className = '', var
             )}
         </div>
     )
-}
+});

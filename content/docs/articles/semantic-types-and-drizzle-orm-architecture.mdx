@@ -1,0 +1,190 @@
+---
+title: "Semantic Types and Drizzle ORM Architecture"
+language: "TypeScript"
+lastModified: "2025-09-10"
+---
+
+At my previous job, [Brainstud](https://brainstud.nl), where I worked on a Next.js + Laravel e-learning platform for Dutch students,
+I learned a typing strategy whilst being extremely simple, yet very effective. Especially for new developers to speed up onboarding.
+
+Diving into system design and modular approaches I use this approach a lot for my typings and database schemas.
+
+I'll show you what types I've seen being typed, my own [implementation](#extending-base-types) and [later-on](#drizzle-orm-schema-design) how I extend this into a full-fledged database schema to prevent DRY code.
+
+While TypeScript's type system is more approachable than languages like Rust, it can feel limiting as projects scale. Basic types like `string`, `boolean`, and `number` are familiar, but larger teams and growing codebases benefit from additional semantic types that improve clarity and onboarding.
+
+Consider the common scenario of defining identifiers. For example, defining:
+
+```ts
+type ID = string | number
+```
+
+is not inherently wrong but it is semantically weak. Depending on your project's strategy for handling IDs, such as using UUIDs or database-generated numeric IDs, an identifier can be either a `string` or a `number`. This is where semantic types come in.
+
+### Semantic types
+
+Like I said, simple but effective. We create a new type which will semantically represent the type of the identifier, but under the hood still functions as a string.
+
+```ts
+export type UUID = string
+```
+
+This is how we can semantically represent a unique identifier. There are more options, it's up to you and your team to decide which add value. I personally also like to keep it simple and (for now) only type these two.
+
+```ts
+export type UUID = string
+export type Time = string
+```
+
+<small>Arguably, `Date` would semantically be better. But `Date` is an internal TypeScript class which could interfere.</small>
+
+Every record in the database usually has a `uuid` and `timestamps`, and if they don't, they should more often than not.
+
+In an attempt to write less boilerplate you could implement these as such:
+
+```ts
+import type { Time, UUID } from "./base"
+    
+export type Timestamps = {
+  createdAt: Time
+  updatedAt: Time
+  deletedAt?: Time
+}
+
+export type BaseEntity = {
+    id: UUID
+} & Timestamps
+```
+
+Which you can then use like this:
+
+```ts
+import type { BaseEntity } from "./entities"
+
+export type Post = BaseEntity & {
+    title: string
+    content: string
+    authorId: UUID
+}
+```
+
+This is the same as, but with less boilerplate, more semantic and fewer possibilities for different types down the road.
+
+```ts
+export type Post = {
+    id: string
+    title: string
+    content: string
+    authorId: string
+    createdAt: string
+    updatedAt: string
+    deletedAt?: string
+}
+```
+<hr/>
+### Usage in Next.js
+This approach is agnostic and not tied to a framework, or even language. I've been using this when writing TypeScript code in Hono.js, or when doing [BFF](https://blog.bitsrc.io/bff-pattern-backend-for-frontend-an-introduction-e4fa965128bf) with server functions, actions and Drizzle ORM.
+
+
+We extract our timestamp and base entity definitions into **helpers**, so we can easily reuse them across tables.
+
+```ts title="src/db/schema-helpers/base.ts"
+import { uuid, timestamp } from "drizzle-orm/pg-core"
+import type { UUID, Time } from "@/api/types/base"
+
+export function timestampsSchema(opts?: { withDeleted?: boolean }) {
+  return {
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow()
+      .$type<Time>(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow()
+      .$type<Time>(),
+    ...(opts?.withDeleted
+      ? { deletedAt: timestamp("deleted_at", { withTimezone: true }).$type<Time>() }
+      : {}),
+  }
+}
+
+export function baseEntitySchema(opts?: { withDeleted?: boolean }) {
+  return {
+    id: uuid("id").primaryKey().defaultRandom().$type<UUID>(),
+    ...timestampsSchema(opts),
+  }
+}
+```
+With this in place we can now extend tables with our reusable helpers.
+```ts title="src/features/blog/api/schemas/posts.schema.ts"
+import { pgTable, text, boolean } from "drizzle-orm/pg-core"
+import { baseEntitySchema } from "./schema-helpers/base"
+
+export const posts = pgTable("posts", {
+  ...baseEntitySchema({ withDeleted: true }),
+  content: text("content").notNull(),
+  published: boolean("published").notNull().default(false),
+})
+```
+
+```ts title="src/features/blog/api/schemas/drafts.schema.ts"
+import { pgTable, text, boolean } from "drizzle-orm/pg-core"
+import { baseEntitySchema } from "./schema-helpers/base"
+
+export const drafts = pgTable("drafts", {
+  ...baseEntitySchema(),
+  content: text("content").notNull(),
+  published: boolean("published").notNull().default(false),
+})
+```
+- `posts` → includes `id, createdAt, updatedAt, deletedAt`.  
+- `drafts` → includes `id, createdAt, updatedAt` only.  
+
+This keeps your schemas clean and consistent while allowing flexible toggling of optional columns.  
+
+And to complete the story, we can now use our schemas in our server functions and actions.
+
+```ts title="src/features/blog/api/{mutations,queries}/posts.ts"
+/** Mutation */
+export async function createPost(data: Post): Promise<Post> {
+  const [post] = await db.insert(posts).values(data).returning()
+  return post
+}
+
+/** Query */
+export async function getPostsByAuthor(authorId: UUID): Promise<Post[]> {
+  return await db.select().from(posts).where(eq(posts.authorId, authorId))
+}
+```
+<SmallText>Server functions have direct database access, whereas actions are server-side functions that can be called from client components and also have direct database access, but are specifically designed for mutations and form handling. Actions require "use server" at line 1.</SmallText>
+
+#### Actions (Form Handling with Validation)
+
+```ts
+// src/actions/posts.ts
+"use server"
+
+import type { Post, NewPost, UUID } from "@/app/api/types/base"
+import { db } from "@/db"
+import { posts } from "@/db/schema"
+import { eq } from "drizzle-orm"
+import { z } from "zod"
+
+const createPostSchema = z.object({
+  title: z.string().min(1),
+  content: z.string().min(1),
+  authorId: z.string().uuid()
+})
+
+export async function createPostAction(formData: FormData) {
+  const data = createPostSchema.parse({
+    title: formData.get("title"),
+    content: formData.get("content"),
+    authorId: formData.get("authorId")
+  })
+
+  const [post] = await db.insert(posts).values(data).returning()
+  return post
+}
+```
+If you're struggling with drizzle,check out the query builder i've created [here](https://remcostoeten.com/query-builder)

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
-import { Textarea } from '@/shared/ui/textarea'
 import { Button } from '@/shared/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs'
+import { CodeBlock } from '@/components/code-block'
 import { SchemaBuilder } from './SchemaBuilder'
 import { useSchema, ParsedTable, ParsedField } from './SchemaContext'
-import { FileCode, RefreshCw, Sparkles, Code, Settings } from 'lucide-react'
-import { codeToHtml } from 'shiki'
+import { FileCode, RefreshCw, Sparkles, Code, Settings, Edit3 } from 'lucide-react'
+import { QueryBuilderSkeleton } from './QueryBuilderSkeleton'
 
 function parseSchema(schemaText: string): ParsedTable[] {
   const tables: ParsedTable[] = []
@@ -96,14 +96,110 @@ function parseSchema(schemaText: string): ParsedTable[] {
   return tables
 }
 
-export function SchemaParser() {
+// Schema Editor Component using CodeBlock
+const SchemaEditor = React.memo(({ 
+  value, 
+  onChange, 
+  placeholder 
+}: { 
+  value: string
+  onChange: (value: string) => void
+  placeholder: string 
+}) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editValue, setEditValue] = useState(value)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  
+  useEffect(() => {
+    setEditValue(value)
+  }, [value])
+  
+  const handleSave = () => {
+    onChange(editValue)
+    setIsEditing(false)
+  }
+  
+  const handleCancel = () => {
+    setEditValue(value)
+    setIsEditing(false)
+  }
+  
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      handleCancel()
+    } else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      handleSave()
+    }
+  }
+  
+  if (isEditing) {
+    return (
+      <div className="relative flex-1">
+        <textarea
+          ref={textareaRef}
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          className="w-full h-full font-mono resize-none bg-zinc-50 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-500 p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          style={{
+            fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
+            fontSize: '14px',
+            lineHeight: '1.5',
+            minHeight: '300px'
+          }}
+          autoFocus
+        />
+        <div className="absolute top-2 right-2 flex gap-2">
+          <Button size="sm" onClick={handleSave} className="bg-green-600 hover:bg-green-700">
+            Save
+          </Button>
+          <Button size="sm" variant="outline" onClick={handleCancel}>
+            Cancel
+          </Button>
+        </div>
+      </div>
+    )
+  }
+  
+  return (
+    <div className="relative flex-1">
+      <CodeBlock
+        code={value || placeholder}
+        language="typescript"
+        fileName="schema.ts"
+        badges={[
+          { text: 'Drizzle', variant: 'primary' },
+          { text: 'Schema', variant: 'secondary' }
+        ]}
+        showLineNumbers={true}
+        showMetaInfo={true}
+        maxHeight="400px"
+        className="h-full"
+        showIcon={true}
+        enableLineHover={true}
+        onCopy={() => {}}
+      />
+      <Button
+        onClick={() => setIsEditing(true)}
+        className="absolute top-2 right-2 bg-blue-600 hover:bg-blue-700"
+        size="sm"
+      >
+        <Edit3 className="w-4 h-4 mr-1" />
+        Edit
+      </Button>
+    </div>
+  )
+})
+
+export const SchemaParser = React.memo(() => {
   const { schemaText, setSchemaText, setParsedTables, setSelectedTable } = useSchema()
   const [activeTab, setActiveTab] = useState('input')
   const [parseError, setParseError] = useState<string | null>(null)
-  const [highlightedCode, setHighlightedCode] = useState<string>('')
-  const [isHighlighting, setIsHighlighting] = useState(false)
+  const [isParsing, setIsParsing] = useState(false)
   
-  const handleParse = () => {
+  const handleParse = useCallback(() => {
+    setIsParsing(true)
     try {
       setParseError(null)
       const parsed = parseSchema(schemaText)
@@ -117,28 +213,12 @@ export function SchemaParser() {
       console.error('Parse error:', error)
       setParseError('Failed to parse schema. Please check the syntax.')
       setParsedTables([])
+    } finally {
+      setIsParsing(false)
     }
-  }
+  }, [schemaText, setParsedTables, setSelectedTable])
   
-  // Highlight code with Shiki
-  useEffect(() => {
-    if (schemaText.trim() && !parseError) {
-      setIsHighlighting(true)
-      codeToHtml(schemaText, {
-        lang: 'typescript',
-        theme: 'dark-plus'
-      }).then(html => {
-        setHighlightedCode(html)
-        setIsHighlighting(false)
-      }).catch(error => {
-        console.error('Shiki highlighting error:', error)
-        setHighlightedCode(`<pre><code>${schemaText}</code></pre>`)
-        setIsHighlighting(false)
-      })
-    } else {
-      setHighlightedCode('')
-    }
-  }, [schemaText, parseError])
+  // Real-time syntax highlighting is now handled by SyntaxEditor component
   
   useEffect(() => {
     if (schemaText.trim()) {
@@ -147,15 +227,15 @@ export function SchemaParser() {
       setParsedTables([])
       setParseError(null)
     }
-  }, [schemaText])
+  }, [schemaText, handleParse, setParsedTables])
   
-  const handlePaste = () => {
+  const handlePaste = useCallback(() => {
     navigator.clipboard.readText().then(text => {
       setSchemaText(text)
     }).catch(error => {
       console.error('Failed to paste:', error)
     })
-  }
+  }, [setSchemaText])
   
   const loadDemo = () => {
     const demoSchema = `import { pgTable } from "drizzle-orm/pg-core";
@@ -193,25 +273,27 @@ export const comments = pgTable("comments", {
   }
   
   return (
-    <Card className="h-full flex flex-col bg-card border-border">
-      <CardHeader className="flex-shrink-0">
-        <div className="flex items-center justify-between">
+    <Card className="h-full flex flex-col bg-zinc-100 dark:bg-zinc-900/50 border-zinc-300 dark:border-zinc-800">
+      <CardHeader className="flex-shrink-0 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="flex items-center gap-2">
-            <FileCode className="w-4 h-4" />
-            <CardTitle>Schema Input</CardTitle>
+            <FileCode className="w-5 h-5 text-zinc-700 dark:text-zinc-300" />
+            <CardTitle className="text-zinc-900 dark:text-zinc-100 text-lg">Schema Input</CardTitle>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={loadDemo}>
-              <Sparkles className="w-4 h-4 mr-1" />
-              Demo
+          <div className="flex flex-wrap gap-2">
+            <Button variant="outline" size="sm" onClick={loadDemo} className="flex items-center gap-1">
+              <Sparkles className="w-4 h-4" />
+              <span className="hidden sm:inline">Demo</span>
             </Button>
             {activeTab === 'input' && (
               <>
                 <Button variant="outline" size="sm" onClick={handlePaste}>
-                  Paste
+                  <span className="hidden sm:inline">Paste</span>
+                  <span className="sm:hidden">📋</span>
                 </Button>
-                <Button variant="outline" size="sm" onClick={handleParse}>
+                <Button variant="outline" size="sm" onClick={handleParse} className="flex items-center gap-1">
                   <RefreshCw className="w-4 h-4" />
+                  <span className="hidden sm:inline">Parse</span>
                 </Button>
               </>
             )}
@@ -220,32 +302,36 @@ export const comments = pgTable("comments", {
       </CardHeader>
       <CardContent className="flex-1 flex flex-col min-h-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col min-h-0">
-          <TabsList className="w-full bg-muted text-muted-foreground flex h-9 items-center justify-center rounded-lg p-1 flex-shrink-0 mb-4">
+          <TabsList className="w-full bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-400 flex h-10 items-center justify-center rounded-lg p-1 flex-shrink-0 mb-4">
             <TabsTrigger 
               value="input" 
-              className="flex items-center gap-2 flex-1 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md px-3 py-1.5 text-sm font-medium transition-all"
+              className="flex items-center gap-1 sm:gap-2 flex-1 data-[state=active]:bg-zinc-300 dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-zinc-900 dark:data-[state=active]:text-zinc-100 data-[state=active]:shadow-sm rounded-md px-2 sm:px-3 py-2 text-sm font-medium transition-all"
             >
               <Code className="w-4 h-4" />
-              Text Input
+              <span className="hidden sm:inline">Text Input</span>
+              <span className="sm:hidden">Input</span>
             </TabsTrigger>
             <TabsTrigger 
               value="builder" 
-              className="flex items-center gap-2 flex-1 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm rounded-md px-3 py-1.5 text-sm font-medium transition-all"
+              className="flex items-center gap-1 sm:gap-2 flex-1 data-[state=active]:bg-zinc-300 dark:data-[state=active]:bg-zinc-700 data-[state=active]:text-zinc-900 dark:data-[state=active]:text-zinc-100 data-[state=active]:shadow-sm rounded-md px-2 sm:px-3 py-2 text-sm font-medium transition-all"
             >
               <Settings className="w-4 h-4" />
-              Visual Builder
+              <span className="hidden sm:inline">Visual Builder</span>
+              <span className="sm:hidden">Builder</span>
             </TabsTrigger>
           </TabsList>
           
           <TabsContent value="input" className="flex-1 flex flex-col min-h-0 mt-0">
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 relative">
-                <Textarea
+              {isParsing ? (
+                <QueryBuilderSkeleton variant="schema" />
+              ) : (
+                <SchemaEditor
                   value={schemaText}
-                  onChange={(e) => setSchemaText(e.target.value)}
-                  placeholder="Paste your Drizzle schema here...
+                  onChange={setSchemaText}
+                  placeholder="📝 Paste your Drizzle schema here...
 
-Example:
+💡 Example Schema:
 import { pgTable } from 'drizzle-orm/pg-core';
 import * as t from 'drizzle-orm/pg-core';
 
@@ -256,7 +342,7 @@ export const users = pgTable('users', {
   age: t.int(),
   isActive: t.boolean().default(true),
   createdAt: t.timestamp().defaultNow()
-})
+});
 
 export const posts = pgTable('posts', {
   id: t.int().primaryKey(),
@@ -264,34 +350,19 @@ export const posts = pgTable('posts', {
   content: t.text(),
   authorId: t.int().references(() => users.id),
   published: t.boolean().default(false)
-})"
-                  className="flex-1 font-mono resize-none bg-muted/20 border-muted h-full absolute inset-0"
+});
+
+✨ Supported dialects: PostgreSQL, MySQL, SQLite
+🔧 Auto-detects: table names, field types, constraints
+⚡ Beautiful syntax highlighting with your CodeBlock!"
                 />
-              </div>
+              )}
               
               {/* Parse Error Display */}
               {parseError && (
-                <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md">
-                  <div className="text-sm text-destructive font-medium">Parse Error:</div>
-                  <div className="text-xs text-destructive/80 mt-1">{parseError}</div>
-                </div>
-              )}
-              
-              {/* Shiki Highlighted Preview */}
-              {highlightedCode && !parseError && (
-                <div className="mt-4 border-t border-muted pt-4">
-                  <div className="text-sm text-muted-foreground mb-2 flex items-center gap-2">
-                    Syntax Preview:
-                    {isHighlighting && (
-                      <div className="w-3 h-3 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin"></div>
-                    )}
-                  </div>
-                  <div className="bg-muted/10 rounded-md overflow-auto border border-muted/50 max-h-32">
-                    <div 
-                      className="text-xs leading-relaxed"
-                      dangerouslySetInnerHTML={{ __html: highlightedCode }}
-                    />
-                  </div>
+                <div className="mt-4 p-3 bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-800 rounded-md">
+                  <div className="text-sm text-red-800 dark:text-red-400 font-medium">Parse Error:</div>
+                  <div className="text-xs text-red-700 dark:text-red-300 mt-1">{parseError}</div>
                 </div>
               )}
             </div>
@@ -304,4 +375,4 @@ export const posts = pgTable('posts', {
       </CardContent>
     </Card>
   )
-}
+});
