@@ -385,13 +385,8 @@ type ${selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}Type = typ
               <CodeBlock
                 code={functionCode}
                 language="typescript"
-                fileName={`${queryConfig.operation}-${selectedTable}.ts`}
-                badges={[
-                  { text: 'TypeScript', variant: 'primary' },
-                  { text: 'Function', variant: 'secondary' }
-                ]}
                 showLineNumbers={true}
-                showMetaInfo={true}
+                showMetaInfo={false}
                 maxHeight="100%"
                 className="h-full"
                 showIcon={true}
@@ -418,13 +413,8 @@ type ${selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}Type = typ
               <CodeBlock
                 code={serverCode}
                 language="typescript"
-                fileName={`${queryConfig.operation}-${selectedTable}-action.ts`}
-                badges={[
-                  { text: 'Server Action', variant: 'warning' },
-                  { text: 'Next.js', variant: 'success' }
-                ]}
                 showLineNumbers={true}
-                showMetaInfo={true}
+                showMetaInfo={false}
                 maxHeight="100%"
                 className="h-full"
                 showIcon={true}
@@ -451,13 +441,8 @@ type ${selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1)}Type = typ
               <CodeBlock
                 code={pageCode}
                 language="tsx"
-                fileName={`${queryConfig.operation}-${selectedTable}-page.tsx`}
-                badges={[
-                  { text: 'React', variant: 'danger' },
-                  { text: 'Component', variant: 'primary' }
-                ]}
                 showLineNumbers={true}
-                showMetaInfo={true}
+                showMetaInfo={false}
                 maxHeight="100%"
                 className="h-full"
                 showIcon={true}

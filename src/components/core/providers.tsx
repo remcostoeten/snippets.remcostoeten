@@ -11,7 +11,7 @@ export function Providers({ children }: TProps) {
         <ThemeProvider
             attribute="class"
             defaultTheme="dark"
-            enableSystem
+            enableSystem={false}
             disableTransitionOnChange
         >
             <TooltipProvider>

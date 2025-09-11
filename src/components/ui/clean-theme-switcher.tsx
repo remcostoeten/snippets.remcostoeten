@@ -1,6 +1,6 @@
 'use client'
 
-import { Moon, Sun, Monitor } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/shared/ui/button";
 import { cn } from "@/lib/utils";
@@ -14,8 +14,7 @@ export function CleanThemeSwitcher({ className }: TProps) {
 
   const themes = [
     { value: 'light', icon: Sun, label: 'Light' },
-    { value: 'dark', icon: Moon, label: 'Dark' },
-    { value: 'system', icon: Monitor, label: 'System' }
+    { value: 'dark', icon: Moon, label: 'Dark' }
   ];
 
   return (

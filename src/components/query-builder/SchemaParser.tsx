@@ -13,78 +13,95 @@ function parseSchema(schemaText: string): ParsedTable[] {
   
   try {
     // Improved regex patterns for Drizzle schema parsing
-    // First, extract table blocks more robustly
-    const tableBlockPattern = /export\s+const\s+(\w+)\s*=\s*(?:mysqlTable|pgTable|sqliteTable|table)\s*\(\s*["']([^"']+)["']\s*,\s*\{([^}]*)\}/g
+    // Use a more robust approach to handle nested braces
+    const tableRegex = /export\s+const\s+(\w+)\s*=\s*(?:mysqlTable|pgTable|sqliteTable|table)\s*\(\s*["']([^"']+)["']\s*,\s*\{/g
     
     let tableMatch
-    while ((tableMatch = tableBlockPattern.exec(schemaText)) !== null) {
-      const [, tableName, dbTableName, fieldsBlock] = tableMatch
-      const fields: ParsedField[] = []
+    while ((tableMatch = tableRegex.exec(schemaText)) !== null) {
+      const [, tableName, dbTableName] = tableMatch
+      const startIndex = tableMatch.index + tableMatch[0].length
       
-      // Parse individual fields within the table block
-      // Split by commas but be careful about nested objects/functions
-      const fieldLines = fieldsBlock.split('\n').map(line => line.trim()).filter(line => line.length > 0)
+      // Find the matching closing brace by counting braces
+      let braceCount = 1
+      let endIndex = startIndex
       
-      for (const line of fieldLines) {
-        // Skip comments and empty lines
-        if (line.startsWith('//') || line.startsWith('/*') || !line.includes(':')) {
-          continue
-        }
-        
-        // Extract field name and definition
-        const colonIndex = line.indexOf(':')
-        if (colonIndex === -1) continue
-        
-        const fieldName = line.substring(0, colonIndex).trim()
-        const fieldDef = line.substring(colonIndex + 1).trim().replace(/,$/, '') // Remove trailing comma
-        
-        if (!fieldName || !fieldDef) continue
-        
-        const constraints: string[] = []
-        
-        // Extract basic type info with improved pattern
-        let type = 'text' // default fallback
-        
-        // Type extraction - look for t.type() patterns
-        const typeMatch = fieldDef.match(/t\.(\w+)\s*\(/)
-        if (typeMatch) {
-          type = typeMatch[1]
-        } else {
-          // Fallback for other patterns
-          if (fieldDef.includes('varchar')) type = 'varchar'
-          else if (fieldDef.includes('int')) type = 'int'
-          else if (fieldDef.includes('text')) type = 'text'
-          else if (fieldDef.includes('timestamp')) type = 'timestamp'
-          else if (fieldDef.includes('boolean')) type = 'boolean'
-          else if (fieldDef.includes('bigint')) type = 'bigint'
-          else if (fieldDef.includes('decimal')) type = 'decimal'
-          else if (fieldDef.includes('date')) type = 'date'
-          else if (fieldDef.includes('json')) type = 'json'
-          else if (fieldDef.includes('uuid')) type = 'uuid'
-          else if (fieldDef.includes('real')) type = 'real'
-          else if (fieldDef.includes('blob')) type = 'blob'
-        }
-        
-        // Check for common modifiers with improved patterns
-        if (fieldDef.includes('.primaryKey(')) constraints.push('PRIMARY KEY')
-        if (fieldDef.includes('.notNull(')) constraints.push('NOT NULL')
-        if (fieldDef.includes('.unique(')) constraints.push('UNIQUE')
-        
-        fields.push({
-          name: fieldName,
-          type,
-          constraints,
-          isPrimary: constraints.includes('PRIMARY KEY'),
-          isUnique: constraints.includes('UNIQUE'),
-          isNotNull: constraints.includes('NOT NULL')
-        })
+      while (endIndex < schemaText.length && braceCount > 0) {
+        if (schemaText[endIndex] === '{') braceCount++
+        else if (schemaText[endIndex] === '}') braceCount--
+        endIndex++
       }
       
-      if (fields.length > 0) {
-        tables.push({
-          name: tableName,
-          fields
-        })
+      if (braceCount === 0) {
+        const fieldsBlock = schemaText.substring(startIndex, endIndex - 1)
+        const fields: ParsedField[] = []
+        
+        // Parse individual fields within the table block
+        // Split by commas but be careful about nested objects/functions
+        const fieldLines = fieldsBlock.split('\n').map(line => line.trim()).filter(line => line.length > 0)
+        
+        for (const line of fieldLines) {
+          // Skip comments and empty lines
+          if (line.startsWith('//') || line.startsWith('/*') || !line.includes(':')) {
+            continue
+          }
+          
+          // Extract field name and definition
+          const colonIndex = line.indexOf(':')
+          if (colonIndex === -1) continue
+          
+          const fieldName = line.substring(0, colonIndex).trim()
+          const fieldDef = line.substring(colonIndex + 1).trim().replace(/,$/, '') // Remove trailing comma
+          
+          if (!fieldName || !fieldDef) continue
+          
+          const constraints: string[] = []
+          
+          // Extract basic type info with improved pattern
+          let type = 'text' // default fallback
+          
+          // Type extraction - look for direct type patterns (not t.type())
+          if (fieldDef.includes('text(')) type = 'text'
+          else if (fieldDef.includes('varchar(')) type = 'varchar'
+          else if (fieldDef.includes('serial(')) type = 'serial'
+          else if (fieldDef.includes('int(')) type = 'int'
+          else if (fieldDef.includes('timestamp(')) type = 'timestamp'
+          else if (fieldDef.includes('boolean(')) type = 'boolean'
+          else if (fieldDef.includes('bigint(')) type = 'bigint'
+          else if (fieldDef.includes('decimal(')) type = 'decimal'
+          else if (fieldDef.includes('date(')) type = 'date'
+          else if (fieldDef.includes('json(')) type = 'json'
+          else if (fieldDef.includes('uuid(')) type = 'uuid'
+          else if (fieldDef.includes('real(')) type = 'real'
+          else if (fieldDef.includes('blob(')) type = 'blob'
+          else if (fieldDef.includes('pgEnum(')) {
+            // Handle enum types - extract the enum name
+            const enumMatch = fieldDef.match(/(\w+)\s*\(/)
+            if (enumMatch) {
+              type = enumMatch[1]
+            }
+          }
+          
+          // Check for common modifiers with improved patterns
+          if (fieldDef.includes('.primaryKey(')) constraints.push('PRIMARY KEY')
+          if (fieldDef.includes('.notNull(')) constraints.push('NOT NULL')
+          if (fieldDef.includes('.unique(')) constraints.push('UNIQUE')
+          
+          fields.push({
+            name: fieldName,
+            type,
+            constraints,
+            isPrimary: constraints.includes('PRIMARY KEY'),
+            isUnique: constraints.includes('UNIQUE'),
+            isNotNull: constraints.includes('NOT NULL')
+          })
+        }
+        
+        if (fields.length > 0) {
+          tables.push({
+            name: tableName,
+            fields
+          })
+        }
       }
     }
   } catch (error) {
@@ -167,13 +184,8 @@ const SchemaEditor = React.memo(({
       <CodeBlock
         code={value || placeholder}
         language="typescript"
-        fileName="schema.ts"
-        badges={[
-          { text: 'Drizzle', variant: 'primary' },
-          { text: 'Schema', variant: 'secondary' }
-        ]}
         showLineNumbers={true}
-        showMetaInfo={true}
+        showMetaInfo={false}
         maxHeight="400px"
         className="h-full"
         showIcon={true}
