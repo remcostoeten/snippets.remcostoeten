@@ -1,11 +1,13 @@
-import { baseOptions } from '@/app/layout.config'
-import { HomeLayout } from 'fumadocs-ui/layouts/home'
+import { Header } from '@/components/header'
 import type { ReactNode } from 'react'
 
 export default function Layout({ children }: { children: ReactNode }) {
     return (
-        <div className="mt-6">
-            <HomeLayout {...baseOptions}>{children}</HomeLayout>
+        <div className="min-h-screen bg-background">
+            <Header />
+            <main className="container mx-auto px-4 py-6">
+                {children}
+            </main>
         </div>
     )
 }

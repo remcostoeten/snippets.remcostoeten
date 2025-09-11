@@ -1,0 +1,30 @@
+.root {
+  position: relative;
+  overflow: auto;
+  max-height: var(--sa-max-h, clamp(280px, 42vh, 580px));
+  contain: layout paint;
+}
+
+.mask {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 calc(100% - var(--sa-fade, 40px)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black calc(100% - var(--sa-fade, 40px)),
+    transparent 100%
+  );
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.maskOff {
+  -webkit-mask-image: none;
+  mask-image: none;
+}

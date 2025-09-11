@@ -5,6 +5,7 @@ import { getGitAndDeploymentInfo } from "@/server/queries/get-statistics";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
+import NextTopLoader from 'nextjs-toploader';
 const inter = Inter({
   subsets: ["latin"],
 });
@@ -96,6 +97,17 @@ export default async function RootLayout({
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
+        <NextTopLoader
+          color="#3b82f6"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #3b82f6,0 0 5px #3b82f6"
+        />
         <Providers>
           <main className="flex-1">{children}</main>
           <Toaster />

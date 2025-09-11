@@ -1,0 +1,46 @@
+/* Minimal Dark Scrollbars */
+:root {
+  --sb-size: 8px;
+  --sb-track: oklch(0.145 0 0);
+  --sb-thumb: oklch(0.269 0 0);
+  --sb-thumb-hover: oklch(0.35 0 0);
+}
+
+.dark {
+  --sb-track: oklch(0.145 0 0);
+  --sb-thumb: oklch(0.269 0 0);
+  --sb-thumb-hover: oklch(0.35 0 0);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb) var(--sb-track);
+}
+
+/* Webkit browsers */
+*::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--sb-track);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb);
+  border-radius: 4px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--sb-thumb-hover);
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: var(--sb-track);
+}

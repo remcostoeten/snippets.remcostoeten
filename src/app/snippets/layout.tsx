@@ -1,14 +1,14 @@
-import { baseOptions } from "@/app/layout.config";
+import { Header } from "@/components/header";
 import { source } from "@/lib/source";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import type { ReactNode } from "react";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div className="mt-6">
+    <div className="min-h-screen bg-background">
+      <Header />
       <DocsLayout
         tree={source.pageTree}
-        {...baseOptions}
         sidebar={{ defaultOpenLevel: 0 }}
       >
         {children}

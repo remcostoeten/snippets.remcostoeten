@@ -10,6 +10,7 @@
 /* @import "fumadocs-ui/css/purple.css"; */
 @import "fumadocs-ui/css/preset.css";
 @import "tw-animate-css";
+@import "../styles/scrollbar.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -399,3 +400,8 @@
   .vim-command .text-code-text { color: color-mix(in oklab, var(--syntax-keyword) 20%, var(--code-text)); }
   .cli-command .text-code-text { color: color-mix(in oklab, var(--syntax-function) 20%, var(--code-text)); }
 }
+
+p.mb-8.text-lg.text-fd-muted-foreground {
+  margin-bottom: 0 !important;
+}
+

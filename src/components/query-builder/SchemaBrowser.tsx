@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card'
 import { Badge } from '@/shared/ui/badge'
 import { Button } from '@/shared/ui/button'
 import { useSchema } from './SchemaContext'
+import { ScrollArea } from '@/components/ui/scroll-area/scroll-area'
 import { Database, Key, Lock, CheckCircle } from 'lucide-react'
 
 export function SchemaBrowser() {
@@ -45,62 +46,64 @@ export function SchemaBrowser() {
           <CardTitle className="text-zinc-900 dark:text-zinc-100 text-lg">Schema Browser</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 overflow-auto">
-        <div className="space-y-4">
-          {parsedTables.map((table) => (
-            <div key={table.name} className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className={`font-mono ${selectedTable === table.name ? 'text-primary' : ''}`}>
-                  {table.name}
-                </h3>
-                <Button
-                  variant={selectedTable === table.name ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => handleSelectTable(table.name)}
-                >
-                  {selectedTable === table.name ? 'Selected' : 'Select'}
-                </Button>
-              </div>
-              
-              <div className="space-y-2">
-                {table.fields.map((field) => (
-                  <div
-                    key={field.name}
-                    className="flex items-center justify-between p-2 rounded border bg-muted/20 border-muted"
+      <CardContent className="flex-1 min-h-0">
+        <ScrollArea maxHeight="clamp(320px, 50vh, 650px)" fadeSize={48}>
+          <div className="space-y-4 pr-2">
+            {parsedTables.map((table) => (
+              <div key={table.name} className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className={`font-mono ${selectedTable === table.name ? 'text-primary' : ''}`}>
+                    {table.name}
+                  </h3>
+                  <Button
+                    variant={selectedTable === table.name ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => handleSelectTable(table.name)}
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono font-medium">{field.name}</span>
-                      <Badge variant="secondary" className="text-xs">
-                        {field.type}
-                      </Badge>
+                    {selectedTable === table.name ? 'Selected' : 'Select'}
+                  </Button>
+                </div>
+                
+                <div className="space-y-2">
+                  {table.fields.map((field) => (
+                    <div
+                      key={field.name}
+                      className="flex items-center justify-between p-2 rounded border bg-muted/20 border-muted"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-medium">{field.name}</span>
+                        <Badge variant="secondary" className="text-xs">
+                          {field.type}
+                        </Badge>
+                      </div>
+                      
+                      <div className="flex items-center gap-1">
+                        {field.isPrimary && (
+                          <Badge variant="default" className="text-xs">
+                            <Key className="w-3 h-3 mr-1" />
+                            PK
+                          </Badge>
+                        )}
+                        {field.isUnique && !field.isPrimary && (
+                          <Badge variant="outline" className="text-xs">
+                            <CheckCircle className="w-3 h-3 mr-1" />
+                            UNIQUE
+                          </Badge>
+                        )}
+                        {field.isNotNull && (
+                          <Badge variant="outline" className="text-xs">
+                            <Lock className="w-3 h-3 mr-1" />
+                            NOT NULL
+                          </Badge>
+                        )}
+                      </div>
                     </div>
-                    
-                    <div className="flex items-center gap-1">
-                      {field.isPrimary && (
-                        <Badge variant="default" className="text-xs">
-                          <Key className="w-3 h-3 mr-1" />
-                          PK
-                        </Badge>
-                      )}
-                      {field.isUnique && !field.isPrimary && (
-                        <Badge variant="outline" className="text-xs">
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          UNIQUE
-                        </Badge>
-                      )}
-                      {field.isNotNull && (
-                        <Badge variant="outline" className="text-xs">
-                          <Lock className="w-3 h-3 mr-1" />
-                          NOT NULL
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   )

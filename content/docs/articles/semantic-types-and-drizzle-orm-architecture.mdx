@@ -1,46 +1,36 @@
 ---
 title: "Semantic Types and Drizzle ORM Architecture"
+description: "Learn how to create semantic types in TypeScript and integrate them with Drizzle ORM for better type safety and developer experience in Next.js applications."
 language: "TypeScript"
 lastModified: "2025-09-10"
+keywords: ["TypeScript", "Drizzle ORM", "Next.js", "semantic types", "database schema", "type safety", "PostgreSQL", "SQLite"]
+authors: ["Remco Stoeten"]
 ---
 
-At my previous job, [Brainstud](https://brainstud.nl), where I worked on a Next.js + Laravel e-learning platform for Dutch students,
-I learned a typing strategy whilst being extremely simple, yet very effective. Especially for new developers to speed up onboarding.
+At [Brainstud](https://brainstud.nl), where I worked on a Next.js + Laravel e-learning platform for Dutch students, I learned a typing strategy that's simple yet incredibly effective. This approach has become my go-to for improving code clarity and speeding up developer onboarding.
 
-Diving into system design and modular approaches I use this approach a lot for my typings and database schemas.
+The problem with basic TypeScript types like `string`, `boolean`, and `number` is that they don't tell the full story. When you see a `string` parameter, you don't know if it's an email, a UUID, a timestamp, or just any old text. This becomes especially problematic as teams grow and codebases scale.
 
-I'll show you what types I've seen being typed, my own [implementation](#extending-base-types) and [later-on](#drizzle-orm-schema-design) how I extend this into a full-fledged database schema to prevent DRY code.
-
-While TypeScript's type system is more approachable than languages like Rust, it can feel limiting as projects scale. Basic types like `string`, `boolean`, and `number` are familiar, but larger teams and growing codebases benefit from additional semantic types that improve clarity and onboarding.
-
-Consider the common scenario of defining identifiers. For example, defining:
+Instead of using generic types like:
 
 ```ts
 type ID = string | number
 ```
 
-is not inherently wrong but it is semantically weak. Depending on your project's strategy for handling IDs, such as using UUIDs or database-generated numeric IDs, an identifier can be either a `string` or a `number`. This is where semantic types come in.
-
-### Semantic types
-
-Like I said, simple but effective. We create a new type which will semantically represent the type of the identifier, but under the hood still functions as a string.
-
-```ts
-export type UUID = string
-```
-
-This is how we can semantically represent a unique identifier. There are more options, it's up to you and your team to decide which add value. I personally also like to keep it simple and (for now) only type these two.
+We can create semantic types that clearly express intent:
 
 ```ts
 export type UUID = string
 export type Time = string
 ```
 
-<small>Arguably, `Date` would semantically be better. But `Date` is an internal TypeScript class which could interfere.</small>
+This simple change makes code self-documenting and prevents common mistakes.
 
-Every record in the database usually has a `uuid` and `timestamps`, and if they don't, they should more often than not.
+## Semantic Types
 
-In an attempt to write less boilerplate you could implement these as such:
+The beauty of this approach is its simplicity. We're not creating complex type hierarchies or fancy abstractions—just clear, semantic names for common patterns.
+
+Every database record typically needs an ID and timestamps. Instead of repeating this pattern everywhere, we can create reusable base types:
 
 ```ts
 import type { Time, UUID } from "./base"
@@ -56,11 +46,9 @@ export type BaseEntity = {
 } & Timestamps
 ```
 
-Which you can then use like this:
+Use them in your entities:
 
 ```ts
-import type { BaseEntity } from "./entities"
-
 export type Post = BaseEntity & {
     title: string
     content: string
@@ -68,25 +56,12 @@ export type Post = BaseEntity & {
 }
 ```
 
-This is the same as, but with less boilerplate, more semantic and fewer possibilities for different types down the road.
+This approach provides better type safety and consistency across your application.
+## Drizzle ORM Schema Design
 
-```ts
-export type Post = {
-    id: string
-    title: string
-    content: string
-    authorId: string
-    createdAt: string
-    updatedAt: string
-    deletedAt?: string
-}
-```
-<hr/>
-### Usage in Next.js
-This approach is agnostic and not tied to a framework, or even language. I've been using this when writing TypeScript code in Hono.js, or when doing [BFF](https://blog.bitsrc.io/bff-pattern-backend-for-frontend-an-introduction-e4fa965128bf) with server functions, actions and Drizzle ORM.
+This semantic typing approach isn't tied to any specific framework—I've used it with Hono.js, Next.js server functions, and Drizzle ORM. The real magic happens when you apply this pattern to your database schemas.
 
-
-We extract our timestamp and base entity definitions into **helpers**, so we can easily reuse them across tables.
+Instead of manually defining the same timestamp and ID fields in every table, we can extract them into reusable helpers:
 
 ```ts title="src/db/schema-helpers/base.ts"
 import { uuid, timestamp } from "drizzle-orm/pg-core"
@@ -115,7 +90,9 @@ export function baseEntitySchema(opts?: { withDeleted?: boolean }) {
   }
 }
 ```
-With this in place we can now extend tables with our reusable helpers.
+
+Use them in your table definitions:
+
 ```ts title="src/features/blog/api/schemas/posts.schema.ts"
 import { pgTable, text, boolean } from "drizzle-orm/pg-core"
 import { baseEntitySchema } from "./schema-helpers/base"
@@ -125,49 +102,28 @@ export const posts = pgTable("posts", {
   content: text("content").notNull(),
   published: boolean("published").notNull().default(false),
 })
-```
+```  
 
-```ts title="src/features/blog/api/schemas/drafts.schema.ts"
-import { pgTable, text, boolean } from "drizzle-orm/pg-core"
-import { baseEntitySchema } from "./schema-helpers/base"
+### Server Functions and Actions
 
-export const drafts = pgTable("drafts", {
-  ...baseEntitySchema(),
-  content: text("content").notNull(),
-  published: boolean("published").notNull().default(false),
-})
-```
-- `posts` → includes `id, createdAt, updatedAt, deletedAt`.  
-- `drafts` → includes `id, createdAt, updatedAt` only.  
+With our semantic types and schema helpers in place, we can now use them throughout our application. The type safety flows from the database schema all the way to your API endpoints:
 
-This keeps your schemas clean and consistent while allowing flexible toggling of optional columns.  
-
-And to complete the story, we can now use our schemas in our server functions and actions.
-
-```ts title="src/features/blog/api/{mutations,queries}/posts.ts"
-/** Mutation */
+```ts title="src/features/blog/api/posts.ts"
 export async function createPost(data: Post): Promise<Post> {
   const [post] = await db.insert(posts).values(data).returning()
   return post
 }
 
-/** Query */
 export async function getPostsByAuthor(authorId: UUID): Promise<Post[]> {
   return await db.select().from(posts).where(eq(posts.authorId, authorId))
 }
 ```
-<SmallText>Server functions have direct database access, whereas actions are server-side functions that can be called from client components and also have direct database access, but are specifically designed for mutations and form handling. Actions require "use server" at line 1.</SmallText>
 
-#### Actions (Form Handling with Validation)
+For form handling with validation:
 
-```ts
-// src/actions/posts.ts
+```ts title="src/actions/posts.ts"
 "use server"
 
-import type { Post, NewPost, UUID } from "@/app/api/types/base"
-import { db } from "@/db"
-import { posts } from "@/db/schema"
-import { eq } from "drizzle-orm"
 import { z } from "zod"
 
 const createPostSchema = z.object({
@@ -187,4 +143,11 @@ export async function createPostAction(formData: FormData) {
   return post
 }
 ```
-If you're struggling with drizzle,check out the query builder i've created [here](https://remcostoeten.com/query-builder)
+
+## Conclusion
+
+After using this approach across multiple projects, I've seen firsthand how semantic types transform the developer experience. New team members can understand the codebase faster, bugs related to type mismatches become rare, and the code becomes self-documenting.
+
+The beauty is in the simplicity—we're not over-engineering anything, just giving our types meaningful names and creating reusable patterns. This approach scales beautifully from small projects to large enterprise applications.
+
+For more advanced patterns, check out the [Query Builder](/query-builder) I've built to help generate these patterns automatically, or explore [modular schema design](/snippets/databases/drizzle-orm/server-function-abstractions) for larger applications.
