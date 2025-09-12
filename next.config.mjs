@@ -41,6 +41,16 @@ const config = {
                         name: 'framer',
                         chunks: 'all',
                     },
+                    shiki: {
+                        test: /[\\/]node_modules[\\/](shiki|@shikijs)[\\/]/,
+                        name: 'shiki',
+                        chunks: 'all',
+                    },
+                    'react-icons': {
+                        test: /[\\/]node_modules[\\/](react-icons)[\\/]/,
+                        name: 'react-icons',
+                        chunks: 'all',
+                    },
                 },
             };
         }

@@ -253,7 +253,7 @@ export function SchemaBuilder() {
     const newColumn: Column = {
       id: `col_${Date.now()}`,
       name: '',
-      type: dialectConfig[dialect].types[0],
+      type: dialectConfig[dialect].types[0].name,
       notNull: false,
       primaryKey: false,
       unique: false,
@@ -619,7 +619,7 @@ ${columnsCode}
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs value={activeTab} onValueChange={(value: 'builder' | 'preview' | 'validation') => setActiveTab(value)} className="flex-1 flex flex-col min-h-0">
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as 'builder' | 'preview' | 'validation')} className="flex-1 flex flex-col min-h-0">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="builder">Schema Builder</TabsTrigger>
           <TabsTrigger value="preview">Preview</TabsTrigger>
