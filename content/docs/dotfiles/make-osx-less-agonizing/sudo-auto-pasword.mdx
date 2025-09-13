@@ -27,21 +27,21 @@ This guide explains how to modify the `/etc/sudoers` file on macOS to disable pa
     sudo visudo
     ```
 
-## Locate the admin group line
+2. **Locate the admin group line:**
 
-    Find the line that defines the permissions for the `admin` group. It typically looks like this:
+   Find the line that defines the permissions for the `admin` group. It typically looks like this:
 
-    ```
-    %admin ALL=(ALL) ALL
-    ```
+   ```
+   %admin ALL=(ALL) ALL
+   ```
 
-## Modify the line to disable password prompts
+3. **Modify the line to disable password prompts:**
 
-    Replace the line with the following to allow members of the `admin` group to run `sudo` commands without a password:
+   Replace the line with the following to allow members of the `admin` group to run `sudo` commands without a password:
 
-    ```
-    %admin ALL=(ALL) NOPASSWD: ALL
-    ```
+   ```
+   %admin ALL=(ALL) NOPASSWD: ALL
+   ```
 
 4.  **Save and exit:**
 

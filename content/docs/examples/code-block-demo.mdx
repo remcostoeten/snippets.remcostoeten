@@ -1,0 +1,72 @@
+---
+title: "CodeBlock Component Demo"
+description: "Examples of using the custom CodeBlock component"
+---
+
+# CodeBlock Component Examples
+
+## Basic Usage
+
+<CodeBlock
+  code="console.log('Hello, World!');"
+  language="javascript"
+  fileName="hello.js"
+/>
+
+## With Badges
+
+<CodeBlock
+  code={`import React from 'react';
+
+export function Button({ children, onClick }) {
+  return (
+    <button onClick={onClick} className="btn">
+      {children}
+    </button>
+  );
+}`}
+  language="tsx"
+  fileName="Button.tsx"
+  badges={[
+    { text: 'React', variant: 'primary' },
+    { text: 'Component', variant: 'secondary' }
+  ]}
+  showLineNumbers
+  enableLineHighlight
+/>
+
+## Shell Commands
+
+<CodeBlock
+  code={`# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build`}
+  language="bash"
+  fileName="package-scripts"
+  badges={[
+    { text: 'NPM', variant: 'success' },
+    { text: 'Scripts', variant: 'warning' }
+  ]}
+/>
+
+## Python Example
+
+<CodeBlock
+  code={`def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+# Generate first 10 fibonacci numbers
+for i in range(10):
+    print(f"F({i}) = {fibonacci(i)}")`}
+  language="python"
+  fileName="fibonacci.py"
+  badges={[{ text: 'Algorithm', variant: 'danger' }]}
+  maxHeight="300px"
+/>
