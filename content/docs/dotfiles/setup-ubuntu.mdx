@@ -1,0 +1,1031 @@
+---
+title: "Dotfiles Documentation"
+description: "Complete documentation of the dotfiles project with all scripts and utilities"
+---
+
+# Dotfiles Project Documentation
+
+This document provides comprehensive documentation for all files in the dotfiles project. Each file serves a specific purpose in creating a modular, extensible shell environment with utilities for development, system management, and productivity.
+
+## Core Utilities
+
+### Help System (`core/help`)
+
+The help system provides a centralized way to register and display help information for all functions across the dotfiles project. It supports categories, modules, and hierarchical help navigation.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+HELP_CATEGORIES=()
+declare -A HELP_MODULES
+declare -A HELP_FUNCTIONS
+declare -A HELP_DESCRIPTIONS
+
+function help.register() {
+    local category=\"$1\"
+    local module=\"$2\"
+    local func=\"$3\"
+    local description=\"$4\"
+    local usage=\"$5\"
+    
+    if [[ ! \" ${HELP_CATEGORIES[*]} \" =~ \" $category \" ]]; then
+        HELP_CATEGORIES+=(\"$category\")
+    fi
+    
+    local key=\"${category}::${module}\"
+    if [[ -z \"${HELP_MODULES[$key]}\" ]]; then
+        HELP_MODULES[$key]=\"$module\"
+    fi
+    
+    local func_key=\"${category}::${module}::${func}\"
+    HELP_FUNCTIONS[$func_key]=\"$func\"
+    HELP_DESCRIPTIONS[$func_key]=\"$description|$usage\"
+}
+
+function help.show.categories() {
+    echo
+    bold \"Available Categories:\"
+    echo
+    
+    for category in \"${HELP_CATEGORIES[@]}\"; do
+        cyan \"  $category\"
+        local modules=()
+        for key in \"${!HELP_MODULES[@]}\"; do
+            if [[ \"$key\" =~ ^${category}:: ]]; then
+                local module=\"${HELP_MODULES[$key]}\"
+                if [[ ! \" ${modules[*]} \" =~ \" $module \" ]]; then
+                    modules+=(\"$module\")
+                fi
+            fi
+        done
+        
+        for module in \"${modules[@]}\"; do
+            gray \"    $module\"
+        done
+        echo
+    done
+    
+    yellow \"Usage:\"
+    echo \"  help                    - Show all categories\"
+    echo \"  help <category>         - Show modules in category\"
+    echo \"  help <category> <module> - Show functions in module\"
+    echo
+}"
+  language="bash"
+  fileName="core/help"
+/>
+
+### Color Functions (`core/colors`)
+
+Provides a comprehensive set of color and text formatting functions for terminal output, including basic colors, background colors, and text styles.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+function black() { echo -e \"\\033[30m$1\\033[0m\"; }
+function red() { echo -e \"\\033[31m$1\\033[0m\"; }
+function green() { echo -e \"\\033[32m$1\\033[0m\"; }
+function yellow() { echo -e \"\\033[33m$1\\033[0m\"; }
+function blue() { echo -e \"\\033[34m$1\\033[0m\"; }
+function magenta() { echo -e \"\\033[35m$1\\033[0m\"; }
+function cyan() { echo -e \"\\033[36m$1\\033[0m\"; }
+function white() { echo -e \"\\033[37m$1\\033[0m\"; }
+function gray() { echo -e \"\\033[90m$1\\033[0m\"; }
+function grey() { echo -e \"\\033[90m$1\\033[0m\"; }
+function lightred() { echo -e \"\\033[91m$1\\033[0m\"; }
+function lightgreen() { echo -e \"\\033[92m$1\\033[0m\"; }
+function lightyellow() { echo -e \"\\033[93m$1\\033[0m\"; }
+function lightblue() { echo -e \"\\033[94m$1\\033[0m\"; }
+function lightmagenta() { echo -e \"\\033[95m$1\\033[0m\"; }
+function lightcyan() { echo -e \"\\033[96m$1\\033[0m\"; }
+function lightwhite() { echo -e \"\\033[97m$1\\033[0m\"; }
+
+function bgblack() { echo -e \"\\033[40m$1\\033[0m\"; }
+function bgred() { echo -e \"\\033[41m$1\\033[0m\"; }
+function bggreen() { echo -e \"\\033[42m$1\\033[0m\"; }
+function bgyellow() { echo -e \"\\033[43m$1\\033[0m\"; }
+function bgblue() { echo -e \"\\033[44m$1\\033[0m\"; }
+function bgmagenta() { echo -e \"\\033[45m$1\\033[0m\"; }
+function bgcyan() { echo -e \"\\033[46m$1\\033[0m\"; }
+function bgwhite() { echo -e \"\\033[47m$1\\033[0m\"; }
+
+function bold() { echo -e \"\\033[1m$1\\033[0m\"; }
+function dim() { echo -e \"\\033[2m$1\\033[0m\"; }
+function italic() { echo -e \"\\033[3m$1\\033[0m\"; }
+function underline() { echo -e \"\\033[4m$1\\033[0m\"; }
+function blink() { echo -e \"\\033[5m$1\\033[0m\"; }
+function reverse() { echo -e \"\\033[7m$1\\033[0m\"; }
+function strikethrough() { echo -e \"\\033[9m$1\\033[0m\"; }
+
+function orange() { echo -e \"\\033[38;5;208m$1\\033[0m\"; }
+function purple() { echo -e \"\\033[38;5;129m$1\\033[0m\"; }
+function pink() { echo -e \"\\033[38;5;206m$1\\033[0m\"; }
+function brown() { echo -e \"\\033[38;5;94m$1\\033[0m\"; }
+function lime() { echo -e \"\\033[38;5;118m$1\\033[0m\"; }
+function teal() { echo -e \"\\033[38;5;30m$1\\033[0m\"; }
+function navy() { echo -e \"\\033[38;5;17m$1\\033[0m\"; }
+function maroon() { echo -e \"\\033[38;5;52m$1\\033[0m\"; }
+function olive() { echo -e \"\\033[38;5;58m$1\\033[0m\"; }
+function aqua() { echo -e \"\\033[38;5;51m$1\\033[0m\"; }
+function fuchsia() { echo -e \"\\033[38;5;201m$1\\033[0m\"; }
+function silver() { echo -e \"\\033[38;5;250m$1\\033[0m\"; }"
+  language="bash"
+  fileName="core/colors"
+/>
+
+### Logging System (`core/log`)
+
+Provides structured logging functions with timestamps and different log levels for consistent output formatting across all scripts.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+function log.info() { echo \"$(date '+%Y-%m-%d %H:%M:%S') [INFO] $1\"; }
+function log.warn() { echo \"$(date '+%Y-%m-%d %H:%M:%S') [WARN] $1\" >&2; }
+function log.error() { echo \"$(date '+%Y-%m-%d %H:%M:%S') [ERROR] $1\" >&2; }
+function log.debug() { [[ -n \"$DEBUG\" ]] && echo \"$(date '+%Y-%m-%d %H:%M:%S') [DEBUG] $1\" >&2; }
+function log.success() { echo \"$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] $1\"; }"
+  language="bash"
+  fileName="core/log"
+/>
+
+### Source Management (`core/source`)
+
+Handles loading and sourcing of files with error handling, supporting both single files and recursive directory loading.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+function load() {
+    local file=\"$1\"
+    
+    if [[ -z \"$file\" ]]; then
+        red \"Error: No file specified\"
+        return 1
+    fi
+    
+    if [[ ! -f \"$file\" ]]; then
+        red \"Error: File '$file' not found\"
+        return 1
+    fi
+    
+    if [[ ! -r \"$file\" ]]; then
+        red \"Error: File '$file' is not readable\"
+        return 1
+    fi
+    
+    source \"$file\" 2>/dev/null
+    if [[ $? -ne 0 ]]; then
+        red \"Error: Failed to source '$file'\"
+        return 1
+    fi
+    
+    green \"Loaded: $file\"
+}
+
+function load.all() {
+    local dir=\"$1\"
+    local extension=\"$2\"
+    
+    if [[ -z \"$dir\" ]]; then
+        red \"Error: No directory specified\"
+        return 1
+    fi
+    
+    if [[ ! -d \"$dir\" ]]; then
+        red \"Error: Directory '$dir' not found\"
+        return 1
+    fi
+    
+    local files
+    if [[ -n \"$extension\" ]]; then
+        files=$(find \"$dir\" -maxdepth 1 -type f -name \"*.$extension\")
+    else
+        files=$(find \"$dir\" -maxdepth 1 -type f)
+    fi
+    
+    if [[ -z \"$files\" ]]; then
+        yellow \"No files found in '$dir'\"
+        return 0
+    fi
+    
+    while IFS= read -r file; do
+        load \"$file\"
+    done <<< \"$files\"
+}
+
+function load.all.recursive() {
+    local dir=\"$1\"
+    local extension=\"$2\"
+    
+    if [[ -z \"$dir\" ]]; then
+        red \"Error: No directory specified\"
+        return 1
+    fi
+    
+    if [[ ! -d \"$dir\" ]]; then
+        red \"Error: Directory '$dir' not found\"
+        return 1
+    fi
+    
+    local files
+    if [[ -n \"$extension\" ]]; then
+        files=$(find \"$dir\" -type f -name \"*.$extension\")
+    else
+        files=$(find \"$dir\" -type f)
+    fi
+    
+    if [[ -z \"$files\" ]]; then
+        yellow \"No files found in '$dir'\"
+        return 0
+    fi
+    
+    while IFS= read -r file; do
+        load \"$file\"
+    done <<< \"$files\"
+}"
+  language="bash"
+  fileName="core/source"
+/>
+
+### Spinner Utilities (`core/spinner`)
+
+Provides visual feedback utilities including spinners, loaders, and progress bars for long-running operations.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+function spinner() {
+    local pid=$!
+    local delay=0.1
+    local spinstr='|/-\\'
+    local message=\"${1:-Loading}\"
+    
+    while ps -p $pid > /dev/null 2>&1; do
+        local temp=${spinstr#?}
+        printf \" [%c] %s\" \"$spinstr\" \"$message\"
+        local spinstr=$temp${spinstr%\"$temp\"}
+        sleep $delay
+        printf \"\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\\b\"
+    done
+    printf \"    \\b\\b\\b\\b\"
+}
+
+function loader() {
+    local message=\"${1:-Processing}\"
+    local duration=\"${2:-3}\"
+    local chars=\"⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏\"
+    local i=0
+    local start=$(date +%s)
+    
+    while [[ $(($(date +%s) - start)) -lt $duration ]]; do
+        printf \"\\r%s %s\" \"${chars:$i:1}\" \"$message\"
+        i=$(( (i + 1) % ${#chars} ))
+        sleep 0.1
+    done
+    
+    printf \"\\r%s %s\\n\" \"✓\" \"$message completed\"
+}
+
+function progress() {
+    local current=$1
+    local total=$2
+    local message=\"${3:-Progress}\"
+    local width=50
+    local percentage=$((current * 100 / total))
+    local filled=$((current * width / total))
+    local bar=\"\"
+    
+    for ((i=0; i<filled; i++)); do
+        bar+=\"█\"
+    done
+    
+    for ((i=filled; i<width; i++)); do
+        bar+=\"░\"
+    done
+    
+    printf \"\\r%s [%s] %d%%\" \"$message\" \"$bar\" \"$percentage\"
+    
+    if [[ $current -eq $total ]]; then
+        echo
+    fi
+}"
+  language="bash"
+  fileName="core/spinner"
+/>
+
+### Code Generation (`core/stub`)
+
+A comprehensive code generation system for creating new modules, functions, and complete project structures with proper help integration.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+function stub.module() {
+    local category=\"$1\"
+    local module=\"$2\"
+    local output_file=\"$3\"
+    
+    if [[ -z \"$category\" || -z \"$module\" ]]; then
+        red \"Error: Category and module required\"
+        echo \"Usage: stub.module <category> <module> [output_file]\"
+        return 1
+    fi
+    
+    local file=\"${output_file:-$module}\"
+    
+    cat > \"$file\" << EOF
+#!/usr/bin/env bash
+
+function ${module}.example() {
+    echo \"Example function in $module\"
+}
+
+help.register \"$category\" \"$module\" \"${module}.example\" \"Example function description\" \"${module}.example\"
+EOF
+    
+    chmod +x \"$file\"
+    green \"Created module stub: $file\"
+    gray \"Edit the file to add your functions and help registrations\"
+}
+
+function stub.function() {
+    local module=\"$1\"
+    local func_name=\"$2\"
+    local description=\"$3\"
+    local usage=\"$4\"
+    
+    if [[ -z \"$module\" || -z \"$func_name\" ]]; then
+        red \"Error: Module and function name required\"
+        echo \"Usage: stub.function <module> <function_name> [description] [usage]\"
+        return 1
+    fi
+    
+    local desc=\"${description:-Function description}\"
+    local use=\"${usage:-$func_name [args]}\"
+    
+    echo
+    echo \"function ${func_name}() {\"
+    echo \"    echo \\\"$func_name implementation\\\"\"
+    echo \"}\"
+    echo
+    echo \"help.register \\\"category\\\" \\\"$module\\\" \\\"$func_name\\\" \\\"$desc\\\" \\\"$use\\\"\"
+    echo
+}
+
+function stub.project() {
+    local project_name=\"$1\"
+    
+    if [[ -z \"$project_name\" ]]; then
+        red \"Error: Project name required\"
+        echo \"Usage: stub.project <project_name>\"
+        return 1
+    fi
+    
+    mkdir -p \"$project_name\"
+    cd \"$project_name\" || return 1
+    
+    cat > \"cfg\" << 'EOF'
+#!/usr/bin/env bash
+
+DOTFILES_ROOT=\"$( cd \"$( dirname \"${BASH_SOURCE[0]}\" )\" && pwd )\"
+
+source \"$DOTFILES_ROOT/core/help\"
+source \"$DOTFILES_ROOT/core/colors\"
+source \"$DOTFILES_ROOT/core/source\"
+source \"$DOTFILES_ROOT/core/log\"
+source \"$DOTFILES_ROOT/core/check\"
+source \"$DOTFILES_ROOT/core/spinner\"
+
+load.all.recursive \"$DOTFILES_ROOT/modules\"
+load.all.recursive \"$DOTFILES_ROOT/plugins\"
+
+green \"Dotfiles loaded successfully\"
+EOF
+    
+    chmod +x cfg
+    
+    mkdir -p core modules plugins
+    
+    stub.category \"core\" \"help\" \"colors\" \"source\" \"log\" \"check\" \"spinner\"
+    stub.category \"modules\" \"git\" \"aliases\" \"prompt\"
+    stub.category \"plugins\" \"docker\" \"node\" \"python\"
+    
+    green \"Created project: $project_name\"
+    gray \"Structure:\"
+    gray \"  cfg (main loader)\"
+    gray \"  core/ (utilities)\"
+    gray \"  modules/ (main functionality)\"  
+    gray \"  plugins/ (optional features)\"
+    echo
+    cyan \"cd $project_name && source ./cfg\"
+}"
+  language="bash"
+  fileName="core/stub"
+/>
+
+### Script Wrapper (`core/wrap`)
+
+Creates executable wrappers for scripts in different languages, enabling easy command-line access to all project scripts.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+function wrap.create() {
+    local script_name=\"$1\"
+    local wrapper_name=\"$2\"
+    local script_type=\"${3:-auto}\"
+    
+    if [[ -z \"$script_name\" || -z \"$wrapper_name\" ]]; then
+        red \"Error: Script name and wrapper name required\"
+        echo \"Usage: wrap.create <script_name> <wrapper_name> [js|py|sh|auto]\"
+        return 1
+    fi
+    
+    local scripts_dir=\"$DOTFILES_ROOT/scripts\"
+    local bin_dir=\"$DOTFILES_ROOT/bin\"
+    local script_path=\"$scripts_dir/$script_name\"
+    local wrapper_path=\"$bin_dir/$wrapper_name\"
+    
+    if [[ ! -f \"$script_path\" ]]; then
+        log.error \"Script not found: $script_path\"
+        return 1
+    fi
+    
+    if [[ \"$script_type\" == \"auto\" ]]; then
+        if [[ \"$script_name\" == *.* ]]; then
+            case \"${script_name##*.}\" in
+                js) script_type=\"js\" ;;
+                py) script_type=\"py\" ;;
+                sh) script_type=\"sh\" ;;
+                *) script_type=\"detect\" ;;
+            esac
+        else
+            script_type=\"detect\"
+        fi
+    fi
+    
+    if [[ \"$script_type\" == \"detect\" ]]; then
+        local shebang=$(head -n1 \"$script_path\")
+        case \"$shebang\" in
+            \"#!/usr/bin/env node\"*|\"#!/usr/bin/node\"*) script_type=\"js\" ;;
+            \"#!/usr/bin/env python\"*|\"#!/usr/bin/python\"*) script_type=\"py\" ;;
+            \"#!/usr/bin/env bash\"*|\"#!/bin/bash\"*|\"#!/bin/sh\"*) script_type=\"sh\" ;;
+            *) script_type=\"generic\" ;;
+        esac
+    fi
+    
+    case \"$script_type\" in
+        \"js\")
+            cat > \"$wrapper_path\" << EOF
+#!/usr/bin/env bash
+node \"$scripts_dir/$script_name\" \"\\$@\"
+EOF
+            ;;
+        \"py\")
+            cat > \"$wrapper_path\" << EOF
+#!/usr/bin/env bash
+python3 \"$scripts_dir/$script_name\" \"\\$@\"
+EOF
+            ;;
+        \"sh\")
+            cat > \"$wrapper_path\" << EOF
+#!/usr/bin/env bash
+source \"$scripts_dir/$script_name\" \"\\$@\"
+EOF
+            ;;
+        \"generic\")
+            cat > \"$wrapper_path\" << EOF
+#!/usr/bin/env bash
+\"$scripts_dir/$script_name\" \"\\$@\"
+EOF
+            ;;
+        *)
+            log.error \"Could not detect script type for: $script_name\"
+            log.info \"Manually specify type: wrap.create '$script_name' '$wrapper_name' [js|py|sh]\"
+            return 1
+            ;;
+    esac
+    
+    chmod +x \"$wrapper_path\"
+    log.success \"Created wrapper: $wrapper_name -> $script_name ($script_type)\"
+}
+
+function wrap.auto() {
+    local scripts_dir=\"$DOTFILES_ROOT/scripts\"
+    local bin_dir=\"$DOTFILES_ROOT/bin\"
+    
+    if [[ ! -d \"$scripts_dir\" ]]; then
+        log.error \"Scripts directory not found: $scripts_dir\"
+        return 1
+    fi
+    
+    mkdir -p \"$bin_dir\"
+    
+    find \"$scripts_dir\" -type f -executable | while read -r script; do
+        local script_name=$(basename \"$script\")
+        local wrapper_name=\"$script_name\"
+        
+        if [[ \"$script_name\" == *.* ]]; then
+            wrapper_name=\"${script_name%.*}\"
+        fi
+        
+        if [[ -f \"$bin_dir/$wrapper_name\" ]]; then
+            continue
+        fi
+        
+        wrap.create \"$script_name\" \"$wrapper_name\"
+    done
+    
+    log.success \"Auto-wrapped all executable scripts\"
+}"
+  language="bash"
+  fileName="core/wrap"
+/>
+
+## Scripts
+
+### Copy Utility (`scripts/copy`)
+
+A comprehensive clipboard utility that can copy file contents, directory paths, filenames, git remotes, and entire directories as zip files to the system clipboard.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+TMP_DIR=\"$HOME/.config/dotfiles/.tmp\"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+
+function copy_to_clipboard() {
+    if command -v xclip >/dev/null 2>&1; then
+        echo -n \"$1\" | xclip -selection clipboard
+    elif command -v pbcopy >/dev/null 2>&1; then
+        echo -n \"$1\" | pbcopy
+    else
+        log.error \"No clipboard utility found (xclip or pbcopy)\"
+        return 1
+    fi
+}
+
+function copy_file_content() {
+    local file=\"$1\"
+    
+    if [[ ! -f \"$file\" ]]; then
+        log.error \"File not found: $file\"
+        return 1
+    fi
+    
+    local content=$(cat \"$file\")
+    copy_to_clipboard \"$content\"
+    log.success \"Copied content of: $file\"
+}
+
+function copy_pwd() {
+    local target_path=\"$1\"
+    local current_dir=$(pwd)
+    
+    if [[ -n \"$target_path\" ]]; then
+        local full_path=\"$current_dir/$target_path\"
+        copy_to_clipboard \"$full_path\"
+        log.success \"Copied: $full_path\"
+    else
+        copy_to_clipboard \"$current_dir\"
+        log.success \"Copied: $current_dir\"
+    fi
+}
+
+function copy_filename() {
+    local file=\"$1\"
+    local target_path=\"$2\"
+    
+    if [[ ! -e \"$file\" ]]; then
+        log.error \"File not found: $file\"
+        return 1
+    fi
+    
+    local filename=$(basename \"$file\")
+    
+    if [[ -n \"$target_path\" ]]; then
+        local full_path=\"$target_path/$filename\"
+        copy_to_clipboard \"$full_path\"
+        log.success \"Copied: $full_path\"
+    else
+        copy_to_clipboard \"$filename\"
+        log.success \"Copied filename: $filename\"
+    fi
+}
+
+function copy_remote() {
+    if ! git rev-parse --git-dir >/dev/null 2>&1; then
+        log.error \"Not a git repository\"
+        return 1
+    fi
+    
+    local remote=$(git remote get-url origin 2>/dev/null)
+    
+    if [[ -z \"$remote\" ]]; then
+        log.error \"No remote origin found\"
+        return 1
+    fi
+    
+    copy_to_clipboard \"$remote\"
+    log.success \"Copied remote: $remote\"
+}
+
+function copy_dir() {
+    local source_dir=\"$1\"
+    local target_path=\"$2\"
+    
+    if [[ -z \"$source_dir\" ]]; then
+        source_dir=\".\"
+    fi
+    
+    if [[ ! -d \"$source_dir\" ]]; then
+        log.error \"Directory not found: $source_dir\"
+        return 1
+    fi
+    
+    mkdir -p \"$TMP_DIR\"
+    
+    local dir_name=$(basename \"$(realpath \"$source_dir\")\")
+    local zip_name=\"$TIMESTAMP-$dir_name-COPY.zip\"
+    local zip_path=\"$TMP_DIR/$zip_name\"
+    
+    cd \"$(dirname \"$source_dir\")\" || return 1
+    zip -r \"$zip_path\" \"$(basename \"$source_dir\")\" >/dev/null 2>&1
+    
+    if [[ -n \"$target_path\" ]]; then
+        local full_target=\"$target_path/$zip_name\"
+        copy_to_clipboard \"$full_target\"
+        log.success \"Copied directory path: $full_target\"
+    else
+        copy_to_clipboard \"$zip_path\"
+        log.success \"Copied directory as zip: $zip_path\"
+    fi
+    
+    log.info \"Temporary zip created: $zip_path\"
+}
+
+function cleanup_temp() {
+    if [[ -d \"$TMP_DIR\" ]]; then
+        find \"$TMP_DIR\" -name \"*-COPY.zip\" -mtime +1 -delete 2>/dev/null
+        log.info \"Cleaned up old temporary files\"
+    fi
+}"
+  language="bash"
+  fileName="scripts/copy"
+/>
+
+### Port Manager (`scripts/ports`)
+
+An interactive port management utility for development environments that can list, monitor, and kill processes running on common development ports.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+PORT_RANGES=(
+    \"3000-3010\"
+    \"5173-5183\"
+    \"8000-8010\"
+    \"8080-8090\"
+    \"8888-8898\"
+    \"9000-9010\"
+    \"4000-4010\"
+    \"3333-3343\"
+    \"1313-1323\"
+    \"8081-8091\"
+)
+
+COMMON_PORTS=(22 80 443 21 25 53 110 143 993 995 587)
+
+function get_port_processes() {
+    local ports=()
+    
+    for range in \"${PORT_RANGES[@]}\"; do
+        local start_port=\"${range%-*}\"
+        local end_port=\"${range#*-}\"
+        
+        for ((port=start_port; port<=end_port; port++)); do
+            local pid=$(lsof -ti:$port 2>/dev/null)
+            if [[ -n \"$pid\" ]]; then
+                local process_info=$(ps -p $pid -o comm= 2>/dev/null | head -1)
+                ports+=(\"$port:$pid:$process_info\")
+            fi
+        done
+    done
+    
+    printf '%s\\n' \"${ports[@]}\"
+}
+
+function kill_port() {
+    local port=\"$1\"
+    local force=\"${2:-false}\"
+    
+    local pids=$(lsof -ti:$port 2>/dev/null)
+    if [[ -z \"$pids\" ]]; then
+        yellow \"No processes found on port $port\"
+        return 0
+    fi
+    
+    for pid in $pids; do
+        local process_name=$(ps -p $pid -o comm= 2>/dev/null | head -1)
+        if [[ \"$force\" == \"true\" ]]; then
+            kill -9 $pid 2>/dev/null
+            green \"Force killed $process_name (PID: $pid) on port $port\"
+        else
+            kill $pid 2>/dev/null
+            green \"Killed $process_name (PID: $pid) on port $port\"
+        fi
+    done
+}
+
+function show_interactive_menu() {
+    local processes=($(get_port_processes))
+    local selected=()
+    local cursor=0
+    
+    if [[ ${#processes[@]} -eq 0 ]]; then
+        yellow \"No development processes found on monitored ports\"
+        return 0
+    fi
+    
+    while true; do
+        clear
+        echo
+        bold \"Port Manager - Active Development Processes\"
+        echo
+        cyan \"Controls:\"
+        echo \"  ↑/↓ or j/k  : Navigate\"
+        echo \"  Space       : Toggle selection\"
+        echo \"  Enter       : Kill selected\"
+        echo \"  a           : Select all\"
+        echo \"  c           : Clear selection\"
+        echo \"  q           : Quit\"
+        echo \"  Range shortcuts: 3000, 5173, 8000, 8080, 8888, 9000\"
+        echo
+        
+        for i in \"${!processes[@]}\"; do
+            local process=\"${processes[i]}\"
+            local port=\"${process%%:*}\"
+            local temp=\"${process#*:}\"
+            local pid=\"${temp%%:*}\"
+            local name=\"${temp#*:}\"
+            
+            local marker=\" \"
+            local color=\"white\"
+            
+            if [[ \" ${selected[*]} \" =~ \" $i \" ]]; then
+                marker=\"✓\"
+                color=\"green\"
+            fi
+            
+            if [[ $i -eq $cursor ]]; then
+                echo -n \"  ► \"
+                eval \"$color\" \"[$marker] Port $port - $name (PID: $pid)\"
+            else
+                echo -n \"    \"
+                eval \"$color\" \"[$marker] Port $port - $name (PID: $pid)\"
+            fi
+        done
+        
+        echo
+        if [[ ${#selected[@]} -gt 0 ]]; then
+            yellow \"Selected: ${#selected[@]} process(es)\"
+        fi
+        echo
+        
+        read -rsn1 key
+        
+        case \"$key\" in
+            'q'|$'\\e')
+                break
+                ;;
+            'k'|$'\\e[A')
+                ((cursor > 0)) && ((cursor--))
+                ;;
+            'j'|$'\\e[B')
+                ((cursor < ${#processes[@]} - 1)) && ((cursor++))
+                ;;
+            ' ')
+                if [[ \" ${selected[*]} \" =~ \" $cursor \" ]]; then
+                    selected=(\"${selected[@]/$cursor}\")
+                    selected=(\"${selected[@]// }\")
+                else
+                    selected+=(\"$cursor\")
+                fi
+                ;;
+            $'\\n')
+                if [[ ${#selected[@]} -gt 0 ]]; then
+                    echo
+                    red \"Killing selected processes...\"
+                    for idx in \"${selected[@]}\"; do
+                        if [[ -n \"$idx\" ]]; then
+                            local process=\"${processes[idx]}\"
+                            local port=\"${process%%:*}\"
+                            kill_port \"$port\"
+                        fi
+                    done
+                    echo
+                    read -p \"Press Enter to continue...\"
+                    processes=($(get_port_processes))
+                    selected=()
+                    cursor=0
+                else
+                    yellow \"No processes selected\"
+                    sleep 1
+                fi
+                ;;
+        esac
+    done
+    
+    clear
+    green \"Port manager closed\"
+}"
+  language="bash"
+  fileName="scripts/ports"
+/>
+
+## Language Support
+
+### Node.js Utilities (`lang/node`)
+
+Provides Node.js version management, npm package management, and development environment setup utilities.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+function node.version() {
+    node --version 2>/dev/null || echo \"Node.js not installed\"
+}
+
+function node.use() {
+    local version=\"$1\"
+    if check.cmd \"nvm\"; then
+        nvm use \"$version\"
+    elif check.cmd \"n\"; then
+        n \"$version\"
+    else
+        log.error \"No Node version manager found\"
+    fi
+}
+
+function npm.global() {
+    npm list -g --depth=0
+}
+
+function npm.outdated() {
+    npm outdated -g
+}
+
+export.set \"NODE_ENV\" \"development\"
+path.add \"$HOME/.npm-global/bin\""
+  language="bash"
+  fileName="lang/node"
+/>
+
+### Python Utilities (`lang/python`)
+
+Provides Python virtual environment management, package management, and development environment setup utilities.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+function python.version() {
+    python3 --version 2>/dev/null || echo \"Python not installed\"
+}
+
+function python.venv() {
+    local name=\"${1:-venv}\"
+    python3 -m venv \"$name\"
+    log.success \"Created virtual environment: $name\"
+}
+
+function python.activate() {
+    local venv=\"${1:-venv}\"
+    if [[ -f \"$venv/bin/activate\" ]]; then
+        source \"$venv/bin/activate\"
+        log.success \"Activated: $venv\"
+    else
+        log.error \"Virtual environment not found: $venv\"
+    fi
+}
+
+function pip.requirements() {
+    pip freeze > requirements.txt
+    log.success \"Requirements saved to requirements.txt\"
+}
+
+export.set \"PYTHONPATH\" \"$HOME/.local/lib/python3.9/site-packages:$PYTHONPATH\"
+path.add \"$HOME/.local/bin\""
+  language="bash"
+  fileName="lang/python"
+/>
+
+## System Configuration
+
+### System Aliases (`system/aliases`)
+
+Provides common command aliases and alias management utilities for improved command-line productivity.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+function alias.add() {
+    local name=\"$1\"
+    local command=\"$2\"
+    alias \"$name\"=\"$command\"
+    log.info \"Added alias: $name='$command'\"
+}
+
+function alias.remove() {
+    local name=\"$1\"
+    unalias \"$name\" 2>/dev/null
+    log.info \"Removed alias: $name\"
+}
+
+function alias.list() {
+    alias | sort
+}
+
+function alias.search() {
+    local pattern=\"$1\"
+    alias | grep -i \"$pattern\"
+}
+
+alias.add \"l\" \"ls -la\"
+alias.add \"ll\" \"ls -alF\"
+alias.add \"la\" \"ls -A\"
+alias.add \"c\" \"clear\"
+alias.add \"..\" \"cd ..\"
+alias.add \"...\" \"cd ../..\"
+alias.add \"grep\" \"grep --color=auto\""
+  language="bash"
+  fileName="system/aliases"
+/>
+
+## Development Tools
+
+### Git Utilities (`tools/git`)
+
+Provides enhanced git workflow utilities including status checking, branch management, and quick commit operations.
+
+<CodeBlock
+  code="#!/usr/bin/env bash
+
+function git.status() {
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then
+        log.error \"Not a git repository\"
+        return 1
+    fi
+    
+    git status --porcelain
+}
+
+function git.branch.current() {
+    git branch --show-current 2>/dev/null
+}
+
+function git.branch.clean() {
+    git branch --merged | grep -v \"\\*\\|main\\|master\\|develop\" | xargs -n 1 git branch -d
+    log.success \"Cleaned merged branches\"
+}
+
+function git.commit.quick() {
+    local message=\"$1\"
+    if [[ -z \"$message\" ]]; then
+        message=\"Quick commit: $(date)\"
+    fi
+    
+    git add -A && git commit -m \"$message\"
+}
+
+function git.push.force() {
+    local branch=$(git.branch.current)
+    git push --force-with-lease origin \"$branch\"
+}"
+  language="bash"
+  fileName="tools/git"
+/>
+
+## Project Structure
+
+The dotfiles project follows a modular architecture with clear separation of concerns:
+
+- **`core/`** - Core utilities and infrastructure (help system, colors, logging, etc.)
+- **`scripts/`** - Standalone utility scripts (copy, ports, etc.)
+- **`lang/`** - Language-specific utilities (Node.js, Python)
+- **`system/`** - System configuration (aliases, environment setup)
+- **`tools/`** - Development tools (git utilities, etc.)
+
+Each module is self-contained with its own help registration and can be loaded independently or as part of the complete system. The help system provides a unified interface for discovering and using all available functions across the entire project.
+
+## Usage
+
+To use this dotfiles system:
+
+1. Source the main configuration: `source ./cfg`
+2. Explore available functions: `help`
+3. Get help for specific categories: `help utilities`
+4. Get help for specific modules: `help utilities copy`
+5. Use any of the registered functions throughout your shell session
+
+The system is designed to be modular, extensible, and easy to customize for individual development workflows.
