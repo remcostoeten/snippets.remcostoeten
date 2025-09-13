@@ -1,4 +1,5 @@
 import { createMDX } from 'fumadocs-mdx/next'
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const withMDX = createMDX()
 
@@ -27,32 +28,28 @@ const config = {
                 chunks: 'all',
                 cacheGroups: {
                     vendor: {
-                        test: /[\\/]node_modules[\\/]/,
+                        test: /[\/]node_modules[\/]/,
                         name: 'vendors',
                         chunks: 'all',
                     },
                     three: {
-                        test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
+                        test: /[\/]node_modules[\/](three|@react-three)[\/]/,
                         name: 'three',
                         chunks: 'all',
                     },
                     framer: {
-                        test: /[\\/]node_modules[\\/](framer-motion|motion)[\\/]/,
+                        test: /[\/]node_modules[\/](framer-motion|motion)[\/]/,
                         name: 'framer',
-                        chunks: 'all',
-                    },
-                    shiki: {
-                        test: /[\\/]node_modules[\\/](shiki|@shikijs)[\\/]/,
-                        name: 'shiki',
-                        chunks: 'all',
-                    },
-                    'react-icons': {
-                        test: /[\\/]node_modules[\\/](react-icons)[\\/]/,
-                        name: 'react-icons',
                         chunks: 'all',
                     },
                 },
             };
+            config.plugins.push(
+                new MiniCssExtractPlugin({
+                    filename: 'static/css/[name].[contenthash].css',
+                    chunkFilename: 'static/css/[name].[contenthash].css',
+                })
+            );
         }
         return config;
     },

@@ -1,5 +1,5 @@
 // source.config.ts
-import { defineConfig, defineDocs } from "fumadocs-mdx/config";
+import { defineConfig, defineDocs } from "fumadocs-mdx/config/zod-3";
 import rehypePrettyCode from "rehype-pretty-code";
 var docs = defineDocs({
   dir: "content/docs"
