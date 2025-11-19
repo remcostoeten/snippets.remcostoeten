@@ -1,10 +1,28 @@
 ---
-title: "Warp terminal - rules"
-description: "Rules for Warp terminal to adhere to"
+title: "Inidvidual ai code rules"
+description: "Some of my individual copyable code rules for agents"
 language: "system"
-lastModified: "2025-06-05"
+lastModified: "19-11-2025"
 ---
 
+
+
+```bash
+File, function, types and constants name rules.
+```
+```bash
+- Names should be max two words, three only when two is unclear.
+- Use concise verb noun or context action forms.
+- Good: useFetch, calcSum, UserAuth, MAX_WIDTH.
+- Bad: useDataFetcherHook, calculateTotalOfAllItems, AuthenticatedUserDetailsType.
+- Avoid fillers like Helper, Type, Hook.
+- Prefer meaning over exhaustiveness, for example useLogin.
+- Replace delete with destroy, for example useDestroy.
+- Local non exported type is always named props, for example type props = {}.
+- Casing rules: camelCase for functions and hooks, SCREAMING_SNAKE_CASE for constants, PascalCase for types.
+- Keep names sharp, minimal, and easy to scan.
+```
+<hr/>
 ```bash
 Practical Functional Programming
 ```
